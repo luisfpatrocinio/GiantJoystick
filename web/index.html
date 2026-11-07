@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Jogando Junto - 6º Ano B | InovaCEV</title>
+  <title>Jogando Junto - 6º Ano B | InovaCEV 2026</title>
   
   <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
@@ -11,7 +11,7 @@
   <!-- Fontes Gamer / Tech -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@500;700;800&family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@500;600;700;800&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
   
   <!-- Three.js e OrbitControls -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
@@ -30,7 +30,9 @@
               red: '#EF4444',
               neonGreen: '#10B981',
               neonCyan: '#06B6D4',
-              accent: '#8B5CF6'
+              accent: '#8B5CF6',
+              dark: '#080A11',
+              card: '#0E131F'
             }
           }
         }
@@ -39,7 +41,7 @@
   </script>
 
   <style>
-    /* Trava 100% da página no viewport (Zero Scroll) */
+    /* Trava 100% da página no viewport (Zero Scroll / Kiosk Mode) */
     html, body {
       height: 100%;
       overflow: hidden;
@@ -49,101 +51,133 @@
     }
 
     body {
-      background-color: #080a11;
+      background-color: #07090f;
       background-image: 
-        radial-gradient(at 0% 0%, rgba(139, 92, 246, 0.12) 0px, transparent 45%),
-        radial-gradient(at 100% 100%, rgba(6, 182, 212, 0.1) 0px, transparent 45%),
-        linear-gradient(to bottom, #090c15, #05070a);
+        radial-gradient(at 0% 0%, rgba(139, 92, 246, 0.15) 0px, transparent 50%),
+        radial-gradient(at 100% 100%, rgba(6, 182, 212, 0.12) 0px, transparent 50%),
+        linear-gradient(to bottom, #090c16, #05070a);
       color: #F3F4F6;
     }
 
     .neon-border-green {
-      box-shadow: 0 0 30px rgba(16, 185, 129, 0.6), inset 0 0 15px rgba(16, 185, 129, 0.2);
+      box-shadow: 0 0 25px rgba(16, 185, 129, 0.6), inset 0 0 12px rgba(16, 185, 129, 0.2);
     }
 
     .neon-glow-red {
-      box-shadow: 0 0 25px rgba(239, 68, 68, 0.4);
+      box-shadow: 0 0 20px rgba(239, 68, 68, 0.45);
+    }
+
+    .neon-glow-cyan {
+      box-shadow: 0 0 20px rgba(6, 182, 212, 0.35);
     }
   </style>
 </head>
 <body class="h-screen flex flex-col font-sans selection:bg-brand-neonCyan selection:text-black">
 
-  <!-- ==================== HEADER COMPACTO ==================== -->
-  <header class="h-14 sm:h-16 border-b border-gray-800/80 bg-gray-950/70 backdrop-blur-md px-4 sm:px-6 flex items-center justify-between shrink-0 z-40">
+  <!-- ==================== BARRA SUPERIOR (HEADER) ==================== -->
+  <header class="h-14 sm:h-16 border-b border-gray-800/80 bg-gray-950/80 backdrop-blur-md px-4 sm:px-6 flex items-center justify-between shrink-0 z-40">
     
-    <!-- Título do Projeto -->
+    <!-- Logo e Identidade da Turma -->
     <div class="flex items-center space-x-3">
-      <div class="w-9 h-9 rounded-lg bg-gradient-to-tr from-brand-red to-brand-accent flex items-center justify-center font-tech font-bold text-white text-base shadow-lg shadow-brand-red/30 shrink-0">
+      <div class="w-9 h-9 rounded-xl bg-gradient-to-tr from-brand-red via-purple-600 to-brand-neonCyan flex items-center justify-center font-tech font-bold text-white text-base shadow-lg shadow-brand-red/30 shrink-0">
         6B
       </div>
       <div>
-        <h1 class="text-base sm:text-lg font-tech font-bold tracking-tight text-white flex items-center gap-2">
-          JOGANDO JUNTO
-          <span class="text-[10px] font-tech font-bold tracking-widest uppercase text-brand-neonCyan px-2 py-0.5 bg-brand-neonCyan/10 rounded-full border border-brand-neonCyan/20 hidden sm:inline-block">
-            InovaCEV 2026
+        <div class="flex items-center gap-2">
+          <h1 class="text-base sm:text-lg font-tech font-bold tracking-tight text-white">
+            JOGANDO JUNTO
+          </h1>
+          <span class="text-[10px] font-tech font-bold tracking-wider uppercase text-brand-neonCyan px-2 py-0.5 bg-brand-neonCyan/10 rounded-full border border-brand-neonCyan/25 hidden md:inline-block">
+            InovaCEV • Feira de Robótica
           </span>
-        </h1>
-        <p class="text-[11px] text-gray-400 font-tech">Controle de Videogame Adaptado de 1 Botão</p>
+        </div>
+        <p class="text-[11px] text-gray-400 font-tech">Controle Acessível de 1 Botão Gigante</p>
       </div>
     </div>
 
-    <!-- Navegação em Abas (Sem Scroll) -->
-    <div class="flex items-center bg-gray-900/90 p-1 rounded-xl border border-gray-800 font-tech text-xs">
-      <button id="tab-3d" class="px-3 sm:px-4 py-1.5 rounded-lg font-bold bg-brand-neonCyan/20 text-brand-neonCyan border border-brand-neonCyan/30 transition flex items-center gap-1.5 shadow-sm">
+    <!-- Navegação em 3 Painéis (Zero Scroll) -->
+    <nav class="flex items-center bg-gray-900/90 p-1 rounded-xl border border-gray-800/90 font-tech text-xs">
+      <button id="nav-3d" class="nav-tab px-3 sm:px-4 py-1.5 rounded-lg font-bold bg-brand-neonCyan/20 text-brand-neonCyan border border-brand-neonCyan/30 transition flex items-center gap-1.5 shadow-sm">
         <span>🎮</span>
         <span>Controle 3D</span>
       </button>
-      <button id="tab-fiação" class="px-3 sm:px-4 py-1.5 rounded-lg font-medium text-gray-400 hover:text-white transition flex items-center gap-1.5">
-        <span>🔌</span>
-        <span>Fiação & Circuito</span>
+      <button id="nav-justificativa" class="nav-tab px-3 sm:px-4 py-1.5 rounded-lg font-medium text-gray-400 hover:text-white transition flex items-center gap-1.5">
+        <span>💡</span>
+        <span>Por Que Importa?</span>
       </button>
-    </div>
+      <button id="nav-tech" class="nav-tab px-3 sm:px-4 py-1.5 rounded-lg font-medium text-gray-400 hover:text-white transition flex items-center gap-1.5">
+        <span>⚡</span>
+        <span>Tecnologia</span>
+      </button>
+    </nav>
 
-    <!-- Ações e Status Bluetooth -->
+    <!-- Status BLE e Som -->
     <div class="flex items-center gap-2 sm:gap-3">
-      <div class="hidden md:flex items-center gap-2 bg-gray-900 border border-gray-800 px-3 py-1.5 rounded-full text-xs font-tech">
+      <div class="hidden lg:flex items-center gap-2 bg-gray-900 border border-gray-800 px-3 py-1.5 rounded-full text-xs font-tech">
         <span class="w-2 h-2 rounded-full bg-brand-neonGreen animate-pulse"></span>
-        <span class="text-gray-300">ESP32 BLE: Barra de Espaço</span>
+        <span class="text-gray-300">Bluetooth HID: Tecla Espaço</span>
       </div>
 
-      <button id="btn-sound-toggle" class="bg-gray-800/90 hover:bg-gray-700 text-gray-300 px-2.5 py-1.5 rounded-lg text-xs font-tech border border-gray-700 transition" title="Som">
+      <button id="btn-sound-toggle" class="bg-gray-800 hover:bg-gray-700 text-gray-200 px-2.5 py-1.5 rounded-lg text-xs font-tech border border-gray-700 transition" title="Ligar/Desligar Som">
         <span id="sound-icon">🔊</span>
       </button>
     </div>
 
   </header>
 
-  <!-- ==================== CONTEÚDO PRINCIPAL (100% VIEWPORT) ==================== -->
+  <!-- ==================== CORPO CENTRAL (100% VIEWPORT / SEM SCROLL) ==================== -->
   <main class="flex-1 relative overflow-hidden flex flex-col p-3 sm:p-4">
 
-    <!-- VIEW 1: PAINEL 3D INTERATIVO (PADRÃO) -->
-    <div id="view-3d" class="w-full h-full relative rounded-2xl border border-gray-800/90 bg-gradient-to-b from-gray-900/80 to-black/90 overflow-hidden shadow-2xl flex flex-col">
+    <!-- ============================================================== -->
+    <!-- PAINEL 1: GÊMEO DIGITAL 3D (COM MODO RAIO-X / FIAÇÃO INTERNA) -->
+    <!-- ============================================================== -->
+    <div id="panel-3d" class="panel-view w-full h-full relative rounded-2xl border border-gray-800/90 bg-gradient-to-b from-gray-900/90 to-black overflow-hidden shadow-2xl flex flex-col">
       
-      <!-- Três.js Canvas -->
-      <div id="canvas-wrapper" class="w-full h-full cursor-grab active:cursor-grabbing relative">
+      <!-- Container do Three.js -->
+      <div id="canvas-container" class="w-full h-full cursor-grab active:cursor-grabbing relative">
         
         <!-- Notificação de Clique Detectado -->
-        <div id="click-badge" class="absolute top-5 left-1/2 -translate-x-1/2 opacity-0 pointer-events-none transition-all duration-150 transform scale-75 bg-brand-neonGreen text-black font-tech font-black px-6 py-2 rounded-full shadow-2xl neon-border-green flex items-center gap-2.5 z-30">
+        <div id="click-feedback-badge" class="absolute top-5 left-1/2 -translate-x-1/2 opacity-0 pointer-events-none transition-all duration-150 transform scale-75 bg-brand-neonGreen text-black font-tech font-extrabold px-6 py-2 rounded-full shadow-2xl neon-border-green flex items-center gap-2.5 z-30">
           <span class="text-lg">⚡</span>
-          <span class="text-sm sm:text-base tracking-wider uppercase">CLIQUE DETECTADO!</span>
+          <span class="text-xs sm:text-sm tracking-wider uppercase">CLIQUE DETECTADO! [BARRA DE ESPAÇO]</span>
         </div>
 
-        <!-- HUD Superior Esquerdo: Contador de Cliques -->
-        <div class="absolute top-4 left-4 z-20 pointer-events-none bg-black/60 backdrop-blur-md border border-gray-800 rounded-xl px-4 py-2.5">
+        <!-- HUD Superior Esquerdo: Métricas Rápidas -->
+        <div class="absolute top-4 left-4 z-20 pointer-events-none bg-black/70 backdrop-blur-md border border-gray-800/90 rounded-xl px-4 py-2.5 shadow-lg">
           <span class="text-[10px] font-tech text-gray-400 block tracking-widest uppercase">BATIDAS NO BOTÃO</span>
           <div class="flex items-baseline gap-2">
             <span id="click-counter" class="text-3xl sm:text-4xl font-tech font-black text-transparent bg-clip-text bg-gradient-to-r from-brand-neonGreen to-cyan-400">
               0
             </span>
-            <span class="text-[11px] font-tech text-brand-neonGreen font-semibold">ONLINE</span>
+            <span class="text-[10px] font-tech text-brand-neonGreen font-semibold uppercase">Pronto para Jogar</span>
           </div>
         </div>
 
-        <!-- HUD Inferior: Dica Rápida e Botão Manual -->
-        <div class="absolute bottom-4 left-4 right-4 z-20 flex flex-wrap items-center justify-between gap-3 bg-black/70 backdrop-blur-md border border-gray-800 px-4 py-2.5 rounded-xl">
+        <!-- HUD Superior Direito: BOTÃO DE RAIO-X / FIAÇÃO NA CENA 3D -->
+        <div class="absolute top-4 right-4 z-20 flex flex-col gap-2 items-end">
+          <button id="btn-toggle-xray" class="px-3.5 py-2 rounded-xl font-tech font-bold text-xs bg-gray-900/90 hover:bg-gray-800 text-white border border-brand-neonCyan/40 shadow-lg flex items-center gap-2 transition active:scale-95">
+            <span id="xray-icon" class="text-base">🔍</span>
+            <span id="xray-text">Revelar Fiação (Raio-X)</span>
+          </button>
+          
+          <div id="xray-legend" class="opacity-0 transition-opacity duration-300 pointer-events-none bg-black/85 backdrop-blur-md border border-gray-800 rounded-lg p-2.5 text-[11px] font-mono text-gray-300 space-y-1 shadow-lg">
+            <div class="flex items-center gap-2">
+              <span class="w-2.5 h-2.5 rounded-full bg-yellow-400"></span>
+              <span>Fio Amarelo ➔ Pino D4 (GPIO 4)</span>
+            </div>
+            <div class="flex items-center gap-2">
+              <span class="w-2.5 h-2.5 rounded-full bg-cyan-400"></span>
+              <span>Fio Preto ➔ Pino GND (Terra)</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- HUD Inferior: Dica e Botão Manual -->
+        <div class="absolute bottom-4 left-4 right-4 z-20 flex flex-wrap items-center justify-between gap-3 bg-black/75 backdrop-blur-md border border-gray-800 px-4 py-2.5 rounded-xl">
           <div class="flex items-center gap-2 text-xs font-tech text-gray-300">
             <kbd class="px-2.5 py-1 bg-gray-800 text-white rounded border border-gray-700 font-mono font-bold text-xs shadow">ESPAÇO</kbd>
-            <span>Bata no botão gigante ou aperte a barra de espaço</span>
+            <span class="hidden sm:inline">Bata no controle gigante ou aperte a tecla espaço no teclado</span>
+            <span class="sm:hidden">Aperte ESPAÇO no controle</span>
           </div>
 
           <button id="btn-manual-click" class="px-4 py-1.5 bg-gradient-to-r from-brand-red to-rose-600 hover:from-red-500 hover:to-rose-500 text-white font-tech font-bold text-xs rounded-lg shadow neon-glow-red transition active:scale-95">
@@ -155,79 +189,150 @@
 
     </div>
 
-    <!-- VIEW 2: FIAÇÃO & CIRCUITO (ESQUEMÁTICO SEM SCROLL) -->
-    <div id="view-fiação" class="hidden w-full h-full rounded-2xl border border-gray-800/90 bg-gradient-to-b from-gray-900/90 to-black p-4 sm:p-6 shadow-2xl flex flex-col justify-between">
+    <!-- ============================================================== -->
+    <!-- PAINEL 2: JUSTIFICATIVA & IMPACTO SOCIAL (INCLUSÃO) -->
+    <!-- ============================================================== -->
+    <div id="panel-justificativa" class="panel-view hidden w-full h-full rounded-2xl border border-gray-800/90 bg-gradient-to-b from-gray-900/95 to-black p-5 sm:p-7 shadow-2xl flex flex-col justify-between overflow-hidden">
       
-      <!-- Topo do Esquemático -->
-      <div class="text-center space-y-1">
-        <span class="text-[10px] font-tech font-bold tracking-widest text-brand-neonCyan uppercase bg-brand-neonCyan/10 px-3 py-1 rounded-full border border-brand-neonCyan/20">
-          Circuito Físico • 2 Fios Garra Jacaré
+      <!-- Cabeçalho da Seção -->
+      <div class="space-y-1">
+        <span class="text-[10px] font-tech font-bold tracking-widest text-purple-400 uppercase bg-purple-950/40 px-3 py-1 rounded-full border border-purple-800/30">
+          Acessibilidade & Cidadania Digital
         </span>
-        <h2 class="text-xl sm:text-2xl font-tech font-bold text-white uppercase">
-          Esquemático de Conexão Rápida
+        <h2 class="text-xl sm:text-2xl font-tech font-bold text-white uppercase tracking-tight">
+          Por Que Criamos o "Jogando Junto"?
         </h2>
+        <p class="text-xs sm:text-sm text-gray-400 max-w-3xl">
+          Videogames conectam amigos, ensinam estratégia e são o esporte da nossa geração. Mas quem não consegue segurar um controle tradicional fica de fora.
+        </p>
       </div>
 
-      <!-- Diagrama Visual Central -->
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-4 items-center my-auto max-w-4xl mx-auto w-full">
+      <!-- 3 Pilares da Importância -->
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-4 my-auto">
         
-        <!-- Bloco 1: ESP32 -->
-        <div class="bg-gray-950 border-2 border-brand-neonCyan/40 rounded-xl p-4 text-center">
-          <div class="w-8 h-8 rounded-lg bg-brand-neonCyan/10 text-brand-neonCyan mx-auto flex items-center justify-center font-tech font-bold text-sm mb-2">
-            MCU
+        <!-- Pilar 1 -->
+        <div class="bg-brand-card border border-gray-800/80 rounded-xl p-4 sm:p-5 flex flex-col justify-between hover:border-brand-accent/40 transition">
+          <div>
+            <div class="text-2xl mb-2">🚫</div>
+            <h3 class="font-tech font-bold text-white text-base mb-1">A Barreira dos 16 Botões</h3>
+            <p class="text-xs text-gray-400 leading-relaxed">
+              Controles modernos de videogame possuem mais de 16 botões minúsculos e duas alavancas analógicas. Para quem tem paralisia cerebral, distrofia muscular ou mobilidade reduzida, segurar o controle tradicional é fisicamente impossível.
+            </p>
           </div>
-          <h3 class="font-tech font-bold text-white text-base">ESP32 DevKit</h3>
-          <p class="text-[11px] text-gray-400 mb-3">Microcontrolador Bluetooth</p>
-          <div class="space-y-1.5 font-mono text-xs">
-            <div class="bg-cyan-950/50 text-cyan-300 px-3 py-1 rounded border border-cyan-800/40 font-bold">
-              GPIO D4 (Sinal)
-            </div>
-            <div class="bg-gray-900 text-gray-300 px-3 py-1 rounded border border-gray-700">
-              GND (Terra)
-            </div>
+          <div class="mt-3 pt-3 border-t border-gray-800 text-[11px] font-tech text-purple-300">
+            • Exclusão não intencional
           </div>
         </div>
 
-        <!-- Bloco 2: Fios Jacaré -->
-        <div class="flex flex-col justify-center space-y-3 py-2 text-center">
-          <div class="bg-gray-900/80 border border-yellow-500/30 p-2.5 rounded-lg">
-            <span class="text-xs font-tech text-yellow-400 font-bold block">Garra Amarela</span>
-            <span class="text-[11px] text-gray-300">Pino D4 ➔ Terminal 1</span>
+        <!-- Pilar 2 -->
+        <div class="bg-brand-card border border-gray-800/80 rounded-xl p-4 sm:p-5 flex flex-col justify-between hover:border-brand-neonCyan/40 transition">
+          <div>
+            <div class="text-2xl mb-2">🎯</div>
+            <h3 class="font-tech font-bold text-white text-base mb-1">A Solução: 1 Único Botão</h3>
+            <p class="text-xs text-gray-400 leading-relaxed">
+              Inspirado na filosofia internacional <em>"One-Switch Gaming"</em>: qualquer movimento voluntário do corpo (a mão aberta, o antebraço, o pé ou o queixo) é suficiente para acionar a ação do jogo com máxima autonomia.
+            </p>
           </div>
-          <div class="bg-gray-900/80 border border-gray-700 p-2.5 rounded-lg">
-            <span class="text-xs font-tech text-gray-400 font-bold block">Garra Preta</span>
-            <span class="text-[11px] text-gray-300">Pino GND ➔ Terminal 2</span>
+          <div class="mt-3 pt-3 border-t border-gray-800 text-[11px] font-tech text-brand-neonCyan">
+            • Autonomia e diversão real
           </div>
         </div>
 
-        <!-- Bloco 3: Botão Gigante -->
-        <div class="bg-gray-950 border-2 border-brand-red/40 rounded-xl p-4 text-center">
-          <div class="w-8 h-8 rounded-full bg-brand-red text-white mx-auto flex items-center justify-center font-tech font-bold text-xs mb-2 shadow neon-glow-red">
-            🔴
+        <!-- Pilar 3 -->
+        <div class="bg-brand-card border border-gray-800/80 rounded-xl p-4 sm:p-5 flex flex-col justify-between hover:border-brand-neonGreen/40 transition">
+          <div>
+            <div class="text-2xl mb-2">🤝</div>
+            <h3 class="font-tech font-bold text-white text-base mb-1">Tecnologia Assistiva Popular</h3>
+            <p class="text-xs text-gray-400 leading-relaxed">
+              Dispositivos comerciais acessíveis importados custam milhares de reais. Nosso protótipo foi construído com microcontrolador acessível e papelão reciclável, provando que inclusão pode ser barata, aberta e replicável em qualquer escola.
+            </p>
           </div>
-          <h3 class="font-tech font-bold text-white text-base">Botão Gigante</h3>
-          <p class="text-[11px] text-gray-400 mb-3">Papelão + Contato Metálico</p>
-          <div class="space-y-1.5 font-mono text-xs">
-            <div class="bg-red-950/50 text-red-300 px-3 py-1 rounded border border-red-800/40 font-bold">
-              Terminal 1 (Superior)
-            </div>
-            <div class="bg-gray-900 text-gray-300 px-3 py-1 rounded border border-gray-700">
-              Terminal 2 (Inferior)
-            </div>
+          <div class="mt-3 pt-3 border-t border-gray-800 text-[11px] font-tech text-brand-neonGreen">
+            • Baixo custo e alto impacto
           </div>
         </div>
 
       </div>
 
-      <!-- Resumo Didático em 2 Linhas -->
-      <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 max-w-4xl mx-auto w-full text-xs text-gray-300">
-        <div class="bg-gray-900/60 p-3 rounded-xl border border-gray-800">
-          <strong class="text-brand-neonCyan font-tech block mb-0.5">1. Resistor Interno Pull-Up:</strong>
-          Pino D4 fica em 3.3V (HIGH) enquanto o botão estiver solto. Não precisa de resistor físico!
+      <!-- Citação dos Alunos -->
+      <div class="bg-gray-950/70 border border-gray-800 rounded-xl p-3 sm:p-4 flex items-center gap-3">
+        <span class="text-xl">💬</span>
+        <p class="text-xs text-gray-300 italic">
+          "Jogar videogame não é só passar de fase; é fazer amigos, dar risada e se sentir parte da turma. Nenhum colega nosso deve ficar só assistindo." — <strong class="text-white font-tech not-italic">Equipe do 6º Ano B</strong>
+        </p>
+      </div>
+
+    </div>
+
+    <!-- ============================================================== -->
+    <!-- PAINEL 3: TECNOLOGIAS & ENGENHARIA -->
+    <!-- ============================================================== -->
+    <div id="panel-tech" class="panel-view hidden w-full h-full rounded-2xl border border-gray-800/90 bg-gradient-to-b from-gray-900/95 to-black p-5 sm:p-7 shadow-2xl flex flex-col justify-between overflow-hidden">
+      
+      <!-- Cabeçalho -->
+      <div class="space-y-1">
+        <span class="text-[10px] font-tech font-bold tracking-widest text-brand-neonCyan uppercase bg-brand-neonCyan/10 px-3 py-1 rounded-full border border-brand-neonCyan/25">
+          Engenharia de Sistemas Embarcados & Web
+        </span>
+        <h2 class="text-xl sm:text-2xl font-tech font-bold text-white uppercase tracking-tight">
+          Como a Mágica Acontece: O Stack Tecnológico
+        </h2>
+        <p class="text-xs sm:text-sm text-gray-400 max-w-3xl">
+          A combinação de hardware de baixo consumo com protocolos sem fio padrão da indústria e computação gráfica em tempo real.
+        </p>
+      </div>
+
+      <!-- 4 Blocos Técnicos -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 my-auto">
+        
+        <!-- Tech 1 -->
+        <div class="bg-brand-card border border-gray-800/80 rounded-xl p-4">
+          <div class="text-brand-neonCyan font-mono text-xs font-bold mb-2">01 / HARDWARE</div>
+          <h3 class="font-tech font-bold text-white text-base mb-1">ESP32 DevKit V1</h3>
+          <p class="text-xs text-gray-400 leading-relaxed">
+            Microcontrolador dual-core com rádio Bluetooth Low Energy (BLE) nativo. Opera como Teclado HID padrão, dispensando qualquer aplicativo ou driver especial no computador.
+          </p>
         </div>
-        <div class="bg-gray-900/60 p-3 rounded-xl border border-gray-800">
-          <strong class="text-brand-neonGreen font-tech block mb-0.5">2. Toque fecha em LOW:</strong>
-          Ao bater no botão, conecta ao GND (0V). O ESP32 envia a barra de espaço via Bluetooth.
+
+        <!-- Tech 2 -->
+        <div class="bg-brand-card border border-gray-800/80 rounded-xl p-4">
+          <div class="text-yellow-400 font-mono text-xs font-bold mb-2">02 / CIRCUITO</div>
+          <h3 class="font-tech font-bold text-white text-base mb-1">INPUT_PULLUP</h3>
+          <p class="text-xs text-gray-400 leading-relaxed">
+            Resistor interno de 45 kΩ ativado por software no pino GPIO 4. Mantém o circuito em nível HIGH (3.3V) e detecta o fechamento para LOW (0V/GND) sem soldar componentes extras.
+          </p>
+        </div>
+
+        <!-- Tech 3 -->
+        <div class="bg-brand-card border border-gray-800/80 rounded-xl p-4">
+          <div class="text-brand-neonGreen font-mono text-xs font-bold mb-2">03 / FIRMWARE</div>
+          <h3 class="font-tech font-bold text-white text-base mb-1">Debounce de 50ms</h3>
+          <p class="text-xs text-gray-400 leading-relaxed">
+            Algoritmo inteligente de amostragem temporal que filtra o repique mecânico das placas metálicas quando o botão gigante de papelão é golpeado com força.
+          </p>
+        </div>
+
+        <!-- Tech 4 -->
+        <div class="bg-brand-card border border-gray-800/80 rounded-xl p-4">
+          <div class="text-purple-400 font-mono text-xs font-bold mb-2">04 / FRONT-END</div>
+          <h3 class="font-tech font-bold text-white text-base mb-1">Three.js WebGL</h3>
+          <p class="text-xs text-gray-400 leading-relaxed">
+            Gêmeo digital 3D totalmente renderizado no browser via GPU, com animação procedural de clique elástico e áudio sintetizado em tempo real via Web Audio API.
+          </p>
+        </div>
+
+      </div>
+
+      <!-- Resumo da Conexão Física -->
+      <div class="bg-gray-950/80 border border-gray-800 rounded-xl p-3.5 flex flex-wrap items-center justify-between gap-4 font-mono text-xs">
+        <div class="flex items-center gap-2">
+          <span class="text-brand-neonCyan font-bold">PINAGEM FÍSICA:</span>
+          <span class="text-gray-300">GPIO D4 ➔ Terminal 1 do Botão</span>
+          <span class="text-gray-600">|</span>
+          <span class="text-gray-300">GND ➔ Terminal 2 do Botão</span>
+        </div>
+        <div class="text-gray-400 text-[11px] font-tech">
+          Compatível com Chrome Dino, Canabalt, Geometry Dash e Flappy Bird.
         </div>
       </div>
 
@@ -235,39 +340,47 @@
 
   </main>
 
-  <!-- ==================== FOOTER COMPACTO ==================== -->
+  <!-- ==================== RODAPÉ COMPACTO ==================== -->
   <footer class="h-9 border-t border-gray-800/80 bg-gray-950 px-4 flex items-center justify-between text-[11px] text-gray-400 font-tech shrink-0">
-    <span>Desenvolvido pelo <strong class="text-white">6º Ano B</strong> • InovaCEV</span>
-    <span>Orientação: <a href="https://patrodev.com" target="_blank" rel="noopener noreferrer" class="text-brand-accent hover:underline">Prof. Luis Felipe Patrocínio (patrodev.com)</a></span>
+    <span>Desenvolvido pelos alunos do <strong class="text-white">6º Ano B</strong> • InovaCEV 2026</span>
+    <span>Orientação: <a href="https://patrodev.com" target="_blank" rel="noopener noreferrer" class="text-brand-accent hover:underline font-semibold">Prof. Luis Felipe Patrocínio (patrodev.com)</a></span>
   </footer>
 
-  <!-- ==================== SCRIPT THREE.JS E CONTROLE DE TELA ÚNICA ==================== -->
+  <!-- ==================== SCRIPTS THREE.JS & MODO RAIO-X ==================== -->
   <script>
     // -------------------------------------------------------------
-    // 1. ALTERNAR ABAS (SEM SCROLL)
+    // 1. SISTEMA DE ABAS (Zero Scroll)
     // -------------------------------------------------------------
-    const tab3D = document.getElementById('tab-3d');
-    const tabFiacao = document.getElementById('tab-fiação');
-    const view3D = document.getElementById('view-3d');
-    const viewFiacao = document.getElementById('view-fiação');
+    const navTabs = {
+      '3d': { btn: document.getElementById('nav-3d'), panel: document.getElementById('panel-3d') },
+      'justificativa': { btn: document.getElementById('nav-justificativa'), panel: document.getElementById('panel-justificativa') },
+      'tech': { btn: document.getElementById('nav-tech'), panel: document.getElementById('panel-tech') }
+    };
 
-    tab3D.addEventListener('click', () => {
-      view3D.classList.remove('hidden');
-      viewFiacao.classList.add('hidden');
-      tab3D.className = "px-3 sm:px-4 py-1.5 rounded-lg font-bold bg-brand-neonCyan/20 text-brand-neonCyan border border-brand-neonCyan/30 transition flex items-center gap-1.5 shadow-sm";
-      tabFiacao.className = "px-3 sm:px-4 py-1.5 rounded-lg font-medium text-gray-400 hover:text-white transition flex items-center gap-1.5";
-      onWindowResize();
-    });
+    function setActiveTab(tabKey) {
+      Object.keys(navTabs).forEach(key => {
+        const item = navTabs[key];
+        const isActive = key === tabKey;
+        item.panel.classList.toggle('hidden', !isActive);
 
-    tabFiacao.addEventListener('click', () => {
-      view3D.classList.add('hidden');
-      viewFiacao.classList.remove('hidden');
-      tabFiacao.className = "px-3 sm:px-4 py-1.5 rounded-lg font-bold bg-brand-neonCyan/20 text-brand-neonCyan border border-brand-neonCyan/30 transition flex items-center gap-1.5 shadow-sm";
-      tab3D.className = "px-3 sm:px-4 py-1.5 rounded-lg font-medium text-gray-400 hover:text-white transition flex items-center gap-1.5";
-    });
+        if (isActive) {
+          item.btn.className = "nav-tab px-3 sm:px-4 py-1.5 rounded-lg font-bold bg-brand-neonCyan/20 text-brand-neonCyan border border-brand-neonCyan/30 transition flex items-center gap-1.5 shadow-sm";
+        } else {
+          item.btn.className = "nav-tab px-3 sm:px-4 py-1.5 rounded-lg font-medium text-gray-400 hover:text-white transition flex items-center gap-1.5";
+        }
+      });
+
+      if (tabKey === '3d') {
+        onWindowResize();
+      }
+    }
+
+    document.getElementById('nav-3d').addEventListener('click', () => setActiveTab('3d'));
+    document.getElementById('nav-justificativa').addEventListener('click', () => setActiveTab('justificativa'));
+    document.getElementById('nav-tech').addEventListener('click', () => setActiveTab('tech'));
 
     // -------------------------------------------------------------
-    // 2. ÁUDIO RETRÔ ARCADE (Web Audio API)
+    // 2. ÁUDIO ARCADE SINTETIZADO (Web Audio API)
     // -------------------------------------------------------------
     let soundEnabled = true;
     let audioCtx = null;
@@ -305,22 +418,22 @@
     });
 
     // -------------------------------------------------------------
-    // 3. THREE.JS CENA PROCEDURAL
+    // 3. THREE.JS CENA 3D PROCEDURAL
     // -------------------------------------------------------------
-    const wrapper = document.getElementById('canvas-wrapper');
+    const container = document.getElementById('canvas-container');
     const scene = new THREE.Scene();
-    scene.background = new THREE.Color(0x080b12);
-    scene.fog = new THREE.FogExp2(0x080b12, 0.04);
+    scene.background = new THREE.Color(0x07090f);
+    scene.fog = new THREE.FogExp2(0x07090f, 0.04);
 
-    const camera = new THREE.PerspectiveCamera(45, wrapper.clientWidth / wrapper.clientHeight, 0.1, 100);
-    camera.position.set(0, 4.2, 7.5);
+    const camera = new THREE.PerspectiveCamera(45, container.clientWidth / container.clientHeight, 0.1, 100);
+    camera.position.set(0, 4.5, 7.8);
 
     const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: false });
-    renderer.setSize(wrapper.clientWidth, wrapper.clientHeight);
+    renderer.setSize(container.clientWidth, container.clientHeight);
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
     renderer.shadowMap.enabled = true;
     renderer.shadowMap.type = THREE.PCFSoftShadowMap;
-    wrapper.appendChild(renderer.domElement);
+    container.appendChild(renderer.domElement);
 
     const controls = new THREE.OrbitControls(camera, renderer.domElement);
     controls.enableDamping = true;
@@ -332,7 +445,7 @@
     controls.autoRotateSpeed = 0.7;
 
     // Iluminação
-    const ambientLight = new THREE.AmbientLight(0xffffff, 0.7);
+    const ambientLight = new THREE.AmbientLight(0xffffff, 0.75);
     scene.add(ambientLight);
 
     const keyLight = new THREE.DirectionalLight(0xffffff, 1.2);
@@ -340,7 +453,7 @@
     keyLight.castShadow = true;
     scene.add(keyLight);
 
-    const cyanLight = new THREE.PointLight(0x06b6d4, 2.2, 10);
+    const cyanLight = new THREE.PointLight(0x06b6d4, 2.4, 10);
     cyanLight.position.set(-3.5, 2.5, 3);
     scene.add(cyanLight);
 
@@ -348,39 +461,51 @@
     glowLight.position.set(0, 3, 0);
     scene.add(glowLight);
 
-    // Grid de chão
+    // Grid do Chão
     const gridHelper = new THREE.GridHelper(16, 16, 0x1e293b, 0x0f172a);
     gridHelper.position.y = -0.01;
     scene.add(gridHelper);
 
-    // MODELO DO CONTROLE
+    // GRUPO PRINCIPAL DO CONTROLE
     const arcadeGroup = new THREE.Group();
     scene.add(arcadeGroup);
 
-    // Base Arcade
+    // A) Base Caixa de Madeira/Acrílico
     const baseGeo = new THREE.BoxGeometry(4.0, 1.1, 4.0);
-    const baseMat = new THREE.MeshStandardMaterial({ color: 0x141a24, roughness: 0.35, metalness: 0.2 });
+    const baseMat = new THREE.MeshStandardMaterial({
+      color: 0x141a24,
+      roughness: 0.35,
+      metalness: 0.2,
+      transparent: true,
+      opacity: 1.0
+    });
     const baseMesh = new THREE.Mesh(baseGeo, baseMat);
     baseMesh.position.y = 0.55;
     baseMesh.castShadow = true;
     baseMesh.receiveShadow = true;
     arcadeGroup.add(baseMesh);
 
-    // Placa superior chanfrada
+    // B) Placa Superior Chanfrada
     const topPlateGeo = new THREE.BoxGeometry(3.7, 0.06, 3.7);
-    const topPlateMat = new THREE.MeshStandardMaterial({ color: 0x090d16, roughness: 0.2, metalness: 0.8 });
+    const topPlateMat = new THREE.MeshStandardMaterial({
+      color: 0x090d16,
+      roughness: 0.2,
+      metalness: 0.8,
+      transparent: true,
+      opacity: 1.0
+    });
     const topPlate = new THREE.Mesh(topPlateGeo, topPlateMat);
     topPlate.position.y = 1.13;
     arcadeGroup.add(topPlate);
 
-    // Aro do botão (Bezel)
+    // C) Aro Metálico do Botão (Bezel)
     const bezelGeo = new THREE.CylinderGeometry(1.5, 1.6, 0.3, 48);
     const bezelMat = new THREE.MeshStandardMaterial({ color: 0x27272a, metalness: 0.9, roughness: 0.2 });
     const bezel = new THREE.Mesh(bezelGeo, bezelMat);
     bezel.position.y = 1.25;
     arcadeGroup.add(bezel);
 
-    // Botão Vermelho Gigante (Grupo Móvel)
+    // D) O BOTÃO VERMELHO GIGANTE MÓVEL
     const buttonCapGroup = new THREE.Group();
     buttonCapGroup.position.y = 1.35;
     arcadeGroup.add(buttonCapGroup);
@@ -403,8 +528,106 @@
     buttonDome.position.y = 0.18;
     buttonCapGroup.add(buttonDome);
 
+    // ==============================================================
+    // ELEMENTOS INTERNOS (REVELADOS NO MODO RAIO-X / FIAÇÃO)
+    // ==============================================================
+    const internalGroup = new THREE.Group();
+    internalGroup.visible = false;
+    arcadeGroup.add(internalGroup);
+
+    // Placa ESP32 interna
+    const esp32BoardGeo = new THREE.BoxGeometry(0.9, 0.08, 1.8);
+    const esp32BoardMat = new THREE.MeshStandardMaterial({ color: 0x052e16, roughness: 0.3, metalness: 0.4 }); // PCB Verde escuro
+    const esp32Board = new THREE.Mesh(esp32BoardGeo, esp32BoardMat);
+    esp32Board.position.set(-0.8, 0.3, -0.6);
+    internalGroup.add(esp32Board);
+
+    // Chip metálico prateado do ESP32
+    const chipGeo = new THREE.BoxGeometry(0.65, 0.05, 0.7);
+    const chipMat = new THREE.MeshStandardMaterial({ color: 0xd1d5db, metalness: 0.9, roughness: 0.2 });
+    const chip = new THREE.Mesh(chipGeo, chipMat);
+    chip.position.set(-0.8, 0.36, -0.4);
+    internalGroup.add(chip);
+
+    // LED Azul do ESP32 (acende junto com o botão)
+    const ledGeo = new THREE.BoxGeometry(0.1, 0.06, 0.1);
+    const ledMat = new THREE.MeshBasicMaterial({ color: 0x38bdf8 });
+    const ledMesh = new THREE.Mesh(ledGeo, ledMat);
+    ledMesh.position.set(-0.55, 0.36, -0.9);
+    internalGroup.add(ledMesh);
+
+    // Fio Amarelo (GPIO D4 conectando do ESP32 até o Terminal 1 do Botão)
+    const yellowCurve = new THREE.CatmullRomCurve3([
+      new THREE.Vector3(-0.6, 0.35, -0.2),
+      new THREE.Vector3(-0.4, 0.7, 0.0),
+      new THREE.Vector3(0.0, 1.0, 0.3)
+    ]);
+    const wireYellowGeo = new THREE.TubeGeometry(yellowCurve, 24, 0.045, 8, false);
+    const wireYellowMat = new THREE.MeshStandardMaterial({ color: 0xfacc15, roughness: 0.4, emissive: 0xca8a04, emissiveIntensity: 0.3 });
+    const wireYellow = new THREE.Mesh(wireYellowGeo, wireYellowMat);
+    internalGroup.add(wireYellow);
+
+    // Fio Preto (GND conectando do ESP32 até o Terminal 2 do Botão)
+    const blackCurve = new THREE.CatmullRomCurve3([
+      new THREE.Vector3(-0.6, 0.35, -0.8),
+      new THREE.Vector3(-0.5, 0.75, -0.4),
+      new THREE.Vector3(0.0, 1.0, -0.3)
+    ]);
+    const wireBlackGeo = new THREE.TubeGeometry(blackCurve, 24, 0.045, 8, false);
+    const wireBlackMat = new THREE.MeshStandardMaterial({ color: 0x22d3ee, roughness: 0.4, emissive: 0x0891b2, emissiveIntensity: 0.3 }); // Ciano brilhante para contrastar no escuro
+    const wireBlack = new THREE.Mesh(wireBlackGeo, wireBlackMat);
+    internalGroup.add(wireBlack);
+
+    // Garras Jacaré nos contatos
+    const clipGeo = new THREE.CylinderGeometry(0.08, 0.08, 0.25, 8);
+    const clipMat = new THREE.MeshStandardMaterial({ color: 0x9ca3af, metalness: 0.9, roughness: 0.2 });
+    
+    const clip1 = new THREE.Mesh(clipGeo, clipMat);
+    clip1.position.set(0.0, 1.0, 0.3);
+    internalGroup.add(clip1);
+
+    const clip2 = new THREE.Mesh(clipGeo, clipMat);
+    clip2.position.set(0.0, 1.0, -0.3);
+    internalGroup.add(clip2);
+
     // -------------------------------------------------------------
-    // 4. LÓGICA DE INTERAÇÃO & CLIQUE
+    // 4. LÓGICA DO MODO RAIO-X / REVELAR FIAÇÃO
+    // -------------------------------------------------------------
+    let xrayActive = false;
+    const btnXray = document.getElementById('btn-toggle-xray');
+    const xrayText = document.getElementById('xray-text');
+    const xrayIcon = document.getElementById('xray-icon');
+    const xrayLegend = document.getElementById('xray-legend');
+
+    btnXray.addEventListener('click', () => {
+      xrayActive = !xrayActive;
+
+      if (xrayActive) {
+        // Transforma a caixa em translúcida / Raio-X
+        baseMat.opacity = 0.25;
+        baseMat.wireframe = false;
+        topPlateMat.opacity = 0.3;
+        internalGroup.visible = true;
+
+        btnXray.className = "px-3.5 py-2 rounded-xl font-tech font-bold text-xs bg-brand-neonCyan/20 text-brand-neonCyan border border-brand-neonCyan shadow-lg flex items-center gap-2 transition active:scale-95 neon-glow-cyan";
+        xrayText.textContent = "Ocultar Fiação (Normal)";
+        xrayIcon.textContent = "📦";
+        xrayLegend.style.opacity = '1';
+      } else {
+        // Restaura a caixa sólida
+        baseMat.opacity = 1.0;
+        topPlateMat.opacity = 1.0;
+        internalGroup.visible = false;
+
+        btnXray.className = "px-3.5 py-2 rounded-xl font-tech font-bold text-xs bg-gray-900/90 hover:bg-gray-800 text-white border border-brand-neonCyan/40 shadow-lg flex items-center gap-2 transition active:scale-95";
+        xrayText.textContent = "Revelar Fiação (Raio-X)";
+        xrayIcon.textContent = "🔍";
+        xrayLegend.style.opacity = '0';
+      }
+    });
+
+    // -------------------------------------------------------------
+    // 5. INTERAÇÃO E ANIMAÇÃO DE CLIQUE
     // -------------------------------------------------------------
     let isPressed = false;
     let targetY = 1.35;
@@ -413,7 +636,7 @@
     let totalClicks = 0;
 
     const counterEl = document.getElementById('click-counter');
-    const badgeEl = document.getElementById('click-badge');
+    const badgeEl = document.getElementById('click-feedback-badge');
 
     function doPress() {
       if (isPressed) return;
@@ -428,7 +651,7 @@
       buttonMat.color.setHex(0x10b981);
       buttonMat.emissive.setHex(0x059669);
       buttonMat.emissiveIntensity = 1.2;
-      glowLight.intensity = 4.0;
+      glowLight.intensity = 4.2;
 
       // Badge Flutuante
       badgeEl.style.opacity = '1';
@@ -477,7 +700,7 @@
     manualBtn.addEventListener('touchstart', (e) => { e.preventDefault(); doPress(); });
     manualBtn.addEventListener('touchend', (e) => { e.preventDefault(); doRelease(); });
 
-    // Clique direto no modelo 3D com o mouse
+    // Clique direto com o mouse no botão 3D
     const raycaster = new THREE.Raycaster();
     const mouse = new THREE.Vector2();
 
@@ -495,14 +718,14 @@
 
     // Redimensionamento
     function onWindowResize() {
-      if (!wrapper.clientWidth || !wrapper.clientHeight) return;
-      camera.aspect = wrapper.clientWidth / wrapper.clientHeight;
+      if (!container.clientWidth || !container.clientHeight) return;
+      camera.aspect = container.clientWidth / container.clientHeight;
       camera.updateProjectionMatrix();
-      renderer.setSize(wrapper.clientWidth, wrapper.clientHeight);
+      renderer.setSize(container.clientWidth, container.clientHeight);
     }
     window.addEventListener('resize', onWindowResize);
 
-    // Loop de Renderização
+    // Loop Principal
     function animate() {
       requestAnimationFrame(animate);
       buttonCapGroup.position.y += (targetY - buttonCapGroup.position.y) * 0.35;
