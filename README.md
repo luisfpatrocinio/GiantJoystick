@@ -3,7 +3,8 @@
 > **Controle de Videogame Adaptado e Acessível de 1 Botão Gigante**  
 > *Inclusão nos eSports e Acessibilidade Motora*  
 > **Orientação:** Prof. Luis Felipe Patrocínio ([patrodev.com](https://patrodev.com))  
-> **Feira de Robótica:** InovaCEV — 13 de Novembro
+> **Feira de Robótica:** InovaCEV — 13 de Novembro  
+> 🌐 **Apresentação 3D Online (GitHub Pages):** [luisfpatrocinio.github.io/GiantJoystick](https://luisfpatrocinio.github.io/GiantJoystick/)
 
 ---
 
