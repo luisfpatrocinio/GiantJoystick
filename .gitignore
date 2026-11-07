@@ -1,0 +1,14 @@
+# Compilações e temporários Arduino
+build/
+*.bin
+*.hex
+*.elf
+
+# Arquivos do sistema
+.DS_Store
+Thumbs.db
+Desktop.ini
+
+# IDEs
+.vscode/
+.idea/

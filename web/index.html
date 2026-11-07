@@ -1,0 +1,713 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Projeto Jogando Junto - 6º Ano B | InovaCEV</title>
+  
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  
+  <!-- Fontes Gamer / Tech (Google Fonts) -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@500;700;800&family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+  
+  <!-- Three.js e OrbitControls -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          fontFamily: {
+            tech: ['"Chakra Petch"', 'sans-serif'],
+            sans: ['Inter', 'sans-serif'],
+          },
+          colors: {
+            brand: {
+              red: '#EF4444',
+              neonGreen: '#10B981',
+              neonCyan: '#06B6D4',
+              darkBg: '#090D16',
+              cardBg: '#111827',
+              accent: '#8B5CF6'
+            }
+          },
+          animation: {
+            'pulse-fast': 'pulse 0.6s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+            'bounce-short': 'bounceShort 0.25s ease-out',
+          },
+          keyframes: {
+            bounceShort: {
+              '0%, 100%': { transform: 'scale(1)' },
+              '50%': { transform: 'scale(0.96)' },
+            }
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    /* Estilos e Efeitos Especiais de Brilho Neon */
+    body {
+      background-color: #07090e;
+      background-image: 
+        radial-gradient(at 0% 0%, rgba(139, 92, 246, 0.15) 0px, transparent 50%),
+        radial-gradient(at 100% 100%, rgba(6, 182, 212, 0.12) 0px, transparent 50%),
+        linear-gradient(to bottom, transparent, rgba(0, 0, 0, 0.8));
+      color: #F3F4F6;
+    }
+
+    .neon-border-green {
+      box-shadow: 0 0 25px rgba(16, 185, 129, 0.6), inset 0 0 15px rgba(16, 185, 129, 0.3);
+    }
+
+    .neon-border-red {
+      box-shadow: 0 0 25px rgba(239, 68, 68, 0.4), inset 0 0 15px rgba(239, 68, 68, 0.2);
+    }
+
+    .neon-glow-text {
+      text-shadow: 0 0 15px rgba(6, 182, 212, 0.6);
+    }
+
+    /* Canvas 3D fixo no card */
+    #canvas3d-container {
+      touch-action: none;
+    }
+  </style>
+</head>
+<body class="min-h-screen flex flex-col font-sans selection:bg-brand-neonCyan selection:text-black">
+
+  <!-- ==================== TOPO / BARRA SUPERIOR ==================== -->
+  <header class="border-b border-gray-800/80 bg-gray-950/70 backdrop-blur-md sticky top-0 z-50">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 py-4 flex flex-wrap items-center justify-between gap-4">
+      
+      <div class="flex items-center space-x-3">
+        <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-brand-red to-brand-accent flex items-center justify-center font-tech font-bold text-white text-xl shadow-lg shadow-brand-red/30">
+          6B
+        </div>
+        <div>
+          <span class="text-xs font-tech font-bold tracking-widest uppercase text-brand-neonCyan px-2 py-0.5 bg-brand-neonCyan/10 rounded-full border border-brand-neonCyan/20">
+            InovaCEV 2026 • Feira de Robótica
+          </span>
+          <h1 class="text-xl sm:text-2xl font-tech font-bold tracking-tight text-white flex items-center gap-2">
+            PROJETO JOGANDO JUNTO
+          </h1>
+        </div>
+      </div>
+
+      <!-- Status do Hardware e Bluetooth -->
+      <div class="flex items-center gap-3">
+        <div class="flex items-center gap-2 bg-gray-900 border border-gray-700/60 px-3.5 py-1.5 rounded-full text-xs font-tech">
+          <span id="ble-status-dot" class="w-2.5 h-2.5 rounded-full bg-brand-neonGreen animate-pulse"></span>
+          <span id="ble-status-text" class="text-gray-300">Aguardando Entrada (BLE / Teclado)</span>
+        </div>
+
+        <button id="btn-sound-toggle" class="bg-gray-800 hover:bg-gray-700 text-gray-300 px-3 py-1.5 rounded-full text-xs font-tech border border-gray-700 transition flex items-center gap-1.5" title="Ativar/Desativar Som Arcade">
+          <span>🔊</span>
+          <span id="sound-label">Som: ON</span>
+        </button>
+      </div>
+
+    </div>
+  </header>
+
+  <!-- ==================== BANNER PRINCIPAL / INTRO ==================== -->
+  <main class="flex-grow max-w-7xl mx-auto px-4 sm:px-6 py-8 w-full space-y-10">
+
+    <div class="text-center max-w-3xl mx-auto space-y-3">
+      <h2 class="text-3xl sm:text-5xl font-tech font-extrabold text-white tracking-wide uppercase">
+        Inclusão nos <span class="text-transparent bg-clip-text bg-gradient-to-r from-red-500 via-purple-400 to-cyan-400">eSports</span> & Acessibilidade
+      </h2>
+      <p class="text-gray-400 text-base sm:text-lg leading-relaxed">
+        Um controle adaptado de <strong class="text-white">1 Único Botão Gigante</strong> criado pelo <span class="text-brand-neonCyan font-semibold">6º Ano B</span>. Desenvolvido para que pessoas com restrições de mobilidade fina possam se divertir e competir em pé de igualdade com qualquer jogador.
+      </p>
+    </div>
+
+    <!-- ==================== SEÇÃO INTERATIVA THREE.JS 3D ==================== -->
+    <section class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+      
+      <!-- Painel 3D -->
+      <div class="lg:col-span-8 bg-gray-900/80 border border-gray-800 rounded-2xl p-4 sm:p-6 shadow-2xl relative overflow-hidden group">
+        
+        <!-- Header da Caixa 3D -->
+        <div class="flex items-center justify-between pb-4 border-b border-gray-800">
+          <div class="flex items-center gap-2">
+            <span class="inline-block w-3 h-3 rounded-full bg-red-500/80"></span>
+            <span class="inline-block w-3 h-3 rounded-full bg-yellow-500/80"></span>
+            <span class="inline-block w-3 h-3 rounded-full bg-green-500/80"></span>
+            <span class="text-xs font-tech text-gray-400 ml-2 tracking-wider">GEMÊO DIGITAL 3D (PROTÓTIPO PROCEDURAL)</span>
+          </div>
+          <span class="text-xs text-brand-neonCyan font-tech bg-brand-neonCyan/10 px-2.5 py-1 rounded border border-brand-neonCyan/30">
+            🖱️ Arraste para Girar • Scroll para Zoom
+          </span>
+        </div>
+
+        <!-- Canvas do Three.js -->
+        <div id="canvas3d-container" class="w-full h-[400px] sm:h-[480px] relative rounded-xl mt-4 cursor-grab active:cursor-grabbing bg-radial from-gray-900 via-gray-950 to-black overflow-hidden">
+          
+          <!-- Notificação Flutuante de Clique Detectado -->
+          <div id="click-feedback-badge" class="absolute top-6 left-1/2 -translate-x-1/2 opacity-0 pointer-events-none transition-all duration-150 transform scale-75 bg-brand-neonGreen text-black font-tech font-extrabold px-6 py-2.5 rounded-full shadow-2xl neon-border-green flex items-center gap-3 z-20">
+            <span class="text-xl">⚡</span>
+            <span class="text-base sm:text-lg tracking-wider">CLIQUE DETECTADO! [BARRA DE ESPAÇO]</span>
+          </div>
+
+          <!-- Dica no rodapé do visualizador -->
+          <div class="absolute bottom-4 left-4 right-4 flex items-center justify-between text-xs text-gray-400 font-tech bg-black/60 backdrop-blur px-4 py-2 rounded-lg border border-gray-800">
+            <div class="flex items-center gap-2">
+              <kbd class="px-2 py-0.5 bg-gray-700 text-white rounded border border-gray-600 font-mono text-[11px]">ESPAÇO</kbd>
+              <span>Aperte no teclado ou no Controle Físico</span>
+            </div>
+            <button id="btn-manual-click" class="text-brand-neonCyan hover:underline font-bold">
+              Ou clique aqui para testar
+            </button>
+          </div>
+
+        </div>
+
+      </div>
+
+      <!-- Painel Lateral: Métricas e Teste em Tempo Real -->
+      <div class="lg:col-span-4 space-y-6">
+        
+        <!-- Placar de Cliques -->
+        <div class="bg-gradient-to-br from-gray-900 via-gray-900 to-gray-950 border border-gray-800 rounded-2xl p-6 shadow-xl relative">
+          <div class="text-xs font-tech text-gray-400 uppercase tracking-widest mb-1">Painel do Estande</div>
+          <h3 class="text-xl font-tech font-bold text-white mb-4">Métricas de Interação</h3>
+
+          <div class="bg-black/60 border border-gray-800 rounded-xl p-5 text-center mb-4 relative overflow-hidden">
+            <div id="click-glow" class="absolute inset-0 bg-brand-neonGreen/10 opacity-0 transition-opacity duration-200"></div>
+            <span class="text-xs text-gray-400 font-tech uppercase block tracking-wider">Total de Batidas</span>
+            <span id="click-counter" class="text-5xl sm:text-6xl font-tech font-black text-transparent bg-clip-text bg-gradient-to-r from-brand-neonGreen to-cyan-400">
+              0
+            </span>
+          </div>
+
+          <div class="space-y-3 text-xs font-tech">
+            <div class="flex justify-between items-center py-2 border-b border-gray-800">
+              <span class="text-gray-400">Tempo de Resposta (Debounce):</span>
+              <span class="text-brand-neonCyan font-bold">50 ms (Anti-vibração)</span>
+            </div>
+            <div class="flex justify-between items-center py-2 border-b border-gray-800">
+              <span class="text-gray-400">Comando Bluetooth HID:</span>
+              <span class="text-brand-neonGreen font-bold">Teclado -> KEY_SPC (' ')</span>
+            </div>
+            <div class="flex justify-between items-center py-2">
+              <span class="text-gray-400">Compatibilidade:</span>
+              <span class="text-purple-400 font-bold">PC, Mac, Linux, Android, iOS</span>
+            </div>
+          </div>
+
+          <button id="btn-big-push" class="w-full mt-6 py-4 bg-gradient-to-r from-brand-red via-red-600 to-rose-700 hover:from-red-500 hover:to-rose-600 text-white font-tech font-bold text-lg rounded-xl shadow-lg shadow-brand-red/30 transition transform active:scale-95 flex items-center justify-center gap-3">
+            <span class="w-4 h-4 rounded-full bg-white animate-ping"></span>
+            APERTE O BOTÃO GIGANTE (TESTE)
+          </button>
+        </div>
+
+        <!-- Card de Missão Social -->
+        <div class="bg-gray-900/60 border border-brand-accent/30 rounded-2xl p-5 shadow-lg relative">
+          <div class="flex items-start gap-3">
+            <div class="text-2xl">♿</div>
+            <div>
+              <h4 class="font-tech font-bold text-white text-sm mb-1">O Conceito "One-Switch Gaming"</h4>
+              <p class="text-xs text-gray-400 leading-relaxed">
+                Jogos como <em>Canabalt</em>, o <em>Dino do Google Chrome</em> e dezenas de títulos na plataforma <em>OneSwitch.org.uk</em> exigem apenas um comando de salto/ação. Com um botão grande, qualquer pessoa pode jogar utilizando a mão aberta, o braço ou o queixo!
+              </p>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+    </section>
+
+    <!-- ==================== SEÇÃO: POR DENTRO DA MÁQUINA ==================== -->
+    <section class="mt-16 pt-10 border-t border-gray-800 space-y-8">
+      
+      <div class="text-center max-w-2xl mx-auto space-y-2">
+        <span class="text-xs font-tech font-bold tracking-widest text-brand-neonGreen uppercase bg-brand-neonGreen/10 px-3 py-1 rounded-full border border-brand-neonGreen/30">
+          Engenharia de Hardware Simples e Genial
+        </span>
+        <h2 class="text-3xl font-tech font-bold text-white uppercase tracking-tight">
+          Por Dentro da Máquina: Esquemático & Fiação
+        </h2>
+        <p class="text-gray-400 text-sm">
+          Como os alunos do 6º B conectaram o mundo físico ao mundo digital usando apenas 2 fios e um microcontrolador.
+        </p>
+      </div>
+
+      <!-- Diagrama Visual dos Fios / Esquemático -->
+      <div class="bg-gradient-to-b from-gray-900 to-black border border-gray-800 rounded-2xl p-6 sm:p-8 shadow-2xl">
+        
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 items-center">
+          
+          <!-- Bloco 1: ESP32 -->
+          <div class="bg-gray-950 border-2 border-brand-neonCyan/40 rounded-xl p-5 text-center shadow-lg hover:border-brand-neonCyan transition">
+            <div class="inline-block p-3 bg-brand-neonCyan/10 rounded-xl mb-3">
+              <svg class="w-10 h-10 text-brand-neonCyan mx-auto" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <rect x="4" y="4" width="16" height="16" rx="2" stroke-width="2"/>
+                <path d="M9 2v2M15 2v2M9 20v2M15 20v2M2 9h2M2 15h2M20 9h2M20 15h2" stroke-width="2"/>
+              </svg>
+            </div>
+            <h4 class="font-tech font-bold text-white text-lg">ESP32 DevKit V1</h4>
+            <p class="text-xs text-gray-400 mt-1 mb-3">Microcontrolador com Bluetooth e Wi-Fi embutidos</p>
+            
+            <div class="space-y-2 text-left font-mono text-xs">
+              <div class="flex items-center justify-between bg-cyan-950/40 px-3 py-1.5 rounded border border-cyan-800/40">
+                <span class="text-cyan-400 font-bold">Pino D4 (GPIO 4)</span>
+                <span class="text-[10px] text-gray-400">Sinal Digital</span>
+              </div>
+              <div class="flex items-center justify-between bg-gray-900 px-3 py-1.5 rounded border border-gray-700">
+                <span class="text-gray-300 font-bold">Pino GND</span>
+                <span class="text-[10px] text-gray-400">Terra (0V)</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Bloco 2: As Ligações (Garras Jacaré) -->
+          <div class="flex flex-col justify-center items-center space-y-6 py-4">
+            
+            <!-- Fio Amarelo / Sinal -->
+            <div class="w-full bg-gray-900/90 border border-yellow-500/30 rounded-xl p-4 text-center relative">
+              <div class="flex items-center justify-between text-xs font-tech text-yellow-400 mb-1">
+                <span>Fio Garra Jacaré (Amarelo)</span>
+                <span>Sinal D4</span>
+              </div>
+              <div class="h-2 w-full bg-gradient-to-r from-cyan-500 via-yellow-400 to-red-500 rounded-full animate-pulse"></div>
+              <span class="text-[11px] text-gray-400 mt-2 block">Pino D4 ➔ Terminal 1 do Botão</span>
+            </div>
+
+            <!-- Fio Preto / GND -->
+            <div class="w-full bg-gray-900/90 border border-gray-700 rounded-xl p-4 text-center relative">
+              <div class="flex items-center justify-between text-xs font-tech text-gray-300 mb-1">
+                <span>Fio Garra Jacaré (Preto)</span>
+                <span>Referência GND</span>
+              </div>
+              <div class="h-2 w-full bg-gradient-to-r from-gray-700 via-gray-500 to-gray-700 rounded-full"></div>
+              <span class="text-[11px] text-gray-400 mt-2 block">Pino GND ➔ Terminal 2 do Botão</span>
+            </div>
+
+          </div>
+
+          <!-- Bloco 3: Botão Gigante -->
+          <div class="bg-gray-950 border-2 border-brand-red/40 rounded-xl p-5 text-center shadow-lg hover:border-brand-red transition">
+            <div class="inline-block p-3 bg-brand-red/10 rounded-xl mb-3">
+              <div class="w-10 h-10 rounded-full bg-brand-red mx-auto shadow-lg shadow-brand-red/50 flex items-center justify-center text-white font-bold text-xs">
+                PRESS
+              </div>
+            </div>
+            <h4 class="font-tech font-bold text-white text-lg">Botão Gigante Mecânico</h4>
+            <p class="text-xs text-gray-400 mt-1 mb-3">Construção em papelão e contatos metálicos</p>
+            
+            <div class="space-y-2 text-left font-mono text-xs">
+              <div class="flex items-center justify-between bg-red-950/40 px-3 py-1.5 rounded border border-red-800/40">
+                <span class="text-red-400 font-bold">Terminal 1</span>
+                <span class="text-[10px] text-gray-400">Contato Superior</span>
+              </div>
+              <div class="flex items-center justify-between bg-gray-900 px-3 py-1.5 rounded border border-gray-700">
+                <span class="text-gray-300 font-bold">Terminal 2</span>
+                <span class="text-[10px] text-gray-400">Contato Inferior</span>
+              </div>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Explicação Teórica do Circuito -->
+        <div class="mt-8 pt-6 border-t border-gray-800 grid grid-cols-1 md:grid-cols-2 gap-6 text-sm text-gray-300">
+          
+          <div class="bg-gray-900/50 p-4 rounded-xl border border-gray-800">
+            <h5 class="font-tech font-bold text-brand-neonCyan text-base mb-2 flex items-center gap-2">
+              <span>🧠</span> 1. A Mágica do Resistor INPUT_PULLUP
+            </h5>
+            <p class="leading-relaxed text-xs sm:text-sm text-gray-400">
+              O ESP32 possui um resistor interno que conecta o pino D4 aos 3.3V. Enquanto o botão está solto, o circuito está aberto e o pino lê <strong class="text-white">HIGH (Nível Alto / 1)</strong>. Não precisamos comprar nem soldar nenhum resistor externo!
+            </p>
+          </div>
+
+          <div class="bg-gray-900/50 p-4 rounded-xl border border-gray-800">
+            <h5 class="font-tech font-bold text-brand-neonGreen text-base mb-2 flex items-center gap-2">
+              <span>⚡</span> 2. Fechando o Circuito para LOW
+            </h5>
+            <p class="leading-relaxed text-xs sm:text-sm text-gray-400">
+              Quando a criança bate no botão gigante, as duas placas metálicas se tocam. A energia escorre para o <strong class="text-white">GND (Terra)</strong>, forçando o pino para <strong class="text-brand-neonGreen">LOW (Nível Baixo / 0)</strong>. O ESP32 percebe a queda na hora e dispara o pacote Bluetooth!
+            </p>
+          </div>
+
+        </div>
+
+      </div>
+
+    </section>
+
+  </main>
+
+  <!-- ==================== RODAPÉ ==================== -->
+  <footer class="border-t border-gray-800/80 bg-gray-950/80 py-8 px-4 text-center mt-16 text-sm text-gray-400 font-tech">
+    <div class="max-w-7xl mx-auto space-y-2">
+      <p class="text-gray-300">
+        Desenvolvido com dedicação pelos alunos do <span class="text-brand-neonCyan font-bold">6º Ano B</span> para o <span class="text-white font-bold">InovaCEV</span>.
+      </p>
+      <p class="text-xs text-gray-500">
+        Orientação: <a href="https://patrodev.com" target="_blank" rel="noopener noreferrer" class="text-brand-accent hover:text-purple-300 transition underline underline-offset-4 font-semibold">Prof. Luis Felipe Patrocínio (patrodev.com)</a>
+      </p>
+    </div>
+  </footer>
+
+  <!-- ==================== SCRIPT PRINCIPAL THREE.JS & INTERAÇÃO ==================== -->
+  <script>
+    // -------------------------------------------------------------
+    // 1. ÁUDIO SINTETIZADO (Web Audio API)
+    // -------------------------------------------------------------
+    let soundEnabled = true;
+    let audioCtx = null;
+
+    function playArcadeClickSound() {
+      if (!soundEnabled) return;
+      try {
+        if (!audioCtx) {
+          audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        }
+        if (audioCtx.state === 'suspended') {
+          audioCtx.resume();
+        }
+
+        const now = audioCtx.currentTime;
+        const osc = audioCtx.createOscillator();
+        const gain = audioCtx.createGain();
+
+        // Tom retrô de arcade sintetizado estilo "power press"
+        osc.type = 'triangle';
+        osc.frequency.setValueAtTime(320, now);
+        osc.frequency.exponentialRampToValueAtTime(120, now + 0.12);
+
+        gain.gain.setValueAtTime(0.3, now);
+        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.14);
+
+        osc.connect(gain);
+        gain.connect(audioCtx.destination);
+
+        osc.start(now);
+        osc.stop(now + 0.15);
+      } catch (e) {
+        console.warn("Audio Context inicializa após interação do usuário.");
+      }
+    }
+
+    const soundBtn = document.getElementById('btn-sound-toggle');
+    const soundLabel = document.getElementById('sound-label');
+    soundBtn.addEventListener('click', () => {
+      soundEnabled = !soundEnabled;
+      soundLabel.textContent = soundEnabled ? 'Som: ON' : 'Som: OFF';
+      soundBtn.classList.toggle('text-gray-400', !soundEnabled);
+      soundBtn.classList.toggle('text-brand-neonGreen', soundEnabled);
+    });
+
+    // -------------------------------------------------------------
+    // 2. CONFIGURAÇÃO DA CENA THREE.JS
+    // -------------------------------------------------------------
+    const container = document.getElementById('canvas3d-container');
+    const scene = new THREE.Scene();
+    scene.background = new THREE.Color(0x0a0d14);
+    scene.fog = new THREE.FogExp2(0x0a0d14, 0.04);
+
+    const camera = new THREE.PerspectiveCamera(45, container.clientWidth / container.clientHeight, 0.1, 100);
+    camera.position.set(0, 5, 8.5);
+
+    const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: false });
+    renderer.setSize(container.clientWidth, container.clientHeight);
+    renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    renderer.shadowMap.enabled = true;
+    renderer.shadowMap.type = THREE.PCFSoftShadowMap;
+    container.appendChild(renderer.domElement);
+
+    // Controles de órbita para os jurados girarem o controle
+    const controls = new THREE.OrbitControls(camera, renderer.domElement);
+    controls.enableDamping = true;
+    controls.dampingFactor = 0.05;
+    controls.maxPolarAngle = Math.PI / 2 - 0.05; // Não passar do chão
+    controls.minDistance = 4;
+    controls.maxDistance = 14;
+    controls.autoRotate = true;
+    controls.autoRotateSpeed = 0.8;
+
+    // -------------------------------------------------------------
+    // 3. ILUMINAÇÃO NEON / ESTÚDIO
+    // -------------------------------------------------------------
+    const ambientLight = new THREE.AmbientLight(0xffffff, 0.7);
+    scene.add(ambientLight);
+
+    const keyLight = new THREE.DirectionalLight(0xffffff, 1.2);
+    keyLight.position.set(5, 10, 7);
+    keyLight.castShadow = true;
+    keyLight.shadow.mapSize.width = 1024;
+    keyLight.shadow.mapSize.height = 1024;
+    scene.add(keyLight);
+
+    // Luzes Neon Coloridas (Ciano e Roxo de preenchimento)
+    const cyanLight = new THREE.PointLight(0x06b6d4, 2.5, 12);
+    cyanLight.position.set(-4, 3, 3);
+    scene.add(cyanLight);
+
+    const purpleLight = new THREE.PointLight(0x8b5cf6, 2.0, 12);
+    purpleLight.position.set(4, 2, -3);
+    scene.add(purpleLight);
+
+    // Luz pontual logo acima do botão vermelho para efeito de flash ao apertar
+    const buttonGlowLight = new THREE.PointLight(0x10b981, 0, 8); // Fica verde brilhante no clique
+    buttonGlowLight.position.set(0, 3.5, 0);
+    scene.add(buttonGlowLight);
+
+    // -------------------------------------------------------------
+    // 4. MODELAGEM PROCEDURAL DO PROTÓTIPO DE 1 BOTÃO
+    // -------------------------------------------------------------
+    const arcadeGroup = new THREE.Group();
+    scene.add(arcadeGroup);
+
+    // A) CHÃO / GRID DE REFERÊNCIA
+    const gridHelper = new THREE.GridHelper(20, 20, 0x1e293b, 0x0f172a);
+    gridHelper.position.y = -0.01;
+    scene.add(gridHelper);
+
+    // B) BASE INCLINADA DO CONTROLE (Estilo Caixa de Fliperama / Arcade Box)
+    // Criamos uma caixa estilosa com chanfro frontal
+    const baseGeometry = new THREE.BoxGeometry(4.2, 1.2, 4.2);
+    const baseMaterial = new THREE.MeshStandardMaterial({
+      color: 0x181e2b,
+      roughness: 0.4,
+      metalness: 0.3,
+    });
+    const baseMesh = new THREE.Mesh(baseGeometry, baseMaterial);
+    baseMesh.position.y = 0.6;
+    baseMesh.castShadow = true;
+    baseMesh.receiveShadow = true;
+    arcadeGroup.add(baseMesh);
+
+    // Detalhe de acabamento: Tampa superior chanfrada / Placa de topo
+    const topPlateGeo = new THREE.BoxGeometry(3.9, 0.08, 3.9);
+    const topPlateMat = new THREE.MeshStandardMaterial({
+      color: 0x0f172a,
+      roughness: 0.2,
+      metalness: 0.8
+    });
+    const topPlate = new THREE.Mesh(topPlateGeo, topPlateMat);
+    topPlate.position.y = 1.24;
+    arcadeGroup.add(topPlate);
+
+    // Anel decorativo Neon em volta da caixa
+    const ringBorderGeo = new THREE.BoxGeometry(4.25, 0.05, 4.25);
+    const ringBorderMat = new THREE.MeshBasicMaterial({ color: 0x06b6d4 });
+    const ringBorder = new THREE.Mesh(ringBorderGeo, ringBorderMat);
+    ringBorder.position.y = 1.15;
+    arcadeGroup.add(ringBorder);
+
+    // C) O ENORME BOTÃO VERMELHO CILÍNDRICO (O Protótipo do 6º Ano)
+    // 1. O Aro metálico exterior do botão (Bezel)
+    const bezelGeo = new THREE.CylinderGeometry(1.5, 1.6, 0.35, 48);
+    const bezelMat = new THREE.MeshStandardMaterial({
+      color: 0x27272a,
+      metalness: 0.9,
+      roughness: 0.2
+    });
+    const bezel = new THREE.Mesh(bezelGeo, bezelMat);
+    bezel.position.y = 1.35;
+    arcadeGroup.add(bezel);
+
+    // 2. A cúpula móvel do botão vermelho (O elemento que afunda ao apertar!)
+    const buttonCapGroup = new THREE.Group();
+    buttonCapGroup.position.y = 1.45; // Posição neutra
+    arcadeGroup.add(buttonCapGroup);
+
+    const buttonCylinderGeo = new THREE.CylinderGeometry(1.35, 1.35, 0.5, 48);
+    const buttonMaterial = new THREE.MeshStandardMaterial({
+      color: 0xef4444, // Vermelho Arcade Vibrante
+      roughness: 0.15,
+      metalness: 0.2,
+      emissive: 0x5a0000,
+      emissiveIntensity: 0.4
+    });
+    const buttonCylinder = new THREE.Mesh(buttonCylinderGeo, buttonMaterial);
+    buttonCylinder.castShadow = true;
+    buttonCapGroup.add(buttonCylinder);
+
+    // Topo levemente arredondado do botão (Domo)
+    const buttonDomeGeo = new THREE.SphereGeometry(1.35, 36, 16, 0, Math.PI * 2, 0, Math.PI * 0.22);
+    const buttonDome = new THREE.Mesh(buttonDomeGeo, buttonMaterial);
+    buttonDome.position.y = 0.2;
+    buttonCapGroup.add(buttonDome);
+
+    // Texto ou Logo estilizado em cima do botão
+    const buttonRingGeo = new THREE.TorusGeometry(0.7, 0.04, 16, 64);
+    const buttonRingMat = new THREE.MeshBasicMaterial({ color: 0xffffff });
+    const buttonRing = new THREE.Mesh(buttonRingGeo, buttonRingMat);
+    buttonRing.rotation.x = Math.PI / 2;
+    buttonRing.position.y = 0.35;
+    buttonCapGroup.add(buttonRing);
+
+    // Cabos estilizados saindo da parte de trás simulando as garras jacaré
+    const curvePoints = [
+      new THREE.Vector3(0, 0.6, 2.1),
+      new THREE.Vector3(0.5, 0.2, 3.2),
+      new THREE.Vector3(1.0, 0.05, 4.0)
+    ];
+    const cableCurve = new THREE.CatmullRomCurve3(curvePoints);
+    const cableGeo = new THREE.TubeGeometry(cableCurve, 20, 0.05, 8, false);
+    const cableMat = new THREE.MeshStandardMaterial({ color: 0xfacc15, roughness: 0.5 }); // Garra amarela D4
+    const cableMesh = new THREE.Mesh(cableGeo, cableMat);
+    arcadeGroup.add(cableMesh);
+
+    // -------------------------------------------------------------
+    // 5. ESTADO DA ANIMAÇÃO DE PRESSIONAR O BOTÃO
+    // -------------------------------------------------------------
+    let isPressed = false;
+    let targetY = 1.45; // Altura normal
+    const normalY = 1.45;
+    const pressedY = 1.15; // Altura afundada durante o clique
+    let totalClicks = 0;
+
+    const counterElement = document.getElementById('click-counter');
+    const badgeElement = document.getElementById('click-feedback-badge');
+    const glowElement = document.getElementById('click-glow');
+
+    function triggerPressAction() {
+      if (isPressed) return; // Evita loop contínuo enquanto segura a tecla
+      isPressed = true;
+      targetY = pressedY;
+
+      totalClicks++;
+      counterElement.textContent = totalClicks;
+
+      // Áudio
+      playArcadeClickSound();
+
+      // Feedback Visual 3D
+      buttonMaterial.color.setHex(0x10b981); // Fica verde no clique
+      buttonMaterial.emissive.setHex(0x059669);
+      buttonMaterial.emissiveIntensity = 1.2;
+      buttonGlowLight.intensity = 4.5;
+
+      // Feedback na Página (Badge flutuante e glow)
+      badgeElement.style.opacity = '1';
+      badgeElement.style.transform = 'translate(-50%, 0) scale(1.05)';
+      glowElement.style.opacity = '1';
+
+      // Parar rotação automática temporariamente para focar na ação
+      controls.autoRotate = false;
+    }
+
+    function triggerReleaseAction() {
+      if (!isPressed) return;
+      isPressed = false;
+      targetY = normalY;
+
+      // Restaura cor original vermelha
+      buttonMaterial.color.setHex(0xef4444);
+      buttonMaterial.emissive.setHex(0x5a0000);
+      buttonMaterial.emissiveIntensity = 0.4;
+      buttonGlowLight.intensity = 0;
+
+      // Esconde o badge com transição suave
+      badgeElement.style.opacity = '0';
+      badgeElement.style.transform = 'translate(-50%, 0) scale(0.8)';
+      glowElement.style.opacity = '0';
+
+      // Volta rotação automática após 2 segundos sem mexer
+      setTimeout(() => {
+        if (!isPressed) controls.autoRotate = true;
+      }, 2000);
+    }
+
+    // -------------------------------------------------------------
+    // 6. EVENT LISTENERS (TECLADO ESPAÇO + CLIQUES DE MOUSE)
+    // -------------------------------------------------------------
+    // A) Tecla ESPAÇO (Enviada pelo Teclado Físico ou pelo ESP32 via Bluetooth!)
+    window.addEventListener('keydown', (e) => {
+      if (e.code === 'Space') {
+        e.preventDefault(); // Não rolar a página para baixo
+        triggerPressAction();
+      }
+    });
+
+    window.addEventListener('keyup', (e) => {
+      if (e.code === 'Space') {
+        e.preventDefault();
+        triggerReleaseAction();
+      }
+    });
+
+    // B) Botão gigante na UI lateral
+    const bigBtn = document.getElementById('btn-big-push');
+    bigBtn.addEventListener('mousedown', triggerPressAction);
+    bigBtn.addEventListener('mouseup', triggerReleaseAction);
+    bigBtn.addEventListener('mouseleave', triggerReleaseAction);
+
+    bigBtn.addEventListener('touchstart', (e) => {
+      e.preventDefault();
+      triggerPressAction();
+    });
+    bigBtn.addEventListener('touchend', (e) => {
+      e.preventDefault();
+      triggerReleaseAction();
+    });
+
+    // C) Atalho no rodapé do canvas
+    const manualClickBtn = document.getElementById('btn-manual-click');
+    manualClickBtn.addEventListener('click', () => {
+      triggerPressAction();
+      setTimeout(triggerReleaseAction, 180);
+    });
+
+    // D) Raycaster para permitir clicar DIRETAMENTE no botão 3D com o mouse
+    const raycaster = new THREE.Raycaster();
+    const mouse = new THREE.Vector2();
+
+    renderer.domElement.addEventListener('pointerdown', (event) => {
+      const rect = renderer.domElement.getBoundingClientRect();
+      mouse.x = ((event.clientX - rect.left) / rect.width) * 2 - 1;
+      mouse.y = -((event.clientY - rect.top) / rect.height) * 2 + 1;
+
+      raycaster.setFromCamera(mouse, camera);
+      const intersects = raycaster.intersectObjects([buttonCylinder, buttonDome, buttonRing], true);
+
+      if (intersects.length > 0) {
+        triggerPressAction();
+        window.addEventListener('pointerup', onPointerUpGlobal, { once: true });
+      }
+    });
+
+    function onPointerUpGlobal() {
+      triggerReleaseAction();
+    }
+
+    // -------------------------------------------------------------
+    // 7. RESPONSIVIDADE DO CANVAS (RESIZE)
+    // -------------------------------------------------------------
+    window.addEventListener('resize', () => {
+      const width = container.clientWidth;
+      const height = container.clientHeight;
+      camera.aspect = width / height;
+      camera.updateProjectionMatrix();
+      renderer.setSize(width, height);
+    });
+
+    // -------------------------------------------------------------
+    // 8. LOOP DE RENDERIZAÇÃO E ANIMAÇÃO DA MOLA
+    // -------------------------------------------------------------
+    function animate() {
+      requestAnimationFrame(animate);
+
+      // Animação de interpolação suave (Spring / Lerp) para o afundamento do botão
+      buttonCapGroup.position.y += (targetY - buttonCapGroup.position.y) * 0.35;
+
+      controls.update();
+      renderer.render(scene, camera);
+    }
+
+    animate();
+  </script>
+
+</body>
+</html>
