@@ -12,6 +12,7 @@
 
 ```text
 GiantJoystick/
+├── corte_laser_layout.svg       # Layout vetorial completo para Corte a Laser (MDF/Acrílico 3mm)
 ├── platformio.ini               # Configuração do PlatformIO (VS Code)
 ├── ponte_teclado_usb.py         # Script Python para transformar USB Serial em tecla real do PC
 ├── src/
@@ -23,6 +24,25 @@ GiantJoystick/
 │   └── index.html               # Simulador 3D com Web Serial API (Plug-and-Play)
 └── README.md                    # Guia Rápido de Sobrevivência para o Crunch Time
 ```
+
+---
+
+## 🛠️ PARTE 0: Fabricação Física em Corte a Laser (MDF / Acrílico 3mm)
+
+O arquivo vetorial pronto para importar no **LightBurn**, **RDWorks**, **CorelDRAW** ou **Inkscape** está disponível na raiz do repositório:
+👉 **[`corte_laser_layout.svg`](./corte_laser_layout.svg)**
+
+### Padrão de Cores para o Operador da Máquina Laser:
+* **🔴 Linhas Vermelhas (`#FF0000` / 0.1mm):** CORTE completo da chapa.
+* **⚫ Linhas Pretas (`#000000`):** GRAVAÇÃO vetorial das marcas e circuitos decorativos.
+* **⬛ Preenchimento Preto:** GRAVAÇÃO em relevo (Raster) dos logotipos.
+
+### Peças Inclusas no Layout:
+1. **Tampa Superior (220mm x 220mm):** Com abertura central de 115mm para o botão e grafismos de circuito impresso.
+2. **Anel Difusor de LED (135mm ext / 115mm int):** Cortado em Acrílico Branco Leitoso para espalhar a luz dos LEDs laterais de forma uniforme.
+3. **Disco do Botão Gigante (110mm):** A peça onde as crianças batem com a mão.
+4. **Disco Trava Inferior (122mm):** Fica por baixo da tampa, impedindo o botão de tombar ou pular para fora da caixa.
+5. **Parede Lateral com Fendas Cyberpunk:** Com rasgos em 45° para a luz neon dos LEDs vazar e abertura para o cabo USB do ESP32.
 
 ---
 

@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<svg xmlns="http://www.w3.org/2000/svg" width="600mm" height="400mm" viewBox="0 0 600 400" version="1.1">
+  <!--
+    ===========================================================================
+    PROJETO JOGANDO JUNTO - 6º ANO B (InovaCEV 2026)
+    LAYOUT DE CORTE A LASER: CONTROLE GIGANTE CYBERPUNK (MDF/ACRÍLICO 3mm)
+    Orientação: Prof. Luis Felipe Patrocínio (patrodev.com)
+    
+    Cores padrão para máquina de corte a laser:
+    - Linha Vermelha (#FF0000, 0.1mm): CORTE (Cut)
+    - Linha Preta (#000000): GRAVAÇÃO VETORIAL (Vector Engrave / Marking)
+    - Preenchimento Preto (#000000): GRAVAÇÃO PREENCHIDA (Raster Engrave)
+    ===========================================================================
+  -->
+
+  <defs>
+    <style>
+      .corte { fill: none; stroke: #FF0000; stroke-width: 0.1; }
+      .gravacao-linha { fill: none; stroke: #000000; stroke-width: 0.3; }
+      .gravacao-texto { font-family: 'Courier New', monospace; font-size: 5px; font-weight: bold; fill: #000000; }
+      .rotulo-info { font-family: Arial, sans-serif; font-size: 4px; fill: #0066CC; }
+    </style>
+  </defs>
+
+  <!-- ======================================================================= -->
+  <!-- PEÇA 1: TAMPA SUPERIOR DA CAIXA (220mm x 220mm com Furo do Botão de 115mm) -->
+  <!-- ======================================================================= -->
+  <g id="tampa-superior" transform="translate(15, 15)">
+    <!-- Contorno Externo de Corte da Tampa -->
+    <rect class="corte" x="0" y="0" width="220" height="220" rx="10" />
+
+    <!-- Furo Central de Corte para o Botão (Diametro 115mm = Raio 57.5mm) -->
+    <circle class="corte" cx="110" cy="110" r="57.5" />
+
+    <!-- 4 Furos de Fixação dos Cantos M3 (Diametro 3.2mm) -->
+    <circle class="corte" cx="12" cy="12" r="1.6" />
+    <circle class="corte" cx="208" cy="12" r="1.6" />
+    <circle class="corte" cx="12" cy="208" r="1.6" />
+    <circle class="corte" cx="208" cy="208" r="1.6" />
+
+    <!-- Grafismos Estilo Cyberpunk / Circuito Impresso (Gravação) -->
+    <path class="gravacao-linha" d="M 15 40 L 45 40 L 60 25 L 85 25" />
+    <circle cx="85" cy="25" r="1.5" fill="#000000" />
+    
+    <path class="gravacao-linha" d="M 205 180 L 175 180 L 160 195 L 135 195" />
+    <circle cx="135" cy="195" r="1.5" fill="#000000" />
+
+    <path class="gravacao-linha" d="M 30 190 L 30 160 L 45 145" />
+    <circle cx="45" cy="145" r="1.5" fill="#000000" />
+
+    <!-- Tipografia Futurista Gravada na Tampa -->
+    <text class="gravacao-texto" x="15" y="212">PROJECT: JOGANDO JUNTO // 6B INOVACEV</text>
+    <text class="gravacao-texto" x="125" y="12">ONE-SWITCH INPUT // 3.3V</text>
+    <text class="rotulo-info" x="5" y="-3">1. TAMPA SUPERIOR (MDF ou Acrílico Preto 3mm)</text>
+  </g>
+
+  <!-- ======================================================================= -->
+  <!-- PEÇA 2: ANEL DIFUSOR DE LEDS LATERAIS (Acrílico Branco Leitoso 3mm)      -->
+  <!-- ======================================================================= -->
+  <g id="anel-difusor-led" transform="translate(255, 15)">
+    <!-- Borda Externa de Corte (Diametro 135mm = Raio 67.5mm) -->
+    <circle class="corte" cx="70" cy="70" r="67.5" />
+    
+    <!-- Borda Interna de Corte (Diametro 115mm = Raio 57.5mm) -->
+    <circle class="corte" cx="70" cy="70" r="57.5" />
+
+    <text class="rotulo-info" x="0" y="-3">2. ANEL DIFUSOR DE LED (Acrílico Branco Leitoso 3mm)</text>
+  </g>
+
+  <!-- ======================================================================= -->
+  <!-- PEÇA 3: DISCO SUPERIOR DO BOTÃO GIGANTE (Diametro 110mm)               -->
+  <!-- ======================================================================= -->
+  <g id="disco-superior-botao" transform="translate(415, 15)">
+    <!-- Contorno Externo do Botão (Diametro 110mm = Raio 55mm) -->
+    <circle class="corte" cx="60" cy="60" r="55" />
+
+    <!-- Gravura Decorativa Central em Alvo Cyberpunk -->
+    <circle class="gravacao-linha" cx="60" cy="60" r="42" />
+    <circle class="gravacao-linha" cx="60" cy="60" r="28" />
+    <circle cx="60" cy="60" r="14" fill="#000000" />
+
+    <text class="gravacao-texto" x="42" y="62" fill="#FFFFFF">PRESS</text>
+    <text class="rotulo-info" x="0" y="-3">3. DISCO DO BOTÃO (Acrílico Vermelho ou MDF)</text>
+  </g>
+
+  <!-- ======================================================================= -->
+  <!-- PEÇA 4: DISCO TRAVA INFERIOR DO BOTÃO (Diametro 122mm)                 -->
+  <!-- Fica POR BAIXO da tampa. O botão não pula para fora da caixa!          -->
+  <!-- ======================================================================= -->
+  <g id="disco-trava-inferior" transform="translate(255, 175)">
+    <!-- Contorno Externo (Diametro 122mm = Raio 61mm) -->
+    <circle class="corte" cx="65" cy="65" r="61" />
+
+    <!-- Furo Central para passar a Mola ou Eixo Guia (Diametro 25mm) -->
+    <circle class="corte" cx="65" cy="65" r="12.5" />
+
+    <!-- 4 Furos M3 para unir o disco de cima com o de baixo -->
+    <circle class="corte" cx="35" cy="65" r="1.6" />
+    <circle class="corte" cx="95" cy="65" r="1.6" />
+    <circle class="corte" cx="65" cy="35" r="1.6" />
+    <circle class="corte" cx="65" cy="95" r="1.6" />
+
+    <text class="rotulo-info" x="0" y="-3">4. TRAVA INFERIOR ANTI-PULO (MDF 3mm)</text>
+  </g>
+
+  <!-- ======================================================================= -->
+  <!-- PEÇA 5: LATERAL COM FENDAS CYBERPUNK (Para vazar a luz dos LEDs)       -->
+  <!-- ======================================================================= -->
+  <g id="lateral-fendas" transform="translate(15, 260)">
+    <!-- Retângulo da Lateral (220mm x 80mm) -->
+    <rect class="corte" x="0" y="0" width="220" height="80" rx="5" />
+
+    <!-- Fendas Angulares (45°) para Vazamento de Luz Neon -->
+    <rect class="corte" x="30" y="25" width="8" height="30" rx="3" transform="rotate(25 34 40)" />
+    <rect class="corte" x="55" y="25" width="8" height="30" rx="3" transform="rotate(25 59 40)" />
+    <rect class="corte" x="80" y="25" width="8" height="30" rx="3" transform="rotate(25 84 40)" />
+    <rect class="corte" x="105" y="25" width="8" height="30" rx="3" transform="rotate(25 109 40)" />
+    <rect class="corte" x="130" y="25" width="8" height="30" rx="3" transform="rotate(25 134 40)" />
+    <rect class="corte" x="155" y="25" width="8" height="30" rx="3" transform="rotate(25 159 40)" />
+    <rect class="corte" x="180" y="25" width="8" height="30" rx="3" transform="rotate(25 184 40)" />
+
+    <!-- Furo traseiro para o Cabo USB do ESP32 (14mm x 8mm) -->
+    <rect class="corte" x="5" y="36" width="14" height="8" rx="2" />
+    <text class="gravacao-texto" x="5" y="32">USB-C / MICRO</text>
+
+    <text class="rotulo-info" x="0" y="-3">5. PAREDE LATERAL (Corte 4x iguais em MDF ou Acrílico)</text>
+  </g>
+
+  <!-- ======================================================================= -->
+  <!-- LEGENDA TÉCNICA PARA O OPERADOR DO LASER                                -->
+  <!-- ======================================================================= -->
+  <g id="legenda-laser" transform="translate(400, 180)">
+    <rect x="0" y="0" width="180" height="75" fill="#F8FAFC" stroke="#0F172A" stroke-width="0.5" rx="4" />
+    <text class="gravacao-texto" x="10" y="15" font-size="6px">CONFIGURAÇÃO DA CORTADORA:</text>
+    <text class="rotulo-info" x="10" y="30" fill="#FF0000">• LINHA VERMELHA: CORTE (Speed 25 / Power 85%)</text>
+    <text class="rotulo-info" x="10" y="45" fill="#000000">• LINHA PRETA: GRAVAÇÃO VETORIAL (Speed 80 / Power 20%)</text>
+    <text class="rotulo-info" x="10" y="60" fill="#000000">• PREENCHIMENTO: GRAVAÇÃO PREENCHIDA (Raster)</text>
+  </g>
+
+</svg>
