@@ -127,16 +127,22 @@
         </div>
       </div>
 
-      <!-- Navegação Rápida Estilo Adesivos -->
+      <!-- Navegação Rápida Estilo Adesivos & Botão USB de Destaque -->
       <div class="flex items-center gap-3">
-        <nav class="hidden md:flex items-center space-x-2 font-display text-xs">
+        <nav class="hidden lg:flex items-center space-x-2 font-display text-xs">
           <a href="#setup-3d" class="px-3 py-1.5 rounded-xl bg-white hover:bg-pop-blue/20 text-pop-dark border-2 border-pop-dark shadow-neo-sm transition">🎮 Simulador 3D</a>
           <a href="#justificativa" class="px-3 py-1.5 rounded-xl bg-white hover:bg-pop-yellow/30 text-pop-dark border-2 border-pop-dark shadow-neo-sm transition">💡 Por Que Importa?</a>
           <a href="#engenharia" class="px-3 py-1.5 rounded-xl bg-white hover:bg-pop-green/20 text-pop-dark border-2 border-pop-dark shadow-neo-sm transition">⚡ Circuito & Fios</a>
           <a href="#comparativo" class="px-3 py-1.5 rounded-xl bg-white hover:bg-pop-red/15 text-pop-dark border-2 border-pop-dark shadow-neo-sm transition">📊 Comparativo</a>
         </nav>
 
-        <button id="btn-sound-toggle" class="btn-neo bg-pop-yellow hover:bg-yellow-300 text-pop-dark px-3 py-1.5 rounded-xl text-xs font-display font-bold flex items-center gap-1.5" title="Áudio Arcade">
+        <!-- BOTÃO DE CONEXÃO USB NO HEADER (MÁXIMA VISIBILIDADE) -->
+        <button id="btn-header-connect-usb" class="btn-neo bg-pop-green hover:bg-emerald-300 text-pop-dark px-3 sm:px-4 py-2 rounded-xl text-xs sm:text-sm font-display font-black flex items-center gap-1.5 shadow-neo-sm animate-pulse">
+          <span class="text-base">🔌</span>
+          <span id="header-usb-btn-text">CONECTAR USB</span>
+        </button>
+
+        <button id="btn-sound-toggle" class="btn-neo bg-pop-yellow hover:bg-yellow-300 text-pop-dark px-3 py-2 rounded-xl text-xs font-display font-bold flex items-center gap-1.5" title="Áudio Arcade">
           <span id="sound-icon">🔊</span>
           <span class="hidden sm:inline">Som: ON</span>
         </button>
@@ -148,6 +154,46 @@
   <!-- ==================== SEÇÃO 1: ECOSSISTEMA 3D INTERATIVO (NINTENDO LABO) ==================== -->
   <section id="setup-3d" class="max-w-7xl mx-auto px-4 sm:px-6 pt-8 pb-12 space-y-4">
     
+    <!-- BANNER DE CONEXÃO USB EM DESTAQUE TOTAL -->
+    <div class="bg-emerald-100 card-neo rounded-2xl p-4 sm:p-5 flex flex-wrap items-center justify-between gap-4">
+      <div class="flex items-center gap-3.5">
+        <div class="w-12 h-12 rounded-2xl bg-pop-green border-3 border-pop-dark flex items-center justify-center text-2xl shadow-neo-sm shrink-0">
+          🔌
+        </div>
+        <div>
+          <div class="flex items-center gap-2">
+            <span class="text-xs font-display font-black text-emerald-950 uppercase bg-white px-2 py-0.5 rounded border border-pop-dark shadow-neo-sm">
+              Conexão Direta Via Cabo
+            </span>
+            <span id="banner-status-badge" class="text-xs font-display font-bold text-slate-700 bg-amber-200 px-2 py-0.5 rounded border border-pop-dark">
+              Aguardando Conexão
+            </span>
+          </div>
+          <p class="text-sm font-display font-bold text-pop-dark mt-1">
+            Conecte o ESP32 pelo cabo USB e clique no botão para jogar sem depender de Bluetooth!
+          </p>
+        </div>
+      </div>
+
+      <div class="flex items-center gap-2.5">
+        <button id="btn-banner-connect-usb" class="btn-neo bg-pop-green hover:bg-emerald-300 text-pop-dark px-5 py-3 rounded-2xl font-display font-black text-sm flex items-center gap-2 shadow-neo">
+          <span class="text-lg">🔌</span>
+          <span id="banner-usb-btn-text">CONECTAR CONTROLE USB</span>
+        </button>
+      </div>
+    </div>
+
+    <!-- Aviso caso esteja abrindo localmente via file:// -->
+    <div id="file-protocol-warning" class="hidden bg-amber-100 border-2 border-pop-dark rounded-xl p-3 text-xs font-bold text-amber-900 flex items-center justify-between gap-2 shadow-neo-sm">
+      <div class="flex items-center gap-2">
+        <span>⚠️</span>
+        <span>Você está visualizando a página pelo arquivo local (file://). O Google Chrome exige conexão segura (HTTPS) para liberar a porta USB!</span>
+      </div>
+      <a href="https://luisfpatrocinio.github.io/GiantJoystick/" class="btn-neo bg-white px-3 py-1 rounded-lg text-xs font-display font-black text-pop-blue uppercase">
+        Abrir no Link Online ➔
+      </a>
+    </div>
+
     <!-- Título do Simulador com Adesivo -->
     <div class="flex flex-wrap items-end justify-between gap-4 pb-2">
       <div class="space-y-1">
@@ -254,13 +300,19 @@
               <span class="hidden sm:inline">Aperte a barra de espaço ou bata no controle de papelão</span>
             </div>
             <span class="text-slate-400 hidden md:inline">•</span>
-            <span class="text-slate-600 hidden md:inline">🖱️ Gire a câmera em 360° para ver a mesa</span>
+            <span class="text-slate-600 hidden md:inline">🖱️ Gire a câmera em 360°</span>
           </div>
 
-          <button id="btn-manual-click" class="btn-neo bg-pop-red text-white font-display font-black text-xs sm:text-sm px-6 py-2.5 rounded-xl flex items-center gap-2">
-            <span class="text-base">🔴</span>
-            <span>BATER NO BOTÃO GIGANTE</span>
-          </button>
+          <div class="flex items-center gap-2">
+            <button id="btn-bottom-connect-usb" class="btn-neo bg-pop-green hover:bg-emerald-300 text-pop-dark font-display font-black text-xs sm:text-sm px-4 py-2.5 rounded-xl flex items-center gap-1.5">
+              <span>🔌</span>
+              <span id="bottom-usb-btn-text">Conectar USB</span>
+            </button>
+            <button id="btn-manual-click" class="btn-neo bg-pop-red text-white font-display font-black text-xs sm:text-sm px-5 py-2.5 rounded-xl flex items-center gap-2">
+              <span class="text-base">🔴</span>
+              <span>BATER NO BOTÃO GIGANTE</span>
+            </button>
+          </div>
         </div>
 
       </div>
@@ -1211,62 +1263,103 @@
     // -------------------------------------------------------------
     // 7. CONEXÃO DIRETA VIA CABO USB (Web Serial API Plug-and-Play)
     // -------------------------------------------------------------
-    const btnConnectUsb = document.getElementById('btn-connect-usb');
-    const usbBtnText = document.getElementById('usb-btn-text');
+    const usbButtons = [
+      { btn: document.getElementById('btn-header-connect-usb'), text: document.getElementById('header-usb-btn-text') },
+      { btn: document.getElementById('btn-banner-connect-usb'), text: document.getElementById('banner-usb-btn-text') },
+      { btn: document.getElementById('btn-connect-usb'), text: document.getElementById('usb-btn-text') },
+      { btn: document.getElementById('btn-bottom-connect-usb'), text: document.getElementById('bottom-usb-btn-text') }
+    ].filter(item => item.btn != null);
+
+    const bannerBadge = document.getElementById('banner-status-badge');
+    const fileWarning = document.getElementById('file-protocol-warning');
     let serialPort = null;
     let serialReader = null;
 
-    if ('serial' in navigator && btnConnectUsb) {
-      btnConnectUsb.addEventListener('click', async () => {
-        if (serialPort) {
-          try {
-            if (serialReader) await serialReader.cancel();
-            await serialPort.close();
-          } catch(e) {}
-          serialPort = null;
-          usbBtnText.textContent = "Conectar Controle USB (Cabo)";
-          btnConnectUsb.className = "btn-neo bg-pop-green hover:bg-emerald-300 text-pop-dark px-4 py-2.5 rounded-2xl font-display font-bold text-xs sm:text-sm flex items-center gap-2";
-          streamStatus.textContent = "SINAL PRONTO";
-          return;
-        }
+    // Detecta se a página está sendo aberta por arquivo local file:// (onde o Chrome bloqueia Web Serial)
+    if (window.location.protocol === 'file:' && fileWarning) {
+      fileWarning.classList.remove('hidden');
+    }
 
-        try {
-          serialPort = await navigator.serial.requestPort();
-          await serialPort.open({ baudRate: 115200 });
-          
-          usbBtnText.textContent = "USB Conectado! (Clique p/ Desconectar)";
-          btnConnectUsb.className = "btn-neo bg-pop-yellow text-pop-dark px-4 py-2.5 rounded-2xl font-display font-bold text-xs sm:text-sm flex items-center gap-2 shadow-neo-sm";
-          streamStatus.textContent = "USB: ONLINE!";
-          streamStatus.className = "text-[10px] font-display font-black text-pop-dark bg-pop-green px-2 py-0.5 rounded-full border border-pop-dark animate-pulse";
-
-          const textDecoder = new TextDecoderStream();
-          serialPort.readable.pipeTo(textDecoder.writable);
-          serialReader = textDecoder.readable.getReader();
-
-          let buffer = '';
-          while (true) {
-            const { value, done } = await serialReader.read();
-            if (done) break;
-            buffer += value;
-            const lines = buffer.split('\n');
-            buffer = lines.pop();
-            for (const line of lines) {
-              const cleanLine = line.trim();
-              if (cleanLine.includes("SPACE:DOWN") || cleanLine.includes("PRESS")) {
-                doPress();
-              } else if (cleanLine.includes("SPACE:UP") || cleanLine.includes("RELEASE")) {
-                doRelease();
-              }
-            }
-          }
-        } catch (err) {
-          console.warn("Erro ao conectar Web Serial:", err);
-          alert("Aviso: Para conectar via USB, certifique-se de que nenhuma outra janela (como o Monitor Serial do PlatformIO/VS Code) esteja usando a porta COM no momento!");
+    function updateUsbUI(isConnected) {
+      usbButtons.forEach(item => {
+        if (!item.btn) return;
+        if (isConnected) {
+          if (item.text) item.text.textContent = "DESCONECTAR USB";
+          item.btn.className = "btn-neo bg-pop-yellow text-pop-dark px-4 py-2 rounded-xl font-display font-black text-xs sm:text-sm flex items-center gap-1.5 shadow-neo-sm";
+        } else {
+          if (item.text) item.text.textContent = "CONECTAR CONTROLE USB";
+          item.btn.className = "btn-neo bg-pop-green hover:bg-emerald-300 text-pop-dark px-4 py-2 rounded-xl font-display font-black text-xs sm:text-sm flex items-center gap-1.5 shadow-neo-sm animate-pulse";
         }
       });
-    } else if (btnConnectUsb) {
-      btnConnectUsb.title = "Use o Google Chrome ou Edge para conexão direta via cabo USB!";
+
+      if (bannerBadge) {
+        if (isConnected) {
+          bannerBadge.textContent = "CONECTADO ONLINE (COM)";
+          bannerBadge.className = "text-xs font-display font-black text-emerald-950 bg-pop-green px-2 py-0.5 rounded border border-pop-dark";
+        } else {
+          bannerBadge.textContent = "Aguardando Conexão";
+          bannerBadge.className = "text-xs font-display font-bold text-slate-700 bg-amber-200 px-2 py-0.5 rounded border border-pop-dark";
+        }
+      }
     }
+
+    async function toggleUsbConnection() {
+      if (!('serial' in navigator)) {
+        alert("Atenção: A conexão USB direta pelo navegador requer o Google Chrome ou Microsoft Edge em uma conexão segura HTTPS.\n\nAcesse pelo link oficial: https://luisfpatrocinio.github.io/GiantJoystick/\n\nOu use a tecla ESPAÇO / script ponte_teclado_usb.py!");
+        return;
+      }
+
+      if (serialPort) {
+        try {
+          if (serialReader) await serialReader.cancel();
+          await serialPort.close();
+        } catch(e) {}
+        serialPort = null;
+        updateUsbUI(false);
+        streamStatus.textContent = "SINAL PRONTO";
+        return;
+      }
+
+      try {
+        serialPort = await navigator.serial.requestPort();
+        await serialPort.open({ baudRate: 115200 });
+        
+        updateUsbUI(true);
+        streamStatus.textContent = "USB: ONLINE!";
+        streamStatus.className = "text-[10px] font-display font-black text-pop-dark bg-pop-green px-2 py-0.5 rounded-full border border-pop-dark animate-pulse";
+
+        const textDecoder = new TextDecoderStream();
+        serialPort.readable.pipeTo(textDecoder.writable);
+        serialReader = textDecoder.readable.getReader();
+
+        let buffer = '';
+        while (true) {
+          const { value, done } = await serialReader.read();
+          if (done) break;
+          buffer += value;
+          const lines = buffer.split('\n');
+          buffer = lines.pop();
+          for (const line of lines) {
+            const cleanLine = line.trim();
+            if (cleanLine.includes("SPACE:DOWN") || cleanLine.includes("PRESS")) {
+              doPress();
+            } else if (cleanLine.includes("SPACE:UP") || cleanLine.includes("RELEASE")) {
+              doRelease();
+            }
+          }
+        }
+      } catch (err) {
+        console.warn("Erro ao conectar Web Serial:", err);
+        updateUsbUI(false);
+        alert("Aviso: Não foi possível abrir a porta USB.\n\n1. Verifique se o cabo está conectado no computador.\n2. Feche o Monitor Serial do PlatformIO/VS Code para não ocupar a porta COM.\n3. Se estiver em arquivo local, abra pelo link online do GitHub Pages!");
+      }
+    }
+
+    usbButtons.forEach(item => {
+      if (item.btn) {
+        item.btn.addEventListener('click', toggleUsbConnection);
+      }
+    });
 
     animate();
   </script>
