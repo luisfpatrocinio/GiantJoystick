@@ -12,19 +12,46 @@
 
 ```text
 GiantJoystick/
-├── platformio.ini               # Configuração do PlatformIO (VS Code) com lib e core fixados
+├── platformio.ini               # Configuração do PlatformIO (VS Code)
+├── ponte_teclado_usb.py         # Script Python para transformar USB Serial em tecla real do PC
 ├── src/
-│   └── main.cpp                 # Código C++ para PlatformIO (com #include <Arduino.h>)
+│   └── main.cpp                 # Firmware C++ USB Serial & Plug-and-Play
 ├── firmware/
-│   └── controle_bluetooth.ino   # Código C++ alternativo para Arduino IDE
+│   ├── controle_usb.ino         # Código alternativo USB Serial para Arduino IDE
+│   └── controle_bluetooth.ino   # Código alternativo Bluetooth BLE
 ├── web/
-│   └── index.html               # Landing page com Gêmeo Digital 3D (Three.js)
+│   └── index.html               # Simulador 3D com Web Serial API (Plug-and-Play)
 └── README.md                    # Guia Rápido de Sobrevivência para o Crunch Time
 ```
 
 ---
 
-## 🚀 PARTE 1: Compilação com PlatformIO (VS Code) — [RECOMENDADO]
+## ⚡ MODO RÁPIDO: Conexão Direta via Cabo USB (Sem dores de cabeça com Bluetooth!)
+
+Se o Bluetooth do computador ou da placa estiver instável no estande, **use a conexão direta via cabo USB**:
+
+### Opção 1: Direto na Página Web 3D (Recomendado!)
+1. Grave o código no ESP32 usando o PlatformIO ou Arduino IDE.
+2. Abra a página `web/index.html` no Google Chrome ou Microsoft Edge (ou acesse [luisfpatrocinio.github.io/GiantJoystick](https://luisfpatrocinio.github.io/GiantJoystick/)).
+3. Clique no botão verde: **`🔌 Conectar Controle USB (Cabo)`**.
+4. Selecione a porta do seu ESP32 (ex: `COM3` ou `COM4`).
+5. **Pronto!** A página lerá o botão físico diretamente pelo cabo USB com latência zero e sem precisar parear nada!
+
+### Opção 2: Jogar Qualquer Jogo no PC (ex: Dino do Chrome)
+Se quiser jogar jogos fora da nossa página (como o jogo do Dinossauro em `chrome://dino`):
+1. Instale as bibliotecas Python (se ainda não tiver):
+   ```bash
+   pip install pyserial pyautogui
+   ```
+2. Execute o script ponte:
+   ```bash
+   python ponte_teclado_usb.py
+   ```
+3. O script detecta a porta USB do ESP32 automaticamente e pressiona a **Barra de Espaço** real do teclado do Windows/Mac a cada batida no botão!
+
+---
+
+## 🚀 PARTE 1: Compilação com PlatformIO (VS Code)
 
 Usando o **PlatformIO** no VS Code, você **não precisa baixar nenhum arquivo ZIP nem configurar gerenciador de placas manualmente**. O arquivo `platformio.ini` já faz tudo de forma 100% automatizada!
 
