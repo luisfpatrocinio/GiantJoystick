@@ -12,8 +12,11 @@
 
 ```text
 GiantJoystick/
+├── platformio.ini               # Configuração do PlatformIO (VS Code) com lib e core fixados
+├── src/
+│   └── main.cpp                 # Código C++ para PlatformIO (com #include <Arduino.h>)
 ├── firmware/
-│   └── controle_bluetooth.ino   # Código C++ do ESP32 (Teclado Bluetooth HID)
+│   └── controle_bluetooth.ino   # Código C++ alternativo para Arduino IDE
 ├── web/
 │   └── index.html               # Landing page com Gêmeo Digital 3D (Three.js)
 └── README.md                    # Guia Rápido de Sobrevivência para o Crunch Time
@@ -21,7 +24,23 @@ GiantJoystick/
 
 ---
 
-## ⚡ PARTE 1: Guia de Instalação e Compilação na Arduino IDE
+## 🚀 PARTE 1: Compilação com PlatformIO (VS Code) — [RECOMENDADO]
+
+Usando o **PlatformIO** no VS Code, você **não precisa baixar nenhum arquivo ZIP nem configurar gerenciador de placas manualmente**. O arquivo `platformio.ini` já faz tudo de forma 100% automatizada!
+
+### 1.1 Como Abrir e Gravar no ESP32:
+1. Abra o **VS Code** com a extensão **PlatformIO IDE** instalada.
+2. Vá em **`File` ➔ `Open Folder...`** e selecione a pasta raiz deste repositório (`GiantJoystick`).
+3. O PlatformIO detectará o `platformio.ini` e fará o download automático:
+   - Do core estável da Espressif (`espressif32@6.5.0`, baseado no Arduino 2.0.14).
+   - Da biblioteca `ESP32-BLE-Keyboard` direto do GitHub oficial.
+4. Conecte o cabo USB do ESP32 ao computador.
+5. Na barra inferior azul do VS Code, clique no ícone de **seta para a direita (`➔ PlatformIO: Upload`)** ou use o atalho `Ctrl + Alt + U`.
+6. Para abrir o monitor serial e ver as batidas no botão em tempo real, clique no ícone de tomada (`PlatformIO: Serial Monitor`).
+
+---
+
+## ⚡ PARTE 1.2: Alternativa via Arduino IDE
 
 A biblioteca `ESP32-BLE-Keyboard` não está disponível no catálogo de pesquisa rápida da Arduino IDE e deve ser instalada manualmente via arquivo ZIP.
 
