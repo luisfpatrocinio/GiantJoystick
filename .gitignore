@@ -1,5 +1,7 @@
-# Compilações e temporários Arduino
+# Compilações e temporários Arduino e PlatformIO
 build/
+.pio/
+.pioenvs/
 *.bin
 *.hex
 *.elf
