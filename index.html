@@ -8,7 +8,7 @@
   <!-- Tailwind CSS CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
   
-  <!-- Google Fonts: Fredoka (Títulos Pop), Nunito (Texto Amigável/Acessível) e JetBrains Mono (Código) -->
+  <!-- Google Fonts: Fredoka (Títulos Pop), Nunito (Acessibilidade) e JetBrains Mono (Código) -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Nunito:wght@500;600;700;800;900&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
@@ -43,7 +43,6 @@
             'neo-sm': '3px 3px 0px 0px #0F172A',
             'neo': '5px 5px 0px 0px #0F172A',
             'neo-lg': '8px 8px 0px 0px #0F172A',
-            'neo-xl': '12px 12px 0px 0px #0F172A',
           }
         }
       }
@@ -51,7 +50,7 @@
   </script>
 
   <style>
-    /* Fundo Acolhedor com Padrão Pontilhado de Caderno Maker */
+    /* Padrão de Caderno Técnico Maker Pontilhado */
     body {
       background-color: #FFFDF7;
       background-image: radial-gradient(#94A3B8 1.5px, transparent 1.5px);
@@ -60,7 +59,6 @@
       scroll-behavior: smooth;
     }
 
-    /* Utilitários Neobrutalistas Táteis */
     .btn-neo {
       transition: all 0.15s ease-out;
       border: 3px solid #0F172A;
@@ -85,7 +83,14 @@
       box-shadow: 8px 8px 0px 0px #0F172A;
     }
 
-    /* Scrollbar Maker Divertida */
+    /* Linhas destacadas dinamicamente no código */
+    .code-line-active {
+      background-color: #FEF08A !important;
+      border-left: 4px solid #EAB308 !important;
+      color: #713F12 !important;
+      font-weight: 700;
+    }
+
     ::-webkit-scrollbar {
       width: 10px;
     }
@@ -109,7 +114,7 @@
   <header class="sticky top-0 z-50 border-b-4 border-pop-dark bg-white/95 backdrop-blur-md">
     <div class="max-w-7xl mx-auto px-4 sm:px-6 h-20 flex items-center justify-between gap-4">
       
-      <!-- Logo do Projeto com Estilo Joy-Con / LEGO -->
+      <!-- Logo do Projeto -->
       <div class="flex items-center space-x-3">
         <div class="w-12 h-12 rounded-2xl bg-pop-red border-3 border-pop-dark flex items-center justify-center font-display font-black text-white text-2xl shadow-neo-sm transform -rotate-3 shrink-0">
           6B
@@ -122,27 +127,33 @@
           </div>
           <h1 class="text-lg sm:text-xl font-display font-black tracking-tight text-pop-dark uppercase flex items-center gap-1.5 mt-0.5">
             <span>JOGANDO JUNTO</span>
-            <span class="text-xs font-bold text-pop-blue bg-pop-blue/15 px-2 py-0.5 rounded-md border border-pop-blue hidden md:inline-block">Controle Adaptado</span>
+            <span class="text-xs font-bold text-pop-blue bg-pop-blue/15 px-2 py-0.5 rounded-md border border-pop-blue hidden sm:inline-block">Controle de 1 Botão</span>
           </h1>
         </div>
       </div>
 
-      <!-- Navegação Rápida Estilo Adesivos & Botão USB de Destaque -->
+      <!-- Links das 3 Grandes Seções & Botão USB -->
       <div class="flex items-center gap-3">
-        <nav class="hidden lg:flex items-center space-x-2 font-display text-xs">
-          <a href="#setup-3d" class="px-3 py-1.5 rounded-xl bg-white hover:bg-pop-blue/20 text-pop-dark border-2 border-pop-dark shadow-neo-sm transition">🎮 Simulador 3D</a>
-          <a href="#justificativa" class="px-3 py-1.5 rounded-xl bg-white hover:bg-pop-yellow/30 text-pop-dark border-2 border-pop-dark shadow-neo-sm transition">💡 Por Que Importa?</a>
-          <a href="#engenharia" class="px-3 py-1.5 rounded-xl bg-white hover:bg-pop-green/20 text-pop-dark border-2 border-pop-dark shadow-neo-sm transition">⚡ Circuito & Fios</a>
-          <a href="#comparativo" class="px-3 py-1.5 rounded-xl bg-white hover:bg-pop-red/15 text-pop-dark border-2 border-pop-dark shadow-neo-sm transition">📊 Comparativo</a>
+        <nav class="hidden md:flex items-center space-x-2 font-display text-xs">
+          <a href="#secao-maquete" class="px-3 py-1.5 rounded-xl bg-white hover:bg-pop-blue/20 text-pop-dark border-2 border-pop-dark shadow-neo-sm transition">
+            1. Maquete 3D
+          </a>
+          <a href="#secao-codigo" class="px-3 py-1.5 rounded-xl bg-white hover:bg-pop-yellow/30 text-pop-dark border-2 border-pop-dark shadow-neo-sm transition">
+            2. Código Dinâmico
+          </a>
+          <a href="#secao-jogo" class="px-3 py-1.5 rounded-xl bg-white hover:bg-pop-green/20 text-pop-dark border-2 border-pop-dark shadow-neo-sm transition">
+            3. Jogar (Flappy 6B)
+          </a>
         </nav>
 
-        <!-- BOTÃO DE CONEXÃO USB NO HEADER (MÁXIMA VISIBILIDADE) -->
-        <button id="btn-header-connect-usb" class="btn-neo bg-pop-green hover:bg-emerald-300 text-pop-dark px-3 sm:px-4 py-2 rounded-xl text-xs sm:text-sm font-display font-black flex items-center gap-1.5 shadow-neo-sm animate-pulse">
+        <!-- Botão de Conectar USB no Header -->
+        <button id="btn-header-connect-usb" class="btn-neo bg-pop-green hover:bg-emerald-300 text-pop-dark px-3 sm:px-4 py-2 rounded-xl text-xs sm:text-sm font-display font-black flex items-center gap-1.5 shadow-neo-sm">
           <span class="text-base">🔌</span>
           <span id="header-usb-btn-text">CONECTAR USB</span>
         </button>
 
-        <button id="btn-sound-toggle" class="btn-neo bg-pop-yellow hover:bg-yellow-300 text-pop-dark px-3 py-2 rounded-xl text-xs font-display font-bold flex items-center gap-1.5" title="Áudio Arcade">
+        <!-- Toggle de Som -->
+        <button id="btn-sound-toggle" class="btn-neo bg-pop-yellow hover:bg-yellow-300 text-pop-dark px-3 py-2 rounded-xl text-xs font-display font-bold flex items-center gap-1.5" title="Som Arcade">
           <span id="sound-icon">🔊</span>
           <span class="hidden sm:inline">Som: ON</span>
         </button>
@@ -151,502 +162,313 @@
     </div>
   </header>
 
-  <!-- ==================== SEÇÃO 1: ECOSSISTEMA 3D INTERATIVO (NINTENDO LABO) ==================== -->
-  <section id="setup-3d" class="max-w-7xl mx-auto px-4 sm:px-6 pt-8 pb-12 space-y-4">
-    
-    <!-- BANNER DE CONEXÃO USB EM DESTAQUE TOTAL -->
-    <div class="bg-emerald-100 card-neo rounded-2xl p-4 sm:p-5 flex flex-wrap items-center justify-between gap-4">
-      <div class="flex items-center gap-3.5">
-        <div class="w-12 h-12 rounded-2xl bg-pop-green border-3 border-pop-dark flex items-center justify-center text-2xl shadow-neo-sm shrink-0">
-          🔌
-        </div>
-        <div>
-          <div class="flex items-center gap-2">
-            <span class="text-xs font-display font-black text-emerald-950 uppercase bg-white px-2 py-0.5 rounded border border-pop-dark shadow-neo-sm">
-              Conexão Direta Via Cabo
-            </span>
-            <span id="banner-status-badge" class="text-xs font-display font-bold text-slate-700 bg-amber-200 px-2 py-0.5 rounded border border-pop-dark">
-              Aguardando Conexão
-            </span>
-          </div>
-          <p class="text-sm font-display font-bold text-pop-dark mt-1">
-            Conecte o ESP32 pelo cabo USB e clique no botão para jogar sem depender de Bluetooth!
-          </p>
-        </div>
-      </div>
+  <main class="max-w-7xl mx-auto px-4 sm:px-6 py-8 space-y-16">
 
-      <div class="flex items-center gap-2.5">
-        <button id="btn-banner-connect-usb" class="btn-neo bg-pop-green hover:bg-emerald-300 text-pop-dark px-5 py-3 rounded-2xl font-display font-black text-sm flex items-center gap-2 shadow-neo">
-          <span class="text-lg">🔌</span>
-          <span id="banner-usb-btn-text">CONECTAR CONTROLE USB</span>
-        </button>
-      </div>
-    </div>
-
-    <!-- Aviso caso esteja abrindo localmente via file:// -->
-    <div id="file-protocol-warning" class="hidden bg-amber-100 border-2 border-pop-dark rounded-xl p-3 text-xs font-bold text-amber-900 flex items-center justify-between gap-2 shadow-neo-sm">
+    <!-- ==================================================================== -->
+    <!-- SEÇÃO 1: MAQUETE 3D COM BLOCO DE JUSTIFICATIVA AO LADO               -->
+    <!-- ==================================================================== -->
+    <section id="secao-maquete" class="scroll-mt-24 space-y-4">
+      
+      <!-- Cabeçalho da Seção 1 -->
       <div class="flex items-center gap-2">
-        <span>⚠️</span>
-        <span>Você está visualizando a página pelo arquivo local (file://). O Google Chrome exige conexão segura (HTTPS) para liberar a porta USB!</span>
-      </div>
-      <a href="https://luisfpatrocinio.github.io/GiantJoystick/" class="btn-neo bg-white px-3 py-1 rounded-lg text-xs font-display font-black text-pop-blue uppercase">
-        Abrir no Link Online ➔
-      </a>
-    </div>
-
-    <!-- Título do Simulador com Adesivo -->
-    <div class="flex flex-wrap items-end justify-between gap-4 pb-2">
-      <div class="space-y-1">
-        <div class="flex items-center gap-2">
-          <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-pop-green/20 border-2 border-pop-dark text-xs font-display font-bold text-pop-dark shadow-neo-sm">
-            <span class="w-2.5 h-2.5 rounded-full bg-pop-green animate-pulse"></span>
-            Simulador Maker em Tempo Real
-          </span>
-        </div>
-        <h2 class="text-2xl sm:text-4xl font-display font-black text-pop-dark uppercase tracking-tight">
-          Da Batida de Papelão à Tela do Jogo!
-        </h2>
-        <p class="text-sm font-semibold text-slate-600 max-w-2xl">
-          Bata no botão gigante físico ou use a barra de espaço para ver a corrente elétrica passar pelas garras jacaré, acionar o ESP32 e mandar o sinal Bluetooth para o computador!
-        </p>
-      </div>
-
-      <!-- Botões de Conexão e Raio-X Neobrutalistas -->
-      <div class="flex flex-wrap items-center gap-3">
-        <button id="btn-connect-usb" class="btn-neo bg-pop-green hover:bg-emerald-300 text-pop-dark px-4 py-2.5 rounded-2xl font-display font-bold text-xs sm:text-sm flex items-center gap-2">
-          <span class="text-base">🔌</span>
-          <span id="usb-btn-text">Conectar Controle USB (Cabo)</span>
-        </button>
-        <button id="btn-toggle-xray" class="btn-neo bg-pop-blue hover:bg-cyan-300 text-pop-dark px-4 py-2.5 rounded-2xl font-display font-bold text-xs sm:text-sm flex items-center gap-2">
-          <span id="xray-icon" class="text-base">🔍</span>
-          <span id="xray-text">Revelar Fiação (Raio-X)</span>
-        </button>
-      </div>
-    </div>
-
-    <!-- O VISUALIZADOR 3D COMPLETO -->
-    <div class="w-full h-[520px] sm:h-[600px] rounded-3xl border-4 border-pop-dark bg-sky-100 overflow-hidden shadow-neo-lg relative">
-      
-      <!-- Container WebGL do Three.js -->
-      <div id="canvas-container" class="w-full h-full cursor-grab active:cursor-grabbing relative">
-        
-        <!-- Notificação de Clique Detectado (Adesivo Pop) -->
-        <div id="click-feedback-badge" class="absolute top-6 left-1/2 -translate-x-1/2 opacity-0 pointer-events-none transition-all duration-150 transform scale-75 bg-pop-green text-pop-dark border-3 border-pop-dark font-display font-black px-6 py-2.5 rounded-full shadow-neo flex items-center gap-2.5 z-30">
-          <span class="text-2xl">⚡</span>
-          <span class="text-sm sm:text-base tracking-wider uppercase">CLIQUE DETECTADO! [BARRA DE ESPAÇO]</span>
-        </div>
-
-        <!-- HUD Superior Esquerdo: Painel de Telemetria Neobrutalista -->
-        <div class="absolute top-4 left-4 z-20 pointer-events-none bg-white border-3 border-pop-dark rounded-2xl p-4 shadow-neo max-w-xs space-y-2">
-          <div class="flex items-center justify-between gap-3">
-            <span class="text-[11px] font-display font-bold text-slate-500 uppercase tracking-wider">Painel do Estande</span>
-            <span id="stream-status" class="text-[10px] font-display font-black text-pop-dark bg-pop-green px-2 py-0.5 rounded-full border border-pop-dark">
-              SINAL PRONTO
-            </span>
-          </div>
-
-          <div class="flex items-baseline gap-2">
-            <span id="click-counter" class="text-3xl sm:text-4xl font-display font-black text-pop-red">
-              0
-            </span>
-            <span class="text-xs font-display font-bold text-slate-600 uppercase">Pulos Realizados</span>
-          </div>
-
-          <!-- Etapas da Transmissão em Linha -->
-          <div class="text-[11px] font-mono font-bold text-slate-700 space-y-1.5 pt-2 border-t-2 border-slate-200">
-            <div id="step-1" class="flex items-center gap-2">
-              <span class="w-3 h-3 rounded-full bg-pop-yellow border border-pop-dark"></span>
-              <span>1. Contato Físico ➔ GND (LOW)</span>
-            </div>
-            <div id="step-2" class="flex items-center gap-2">
-              <span class="w-3 h-3 rounded-full bg-pop-blue border border-pop-dark"></span>
-              <span>2. ESP32 Debounce ➔ 50ms</span>
-            </div>
-            <div id="step-3" class="flex items-center gap-2">
-              <span class="w-3 h-3 rounded-full bg-purple-400 border border-pop-dark"></span>
-              <span>3. Cabo USB / BLE ➔ Tecla Espaço</span>
-            </div>
-            <div id="step-4" class="flex items-center gap-2">
-              <span class="w-3 h-3 rounded-full bg-pop-green border border-pop-dark"></span>
-              <span>4. Videogame ➔ Salto Executado!</span>
-            </div>
-          </div>
-        </div>
-
-        <!-- Legenda de Fiação (Modo Raio-X) -->
-        <div id="xray-legend" class="absolute top-4 right-4 opacity-0 transition-opacity duration-300 pointer-events-none bg-white border-3 border-pop-dark rounded-2xl p-3.5 text-xs font-mono font-bold text-pop-dark space-y-2 shadow-neo z-20">
-          <div class="text-[11px] font-display font-black text-pop-blue uppercase tracking-wider mb-1 flex items-center gap-1.5">
-            <span>📦</span> CIRCUITO INTERNO REVELADO
-          </div>
-          <div class="flex items-center gap-2">
-            <span class="w-3.5 h-3.5 rounded-full bg-pop-yellow border border-pop-dark"></span>
-            <span>Fio Amarelo ➔ Pino D4 (GPIO 4)</span>
-          </div>
-          <div class="flex items-center gap-2">
-            <span class="w-3.5 h-3.5 rounded-full bg-pop-blue border border-pop-dark"></span>
-            <span>Fio Preto ➔ Pino GND (Terra)</span>
-          </div>
-          <div class="flex items-center gap-2">
-            <span class="w-3.5 h-3.5 rounded-full bg-sky-500 border border-pop-dark"></span>
-            <span>LED Interno D2 ➔ Pisca no Clique</span>
-          </div>
-        </div>
-
-        <!-- Barra Inferior do Canvas: Interação do Usuário -->
-        <div class="absolute bottom-4 left-4 right-4 z-20 flex flex-wrap items-center justify-between gap-3 bg-white/95 backdrop-blur-md border-3 border-pop-dark px-5 py-3 rounded-2xl shadow-neo text-xs font-display">
-          <div class="flex items-center gap-3 text-pop-dark font-bold">
-            <div class="flex items-center gap-2">
-              <kbd class="px-3 py-1 bg-pop-yellow text-pop-dark rounded-lg border-2 border-pop-dark font-mono font-black text-xs shadow-neo-sm">ESPAÇO</kbd>
-              <span class="hidden sm:inline">Aperte a barra de espaço ou bata no controle de papelão</span>
-            </div>
-            <span class="text-slate-400 hidden md:inline">•</span>
-            <span class="text-slate-600 hidden md:inline">🖱️ Gire a câmera em 360°</span>
-          </div>
-
-          <div class="flex items-center gap-2">
-            <button id="btn-bottom-connect-usb" class="btn-neo bg-pop-green hover:bg-emerald-300 text-pop-dark font-display font-black text-xs sm:text-sm px-4 py-2.5 rounded-xl flex items-center gap-1.5">
-              <span>🔌</span>
-              <span id="bottom-usb-btn-text">Conectar USB</span>
-            </button>
-            <button id="btn-manual-click" class="btn-neo bg-pop-red text-white font-display font-black text-xs sm:text-sm px-5 py-2.5 rounded-xl flex items-center gap-2">
-              <span class="text-base">🔴</span>
-              <span>BATER NO BOTÃO GIGANTE</span>
-            </button>
-          </div>
-        </div>
-
-      </div>
-
-    </div>
-
-  </section>
-
-  <!-- ==================== SEÇÃO 2: APROFUNDAMENTO & DOSSIÊ COMPLETO ==================== -->
-  <section class="max-w-7xl mx-auto px-4 sm:px-6 py-12 space-y-16">
-
-    <!-- ==================== PARTE A: JUSTIFICATIVA & ACESSIBILIDADE ==================== -->
-    <div id="justificativa" class="scroll-mt-24 space-y-8">
-      
-      <div class="max-w-3xl space-y-2">
-        <span class="inline-block text-xs font-display font-bold tracking-widest text-pop-dark uppercase bg-purple-200 px-3 py-1 rounded-full border-2 border-pop-dark shadow-neo-sm transform -rotate-1">
-          ♿ Acessibilidade & Cidadania Digital
+        <span class="px-3 py-1 rounded-full bg-pop-blue text-pop-dark font-display font-black text-xs uppercase border-2 border-pop-dark shadow-neo-sm transform -rotate-1">
+          SEÇÃO 1
         </span>
-        <h2 class="text-3xl sm:text-4xl font-display font-black text-pop-dark uppercase tracking-tight">
-          Por Que Criamos o "Jogando Junto"?
+        <h2 class="text-2xl sm:text-3xl font-display font-black text-pop-dark uppercase tracking-tight">
+          O Protótipo Maker & A Justificativa Social
         </h2>
-        <p class="text-slate-700 text-base font-semibold leading-relaxed">
-          Os videogames se tornaram a maior indústria de entretenimento do planeta e um espaço fundamental de socialização infantil e juvenil. No entanto, o design tradicional dos controles ainda é uma grande barreira para milhões de pessoas.
-        </p>
       </div>
 
-      <!-- Grid de 3 Cards Argumentativos Estilo Pop Neobrutalista -->
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+      <!-- Grid Split: Maquete 3D (Esq) + Justificativa (Dir) -->
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-stretch">
         
-        <!-- Card 1 -->
-        <div class="card-neo bg-white rounded-3xl p-6 flex flex-col justify-between hover:-translate-y-1 transition duration-200">
-          <div class="space-y-3">
-            <div class="w-14 h-14 rounded-2xl bg-purple-100 border-3 border-pop-dark flex items-center justify-center text-3xl shadow-neo-sm transform -rotate-3">
-              🎮
-            </div>
-            <h3 class="font-display font-black text-pop-dark text-xl">A Barreira dos 16 Botões</h3>
-            <p class="text-xs sm:text-sm font-semibold text-slate-600 leading-relaxed">
-              Um controle comum de PlayStation ou Xbox exige a utilização sincronizada de até 16 botões minúsculos, dois analógicos e dois gatilhos. Para crianças e jovens com paralisia cerebral, atrofia muscular espinhal, sequelas de AVC ou amputações, essa complexidade impede totalmente a participação.
-            </p>
-          </div>
-          <div class="mt-4 pt-3 border-t-2 border-slate-200 text-xs font-display font-bold text-purple-700">
-            • Exclusão involuntária nos jogos
-          </div>
-        </div>
-
-        <!-- Card 2 -->
-        <div class="card-neo bg-white rounded-3xl p-6 flex flex-col justify-between hover:-translate-y-1 transition duration-200">
-          <div class="space-y-3">
-            <div class="w-14 h-14 rounded-2xl bg-cyan-100 border-3 border-pop-dark flex items-center justify-center text-3xl shadow-neo-sm transform rotate-2">
-              🎯
-            </div>
-            <h3 class="font-display font-black text-pop-dark text-xl">O Poder do One-Switch</h3>
-            <p class="text-xs sm:text-sm font-semibold text-slate-600 leading-relaxed">
-              A comunidade médica e de reabilitação internacional consagrou o conceito de <em>One-Switch Gaming</em>: projetar jogos onde uma única ação de entrada desencadeia o salto, aceleração ou manobra. Com uma área de contato enorme, o jogador pode bater com a palma da mão aberta, antebraço, pé ou queixo.
-            </p>
-          </div>
-          <div class="mt-4 pt-3 border-t-2 border-slate-200 text-xs font-display font-bold text-pop-blue">
-            • Autonomia corporal e diversão real
-          </div>
-        </div>
-
-        <!-- Card 3 -->
-        <div class="card-neo bg-white rounded-3xl p-6 flex flex-col justify-between hover:-translate-y-1 transition duration-200">
-          <div class="space-y-3">
-            <div class="w-14 h-14 rounded-2xl bg-emerald-100 border-3 border-pop-dark flex items-center justify-center text-3xl shadow-neo-sm transform -rotate-2">
-              📦
-            </div>
-            <h3 class="font-display font-black text-pop-dark text-xl">Tecnologia Maker Popular</h3>
-            <p class="text-xs sm:text-sm font-semibold text-slate-600 leading-relaxed">
-              Controles adaptados importados chegam a custar mais de R$ 2.000, tornando-se inacessíveis para a maioria das escolas e famílias brasileiras. Nosso projeto demonstra que, usando sucata de papelão limpo, lâminas metálicas e um ESP32, qualquer sala de aula pode produzir inclusão de alta precisão.
-            </p>
-          </div>
-          <div class="mt-4 pt-3 border-t-2 border-slate-200 text-xs font-display font-bold text-pop-green">
-            • Baixo custo e impacto pedagógico
-          </div>
-        </div>
-
-      </div>
-
-      <!-- POST-IT GIGANTE: MANIFESTO DOS ALUNOS DO 6º B -->
-      <div class="relative max-w-4xl mx-auto my-8">
-        <!-- Fita adesiva simulada no topo do post-it -->
-        <div class="absolute -top-4 left-1/2 -translate-x-1/2 w-32 h-8 bg-amber-200/80 border-2 border-pop-dark/40 transform -rotate-2 shadow-sm z-10"></div>
-        
-        <div class="bg-pop-yellow card-neo-lg rounded-3xl p-6 sm:p-8 transform rotate-0.5 space-y-3">
-          <div class="flex items-center gap-3">
-            <span class="text-3xl">📢</span>
-            <span class="text-xs font-display font-black uppercase tracking-wider text-pop-dark bg-white px-3 py-1 rounded-full border-2 border-pop-dark shadow-neo-sm">
-              Mural da Turma • 6º Ano B
-            </span>
-          </div>
-          <blockquote class="text-lg sm:text-2xl font-display font-black text-pop-dark leading-snug">
-            "Jogar junto não é sobre quem tem o controle mais caro. É sobre ninguém ficar de fora da partida."
-          </blockquote>
-          <p class="text-xs sm:text-sm font-bold text-slate-800">
-            — Manifesto oficial dos alunos do 6º Ano B para a banca avaliadora do InovaCEV 2026.
-          </p>
-        </div>
-      </div>
-
-    </div>
-
-    <!-- ==================== PARTE B: ENGENHARIA & HARDWARE ==================== -->
-    <div id="engenharia" class="scroll-mt-24 space-y-8">
-      
-      <div class="max-w-3xl space-y-2">
-        <span class="inline-block text-xs font-display font-bold tracking-widest text-pop-dark uppercase bg-cyan-200 px-3 py-1 rounded-full border-2 border-pop-dark shadow-neo-sm transform rotate-1">
-          ⚡ Engenharia de Sistemas Embarcados & IoT
-        </span>
-        <h2 class="text-3xl sm:text-4xl font-display font-black text-pop-dark uppercase tracking-tight">
-          Por Dentro do Circuito: Como a Mágica Acontece
-        </h2>
-        <p class="text-slate-700 text-base font-semibold leading-relaxed">
-          Sem placas extras, sem resistores externos e sem aplicativos complicados. O projeto foi desenhado sob o princípio maker de minimalismo elétrico: máxima eficiência com o mínimo de peças.
-        </p>
-      </div>
-
-      <!-- Diagrama de Fiação e Arquitetura Neobrutalista -->
-      <div class="bg-white card-neo-lg rounded-3xl p-6 sm:p-8 space-y-8">
-        
-        <!-- Linha do Circuito com 3 Blocos Táteis -->
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 items-center">
+        <!-- COLUNA 3D (7 Colunas no Desktop) -->
+        <div class="lg:col-span-7 flex flex-col space-y-3">
           
-          <!-- Bloco 1: O Botão de Papelão -->
-          <div class="bg-amber-50 border-3 border-pop-dark rounded-2xl p-5 text-center shadow-neo">
-            <span class="text-[10px] font-mono font-bold text-pop-red uppercase tracking-widest block mb-1">Entrada Mecânica</span>
-            <div class="w-14 h-14 rounded-2xl bg-pop-red text-white border-3 border-pop-dark flex items-center justify-center font-bold text-xl mx-auto my-2 shadow-neo-sm">
-              🔴
-            </div>
-            <h4 class="font-display font-black text-pop-dark text-lg">Botão Gigante</h4>
-            <p class="text-xs font-semibold text-slate-600 mt-1 mb-3">Duas lâminas condutoras separadas por mola de espuma.</p>
-            <div class="bg-white p-2 rounded-xl border-2 border-pop-dark text-[11px] font-mono font-bold text-pop-dark shadow-neo-sm">
-              Aberto = 3.3V | Fechado = 0V
+          <div class="w-full h-[460px] sm:h-[520px] rounded-3xl border-4 border-pop-dark bg-sky-100 overflow-hidden shadow-neo-lg relative">
+            <div id="canvas-container" class="w-full h-full cursor-grab active:cursor-grabbing relative">
+              
+              <!-- Badge de Clique Detectado -->
+              <div id="click-feedback-badge" class="absolute top-5 left-1/2 -translate-x-1/2 opacity-0 pointer-events-none transition-all duration-150 transform scale-75 bg-pop-green text-pop-dark border-3 border-pop-dark font-display font-black px-5 py-2 rounded-full shadow-neo flex items-center gap-2 z-30">
+                <span class="text-xl">⚡</span>
+                <span class="text-xs sm:text-sm tracking-wider uppercase">CLIQUE DETECTADO! [ESPAÇO]</span>
+              </div>
+
+              <!-- HUD Superior Esquerdo: Telemetria -->
+              <div class="absolute top-3 left-3 z-20 pointer-events-none bg-white border-3 border-pop-dark rounded-2xl p-3 shadow-neo space-y-1 max-w-[200px]">
+                <div class="flex items-center justify-between gap-2">
+                  <span class="text-[10px] font-display font-bold text-slate-500 uppercase">Telemetria</span>
+                  <span id="stream-status" class="text-[9px] font-display font-black text-pop-dark bg-pop-green px-1.5 py-0.5 rounded border border-pop-dark">
+                    PRONTO
+                  </span>
+                </div>
+                <div class="flex items-baseline gap-2">
+                  <span id="click-counter" class="text-3xl font-display font-black text-pop-red">0</span>
+                  <span class="text-[11px] font-display font-bold text-slate-600 uppercase">Pulos</span>
+                </div>
+              </div>
+
+              <!-- Botão Raio-X Superior Direito -->
+              <div class="absolute top-3 right-3 z-20">
+                <button id="btn-toggle-xray" class="btn-neo bg-pop-blue hover:bg-cyan-300 text-pop-dark px-3 py-1.5 rounded-xl font-display font-bold text-xs flex items-center gap-1.5">
+                  <span id="xray-icon">🔍</span>
+                  <span id="xray-text">Raio-X (Fiação)</span>
+                </button>
+              </div>
+
+              <!-- Legenda do Raio-X -->
+              <div id="xray-legend" class="absolute top-14 right-3 opacity-0 transition-opacity duration-300 pointer-events-none bg-white border-2 border-pop-dark rounded-xl p-2.5 text-[11px] font-mono font-bold text-pop-dark space-y-1 shadow-neo z-20">
+                <div class="flex items-center gap-1.5">
+                  <span class="w-2.5 h-2.5 rounded-full bg-pop-yellow border border-pop-dark"></span>
+                  <span>Fio Amarelo ➔ D4 (GPIO 4)</span>
+                </div>
+                <div class="flex items-center gap-1.5">
+                  <span class="w-2.5 h-2.5 rounded-full bg-pop-blue border border-pop-dark"></span>
+                  <span>Fio Preto ➔ GND (Terra)</span>
+                </div>
+              </div>
+
+              <!-- Barra Inferior do 3D -->
+              <div class="absolute bottom-3 left-3 right-3 z-20 flex flex-wrap items-center justify-between gap-2 bg-white/95 backdrop-blur-md border-3 border-pop-dark px-4 py-2 rounded-2xl shadow-neo text-xs font-display">
+                <div class="flex items-center gap-2 text-pop-dark font-bold text-[11px]">
+                  <kbd class="px-2 py-0.5 bg-pop-yellow text-pop-dark rounded border-2 border-pop-dark font-mono font-black text-xs shadow-neo-sm">ESPAÇO</kbd>
+                  <span class="hidden sm:inline">Bata no botão gigante ou aperte a barra de espaço</span>
+                </div>
+                <button id="btn-manual-click" class="btn-neo bg-pop-red text-white font-display font-black text-xs px-4 py-1.5 rounded-xl flex items-center gap-1.5">
+                  <span>🔴</span>
+                  <span>BATER NO BOTÃO</span>
+                </button>
+              </div>
+
             </div>
           </div>
 
-          <!-- Bloco 2: Fios Garra Jacaré -->
-          <div class="flex flex-col justify-center space-y-3 py-2">
-            <div class="bg-yellow-100 border-3 border-pop-dark p-3 rounded-2xl text-center shadow-neo-sm">
-              <span class="text-xs font-display font-black text-amber-900 block">Garra Amarela (Sinal D4)</span>
-              <span class="text-[11px] font-mono font-bold text-slate-700">Pino GPIO 4 ➔ Contato Superior</span>
-            </div>
-            <div class="bg-cyan-100 border-3 border-pop-dark p-3 rounded-2xl text-center shadow-neo-sm">
-              <span class="text-xs font-display font-black text-cyan-900 block">Garra Preta (GND)</span>
-              <span class="text-[11px] font-mono font-bold text-slate-700">Pino GND ➔ Contato Inferior</span>
-            </div>
-          </div>
-
-          <!-- Bloco 3: Microcontrolador ESP32 -->
-          <div class="bg-emerald-50 border-3 border-pop-dark rounded-2xl p-5 text-center shadow-neo">
-            <span class="text-[10px] font-mono font-bold text-pop-green uppercase tracking-widest block mb-1">Processamento & BLE</span>
-            <div class="w-14 h-14 rounded-2xl bg-white border-3 border-pop-dark text-pop-green flex items-center justify-center font-display font-black text-lg mx-auto my-2 shadow-neo-sm">
-              MCU
-            </div>
-            <h4 class="font-display font-black text-pop-dark text-lg">ESP32 DevKit V1</h4>
-            <p class="text-xs font-semibold text-slate-600 mt-1 mb-3">Dual-core com pilha Bluetooth HID nativa.</p>
-            <div class="bg-white p-2 rounded-xl border-2 border-pop-dark text-[11px] font-mono font-bold text-pop-dark shadow-neo-sm">
-              Envia: Tecla Espaço (' ')
-            </div>
+          <div class="flex items-center justify-between px-2 text-xs font-display text-slate-600 font-bold">
+            <span>🕹️ Gire com o mouse para ver o ESP32 e o monitor</span>
+            <span>Madeira clara & Papelão Kraft estilo Nintendo Labo</span>
           </div>
 
         </div>
 
-        <!-- 4 Cartões de Engenharia Didática -->
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 pt-6 border-t-2 border-slate-200">
+        <!-- COLUNA JUSTIFICATIVA (5 Colunas no Desktop) -->
+        <div class="lg:col-span-5 flex flex-col justify-between space-y-4">
           
-          <div class="bg-yellow-50 border-2 border-pop-dark p-4 rounded-2xl shadow-neo-sm">
-            <strong class="font-display text-amber-800 text-xs uppercase block mb-1">1. INPUT_PULLUP</strong>
-            <p class="text-xs font-semibold text-slate-600 leading-relaxed">
-              O microcontrolador ativa internamente um resistor de 45 kΩ ligado aos 3.3V. Enquanto o botão está solto, a leitura é HIGH (1). Ao fechar, a corrente vai para o GND e torna-se LOW (0).
+          <div class="card-neo-lg bg-white rounded-3xl p-6 space-y-4">
+            <div>
+              <span class="text-xs font-display font-black text-purple-700 bg-purple-100 px-3 py-1 rounded-full border-2 border-pop-dark shadow-neo-sm inline-block">
+                ♿ Acessibilidade & Inclusão
+              </span>
+              <h3 class="text-xl sm:text-2xl font-display font-black text-pop-dark uppercase mt-2">
+                Por Que Este Projeto Existe?
+              </h3>
+            </div>
+
+            <p class="text-xs sm:text-sm font-semibold text-slate-700 leading-relaxed">
+              Um controle comum de videogame possui mais de <strong class="text-pop-red">16 botões minúsculos e 2 analógicos</strong>. Para crianças com paralisia cerebral, atrofia muscular ou dificuldades motoras finas, jogar videogame convencional é fisicamente impossível.
             </p>
+
+            <div class="bg-cyan-50 border-2 border-pop-dark rounded-2xl p-4 space-y-2">
+              <h4 class="font-display font-black text-pop-dark text-sm flex items-center gap-1.5">
+                <span>🎯</span> O Conceito One-Switch Gaming
+              </h4>
+              <p class="text-xs font-semibold text-slate-600 leading-relaxed">
+                Qualquer toque voluntário — usando a <strong>palma da mão aberta, o antebraço, o pé ou o queixo</strong> — ativa a ação no jogo com autonomia e dignidade.
+              </p>
+            </div>
+
+            <!-- Comparativo de Preço Rápido -->
+            <div class="grid grid-cols-2 gap-2 text-center text-xs font-display">
+              <div class="p-2.5 rounded-xl border-2 border-pop-dark bg-red-100">
+                <span class="text-slate-600 block text-[10px] font-bold">Controle Adaptado Comercial</span>
+                <span class="text-pop-red font-black text-sm">R$ 1.800+</span>
+              </div>
+              <div class="p-2.5 rounded-xl border-2 border-pop-dark bg-emerald-100">
+                <span class="text-emerald-900 block text-[10px] font-bold">Projeto Jogando Junto</span>
+                <span class="text-pop-green font-black text-sm">&lt; R$ 45 (Maker)</span>
+              </div>
+            </div>
           </div>
 
-          <div class="bg-emerald-50 border-2 border-pop-dark p-4 rounded-2xl shadow-neo-sm">
-            <strong class="font-display text-emerald-800 text-xs uppercase block mb-1">2. Debounce de 50ms</strong>
-            <p class="text-xs font-semibold text-slate-600 leading-relaxed">
-              Quando crianças golpeiam o botão com energia, as lâminas vibram por milissegundos. Nosso algoritmo descarta esses falsos cliques mecânicos antes de acionar o Bluetooth.
-            </p>
-          </div>
-
-          <div class="bg-cyan-50 border-2 border-pop-dark p-4 rounded-2xl shadow-neo-sm">
-            <strong class="font-display text-cyan-800 text-xs uppercase block mb-1">3. Bluetooth Universal</strong>
-            <p class="text-xs font-semibold text-slate-600 leading-relaxed">
-              O ESP32 atua como um teclado gamer comum. Isso significa zero drivers e compatibilidade instantânea com Windows, Mac, Linux, Android, iOS e Raspberry Pi.
-            </p>
-          </div>
-
-          <div class="bg-purple-50 border-2 border-pop-dark p-4 rounded-2xl shadow-neo-sm">
-            <strong class="font-display text-purple-800 text-xs uppercase block mb-1">4. Feedback LED D2</strong>
-            <p class="text-xs font-semibold text-slate-600 leading-relaxed">
-              O LED azul embutido na placa acende no exato momento do clique, permitindo que a equipe confirme visualmente se o contato funcionou mesmo antes do jogo reagir.
-            </p>
+          <!-- Post-It do Manifesto dos Alunos -->
+          <div class="bg-pop-yellow card-neo rounded-3xl p-5 transform -rotate-1 relative">
+            <div class="flex items-center gap-2 mb-1.5">
+              <span class="text-xl">📢</span>
+              <span class="text-[11px] font-display font-black uppercase text-pop-dark bg-white px-2.5 py-0.5 rounded-full border border-pop-dark">
+                Mural do 6º Ano B
+              </span>
+            </div>
+            <blockquote class="text-sm sm:text-base font-display font-black text-pop-dark leading-snug">
+              "Jogar junto não é sobre quem tem o controle mais caro. É sobre ninguém ficar de fora da partida."
+            </blockquote>
           </div>
 
         </div>
 
       </div>
 
-    </div>
+    </section>
 
-    <!-- ==================== PARTE C: TABELA COMPARATIVA & IMPACTO ==================== -->
-    <div id="comparativo" class="scroll-mt-24 space-y-8">
+    <!-- ==================================================================== -->
+    <!-- SEÇÃO 2: VISUALIZAÇÃO DINÂMICA DO CÓDIGO (AO VIVO!)                 -->
+    <!-- ==================================================================== -->
+    <section id="secao-codigo" class="scroll-mt-24 space-y-4">
       
-      <div class="max-w-3xl space-y-2">
-        <span class="inline-block text-xs font-display font-bold tracking-widest text-pop-dark uppercase bg-emerald-200 px-3 py-1 rounded-full border-2 border-pop-dark shadow-neo-sm transform -rotate-1">
-          📊 Estudo Comparativo de Viabilidade
-        </span>
-        <h2 class="text-3xl sm:text-4xl font-display font-black text-pop-dark uppercase tracking-tight">
-          Soluções Comerciais vs. Jogando Junto
-        </h2>
-        <p class="text-slate-700 text-base font-semibold leading-relaxed">
-          Veja como o projeto dos alunos do 6º Ano B se posiciona frente aos equipamentos convencionais e profissionais do mercado mundial.
-        </p>
-      </div>
-
-      <!-- Tabela Comparativa Estilo Nintendo / Neobrutalismo -->
-      <div class="overflow-x-auto rounded-3xl border-4 border-pop-dark shadow-neo-lg bg-white">
-        <table class="w-full text-left text-xs sm:text-sm">
-          <thead class="bg-slate-100 border-b-3 border-pop-dark font-display text-pop-dark uppercase tracking-wider text-xs font-black">
-            <tr>
-              <th class="py-4 px-6 border-r-2 border-pop-dark">Critério de Avaliação</th>
-              <th class="py-4 px-6 border-r-2 border-pop-dark text-slate-600">Controle Tradicional (PS5 / Xbox)</th>
-              <th class="py-4 px-6 border-r-2 border-pop-dark text-amber-700 bg-amber-50">Hubs Acessíveis Importados</th>
-              <th class="py-4 px-6 text-emerald-950 bg-emerald-200 font-black">
-                <span class="inline-flex items-center gap-1 bg-white px-2 py-0.5 rounded-md border border-pop-dark shadow-neo-sm">
-                  🏆 Projeto Jogando Junto (6º B)
-                </span>
-              </th>
-            </tr>
-          </thead>
-          <tbody class="divide-y-2 divide-pop-dark font-semibold text-slate-800">
-            <tr class="hover:bg-slate-50 transition">
-              <td class="py-4 px-6 font-display font-bold text-pop-dark border-r-2 border-pop-dark">Custo Estimado</td>
-              <td class="py-4 px-6 text-red-600 border-r-2 border-pop-dark font-bold">R$ 450 - R$ 600</td>
-              <td class="py-4 px-6 text-amber-700 border-r-2 border-pop-dark font-bold bg-amber-50/50">R$ 1.800 - R$ 3.500</td>
-              <td class="py-4 px-6 text-emerald-800 font-extrabold bg-emerald-100">Menos de R$ 45 (ESP32 + Papelão)</td>
-            </tr>
-            <tr class="hover:bg-slate-50 transition">
-              <td class="py-4 px-6 font-display font-bold text-pop-dark border-r-2 border-pop-dark">Complexidade Motora</td>
-              <td class="py-4 px-6 text-red-600 border-r-2 border-pop-dark">Alta (16 botões + 2 analógicos)</td>
-              <td class="py-4 px-6 text-slate-700 border-r-2 border-pop-dark bg-amber-50/50">Variável (Configuração complexa)</td>
-              <td class="py-4 px-6 text-emerald-800 font-extrabold bg-emerald-100">Mínima (1 Grande Ação Intuitiva)</td>
-            </tr>
-            <tr class="hover:bg-slate-50 transition">
-              <td class="py-4 px-6 font-display font-bold text-pop-dark border-r-2 border-pop-dark">Área de Contato</td>
-              <td class="py-4 px-6 text-red-600 border-r-2 border-pop-dark">Menos de 1 cm² por botão</td>
-              <td class="py-4 px-6 text-slate-700 border-r-2 border-pop-dark bg-amber-50/50">5 a 8 cm</td>
-              <td class="py-4 px-6 text-emerald-800 font-extrabold bg-emerald-100">18 a 22 cm (Acionável com o braço)</td>
-            </tr>
-            <tr class="hover:bg-slate-50 transition">
-              <td class="py-4 px-6 font-display font-bold text-pop-dark border-r-2 border-pop-dark">Replicabilidade Escolar</td>
-              <td class="py-4 px-6 text-slate-600 border-r-2 border-pop-dark">Nula (Periférico fechado de fábrica)</td>
-              <td class="py-4 px-6 text-slate-600 border-r-2 border-pop-dark bg-amber-50/50">Baixa (Equipamento proprietário)</td>
-              <td class="py-4 px-6 text-emerald-800 font-extrabold bg-emerald-100">Total (Código aberto e sucata limpa)</td>
-            </tr>
-            <tr class="hover:bg-slate-50 transition">
-              <td class="py-4 px-6 font-display font-bold text-pop-dark border-r-2 border-pop-dark">Instalação de Drivers</td>
-              <td class="py-4 px-6 text-slate-700 border-r-2 border-pop-dark">Automático no console</td>
-              <td class="py-4 px-6 text-amber-700 border-r-2 border-pop-dark bg-amber-50/50">Requer softwares auxiliares</td>
-              <td class="py-4 px-6 text-emerald-800 font-extrabold bg-emerald-100">Plug-and-Play Bluetooth HID</td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-
-    </div>
-
-    <!-- ==================== PARTE D: JOGOS TESTADOS NA PRÁTICA ==================== -->
-    <div class="bg-white card-neo-lg rounded-3xl p-6 sm:p-8 space-y-6">
-      
+      <!-- Cabeçalho da Seção 2 -->
       <div class="flex flex-wrap items-center justify-between gap-4">
-        <div>
-          <span class="text-xs font-display font-black text-pop-blue uppercase tracking-widest bg-cyan-100 px-3 py-1 rounded-full border-2 border-pop-dark shadow-neo-sm inline-block">
-            🎮 Catálogo Homologado pelos Alunos
+        <div class="flex items-center gap-2">
+          <span class="px-3 py-1 rounded-full bg-pop-yellow text-pop-dark font-display font-black text-xs uppercase border-2 border-pop-dark shadow-neo-sm transform rotate-1">
+            SEÇÃO 2
           </span>
-          <h3 class="text-xl sm:text-2xl font-display font-black text-pop-dark uppercase mt-2">
-            Jogos em Demonstração no Estande
-          </h3>
+          <h2 class="text-2xl sm:text-3xl font-display font-black text-pop-dark uppercase tracking-tight">
+            Visualização Dinâmica do Código
+          </h2>
         </div>
-        <span class="text-xs font-display font-bold text-pop-dark bg-pop-yellow px-3 py-1.5 rounded-xl border-2 border-pop-dark shadow-neo-sm">
-          Todos acionados com a Barra de Espaço
-        </span>
+
+        <div class="flex items-center gap-2 text-xs font-display font-bold text-slate-700 bg-white px-3 py-1.5 rounded-xl border-2 border-pop-dark shadow-neo-sm">
+          <span class="w-2.5 h-2.5 rounded-full bg-pop-yellow animate-ping"></span>
+          <span>Bata no botão físico ou aperte espaço para ver a linha acender!</span>
+        </div>
       </div>
 
-      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+      <!-- Card Neobrutalista do Código com Destaque de Execução -->
+      <div class="card-neo-lg bg-slate-900 text-slate-100 rounded-3xl p-6 overflow-hidden relative shadow-neo-lg">
         
-        <div class="bg-amber-50 border-3 border-pop-dark p-4 rounded-2xl shadow-neo-sm flex items-center gap-3.5 hover:-translate-y-0.5 transition">
-          <div class="w-12 h-12 rounded-xl bg-pop-yellow border-2 border-pop-dark flex items-center justify-center text-2xl shadow-neo-sm shrink-0">
-            🦖
+        <!-- Barra de Janela Estilo Terminal Maker -->
+        <div class="flex items-center justify-between pb-4 border-b-2 border-slate-700 mb-4 font-mono text-xs">
+          <div class="flex items-center gap-2">
+            <span class="w-3.5 h-3.5 rounded-full bg-pop-red border border-black inline-block"></span>
+            <span class="w-3.5 h-3.5 rounded-full bg-pop-yellow border border-black inline-block"></span>
+            <span class="w-3.5 h-3.5 rounded-full bg-pop-green border border-black inline-block"></span>
+            <span class="ml-2 font-bold text-slate-300">firmware/src/main.cpp (ESP32 DevKit V1)</span>
           </div>
-          <div>
-            <h4 class="font-display font-black text-pop-dark text-base">Chrome Dino</h4>
-            <p class="text-xs font-semibold text-slate-600">Salto sobre cactos e aves.</p>
-          </div>
+          <span id="code-state-indicator" class="px-3 py-0.5 rounded-full text-[11px] font-bold bg-slate-800 text-slate-300 border border-slate-600">
+            Aguardando Entrada (HIGH / Solto)
+          </span>
         </div>
 
-        <div class="bg-red-50 border-3 border-pop-dark p-4 rounded-2xl shadow-neo-sm flex items-center gap-3.5 hover:-translate-y-0.5 transition">
-          <div class="w-12 h-12 rounded-xl bg-pop-red text-white border-2 border-pop-dark flex items-center justify-center text-2xl shadow-neo-sm shrink-0">
-            🏙️
-          </div>
-          <div>
-            <h4 class="font-display font-black text-pop-dark text-base">Canabalt</h4>
-            <p class="text-xs font-semibold text-slate-600">Corrida no topo dos prédios.</p>
-          </div>
-        </div>
+        <!-- Área de Código C++ com Linhas Interativas -->
+        <pre class="font-mono text-xs sm:text-sm leading-relaxed overflow-x-auto space-y-1">
+<span class="text-slate-500">// 1. Leitura do botão com pull-up interno (3.3V quando solto)</span>
+<span id="line-read" class="block px-2 py-0.5 rounded transition-all duration-150 text-slate-300">int leituraAtual = digitalRead(PINO_BOTAO);</span>
 
-        <div class="bg-cyan-50 border-3 border-pop-dark p-4 rounded-2xl shadow-neo-sm flex items-center gap-3.5 hover:-translate-y-0.5 transition">
-          <div class="w-12 h-12 rounded-xl bg-pop-blue text-pop-dark border-2 border-pop-dark flex items-center justify-center text-2xl shadow-neo-sm shrink-0">
-            🐦
-          </div>
-          <div>
-            <h4 class="font-display font-black text-pop-dark text-base">Flappy Bird</h4>
-            <p class="text-xs font-semibold text-slate-600">Controle de impulso e tubos.</p>
-          </div>
-        </div>
+<span class="text-slate-500">// 2. Filtro de Debounce anti-vibração mecânica (40 ms)</span>
+<span id="line-debounce" class="block px-2 py-0.5 rounded transition-all duration-150 text-slate-300">if ((millis() - tempoUltimaMudanca) > TEMPO_DEBOUNCE) {</span>
 
-        <div class="bg-emerald-50 border-3 border-pop-dark p-4 rounded-2xl shadow-neo-sm flex items-center gap-3.5 hover:-translate-y-0.5 transition">
-          <div class="w-12 h-12 rounded-xl bg-pop-green text-white border-2 border-pop-dark flex items-center justify-center text-2xl shadow-neo-sm shrink-0">
-            🌐
+<span class="text-slate-500">// 3. CASO A: Botão pressionado com força (circuito fechou em LOW / 0V)</span>
+<span id="line-down-check" class="block px-2 py-0.5 rounded transition-all duration-150 text-slate-300">  if (estadoEstavelBotao == LOW) {</span>
+<span id="line-led-on" class="block px-2 py-0.5 rounded transition-all duration-150 text-emerald-400">    digitalWrite(PINO_LED, HIGH);      <span class="text-slate-500">// Acende o LED azul da placa!</span></span>
+<span id="line-send-down" class="block px-2 py-0.5 rounded transition-all duration-150 text-amber-300">    Serial.println("SPACE:DOWN");      <span class="text-slate-500">// Dispara comando USB para o jogo!</span></span>
+<span id="line-down-end" class="block px-2 py-0.5 rounded transition-all duration-150 text-slate-300">  }</span>
+
+<span class="text-slate-500">// 4. CASO B: Botão solto (volta para 3.3V pelo pull-up)</span>
+<span id="line-up-check" class="block px-2 py-0.5 rounded transition-all duration-150 text-slate-300">  else {</span>
+<span id="line-led-off" class="block px-2 py-0.5 rounded transition-all duration-150 text-slate-400">    digitalWrite(PINO_LED, LOW);       <span class="text-slate-500">// Apaga o LED</span></span>
+<span id="line-send-up" class="block px-2 py-0.5 rounded transition-all duration-150 text-slate-400">    Serial.println("SPACE:UP");        <span class="text-slate-500">// Libera a tecla de espaço</span></span>
+<span id="line-up-end" class="block px-2 py-0.5 rounded transition-all duration-150 text-slate-300">  }</span>
+<span class="text-slate-300">}</span></pre>
+
+        <!-- Três Cards Explicativos da Engenharia -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-3 pt-5 mt-5 border-t-2 border-slate-700 text-xs font-sans">
+          <div class="bg-slate-800/80 p-3 rounded-2xl border border-slate-700">
+            <strong class="font-display text-pop-yellow text-xs uppercase block mb-1">⚡ INPUT_PULLUP</strong>
+            <p class="text-slate-400 leading-relaxed text-[11px]">
+              O ESP32 ativa um resistor interno de 45 kΩ ligado aos 3.3V. Enquanto solto, lê 1 (HIGH). Ao encostar no GND, vai a 0 (LOW).
+            </p>
           </div>
-          <div>
-            <h4 class="font-display font-black text-pop-dark text-base">OneSwitch.org</h4>
-            <p class="text-xs font-semibold text-slate-600">Jogos terapêuticos mundiais.</p>
+          <div class="bg-slate-800/80 p-3 rounded-2xl border border-slate-700">
+            <strong class="font-display text-pop-green text-xs uppercase block mb-1">⏱️ Debounce de 40ms</strong>
+            <p class="text-slate-400 leading-relaxed text-[11px]">
+              Filtro no firmware que descarta o repique mecânico das placas de papelão antes de enviar o sinal ao jogo.
+            </p>
+          </div>
+          <div class="bg-slate-800/80 p-3 rounded-2xl border border-slate-700">
+            <strong class="font-display text-pop-blue text-xs uppercase block mb-1">🔌 Web Serial API</strong>
+            <p class="text-slate-400 leading-relaxed text-[11px]">
+              Comunicação direta a 115200 bps pelo cabo USB: latência zero e sem risco de interferência de sinal na feira.
+            </p>
           </div>
         </div>
 
       </div>
 
-    </div>
+    </section>
 
-  </section>
+    <!-- ==================================================================== -->
+    <!-- SEÇÃO 3: JOGO FLAPPY BIRD 6B COM SISTEMA DE HIGHSCORE LOCAL        -->
+    <!-- ==================================================================== -->
+    <section id="secao-jogo" class="scroll-mt-24 space-y-4">
+      
+      <!-- Cabeçalho da Seção 3 -->
+      <div class="flex flex-wrap items-center justify-between gap-4">
+        <div class="flex items-center gap-2">
+          <span class="px-3 py-1 rounded-full bg-pop-green text-pop-dark font-display font-black text-xs uppercase border-2 border-pop-dark shadow-neo-sm transform -rotate-1">
+            SEÇÃO 3
+          </span>
+          <h2 class="text-2xl sm:text-3xl font-display font-black text-pop-dark uppercase tracking-tight">
+            Arena de Teste: Salto do 6º B!
+          </h2>
+        </div>
+
+        <!-- Placar e Highscore do Estande -->
+        <div class="flex items-center gap-3 font-display">
+          <div class="bg-white px-4 py-1.5 rounded-2xl border-3 border-pop-dark shadow-neo-sm flex items-center gap-2">
+            <span class="text-xs text-slate-500 font-bold uppercase">Pontos:</span>
+            <span id="game-current-score" class="text-xl font-black text-pop-dark">0</span>
+          </div>
+
+          <div class="bg-pop-yellow px-4 py-1.5 rounded-2xl border-3 border-pop-dark shadow-neo-sm flex items-center gap-2">
+            <span class="text-xs text-amber-950 font-black uppercase">🏆 Recorde:</span>
+            <span id="game-best-score" class="text-xl font-black text-pop-dark">0</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Container do Jogo em Canvas 2D -->
+      <div class="card-neo-lg bg-sky-200 rounded-3xl p-4 sm:p-6 overflow-hidden relative shadow-neo-lg">
+        
+        <div class="relative w-full max-w-3xl mx-auto h-[380px] sm:h-[420px] rounded-2xl border-4 border-pop-dark bg-sky-300 overflow-hidden shadow-inner">
+          <canvas id="flappy-canvas" class="w-full h-full block cursor-pointer"></canvas>
+
+          <!-- Overlay de Início / Game Over -->
+          <div id="game-overlay" class="absolute inset-0 bg-black/40 backdrop-blur-xs flex flex-col items-center justify-center p-6 text-center z-10">
+            <div class="bg-white card-neo rounded-3xl p-6 sm:p-8 max-w-md w-full space-y-4 transform animate-bounceShort">
+              <span id="overlay-tag" class="text-xs font-display font-black uppercase bg-pop-yellow px-3 py-1 rounded-full border border-pop-dark shadow-neo-sm inline-block">
+                🎮 TESTE DO CONTROLE
+              </span>
+              <h3 id="overlay-title" class="text-2xl sm:text-3xl font-display font-black text-pop-dark uppercase">
+                SALTO DO 6º ANO B!
+              </h3>
+              <p id="overlay-msg" class="text-xs sm:text-sm font-semibold text-slate-600">
+                Bata no botão gigante físico, clique na tela ou aperte a barra de espaço para fazer o robozinho voar e desviar dos canos!
+              </p>
+              <button id="btn-start-game" class="btn-neo bg-pop-green hover:bg-emerald-300 text-pop-dark font-display font-black text-sm sm:text-base px-6 py-3 rounded-2xl w-full">
+                BATER PARA JOGAR! 🚀
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Instruções Rápidas no Rodapé do Jogo -->
+        <div class="flex flex-wrap items-center justify-between gap-3 mt-4 text-xs font-display font-bold text-slate-700">
+          <div class="flex items-center gap-2">
+            <span>🕹️ Controle:</span>
+            <kbd class="px-2 py-0.5 bg-white rounded border border-pop-dark shadow-neo-sm">1 Toque = 1 Impulso</kbd>
+            <span>Compatível com botão de papelão, teclado e toque na tela!</span>
+          </div>
+
+          <button id="btn-reset-highscore" class="text-slate-500 hover:text-pop-red underline text-[11px] font-bold">
+            Zerar Recorde da Feira
+          </button>
+        </div>
+
+      </div>
+
+    </section>
+
+  </main>
 
   <!-- ==================== RODAPÉ OFICIAL DA FEIRA ==================== -->
-  <footer class="border-t-4 border-pop-dark bg-white py-10 px-4 sm:px-6 text-sm font-display text-slate-600">
+  <footer class="border-t-4 border-pop-dark bg-white py-8 px-4 sm:px-6 text-sm font-display text-slate-600 mt-12">
     <div class="max-w-7xl mx-auto flex flex-col sm:flex-row items-center justify-between gap-4">
       <div class="flex items-center space-x-3">
         <div class="w-10 h-10 rounded-2xl bg-pop-red border-3 border-pop-dark flex items-center justify-center font-display font-black text-white text-base shadow-neo-sm">
@@ -667,7 +489,7 @@
     </div>
   </footer>
 
-  <!-- ==================== SCRIPT THREE.JS: SETUP POP MAKER (NINTENDO LABO) ==================== -->
+  <!-- ==================== JAVASCRIPT: THREE.JS + CÓDIGO DINÂMICO + FLAPPY BIRD ==================== -->
   <script>
     // -------------------------------------------------------------
     // 1. ÁUDIO SINTETIZADO RETRÔ (Web Audio API)
@@ -675,29 +497,51 @@
     let soundEnabled = true;
     let audioCtx = null;
 
-    function playArcadeAudio() {
+    function getAudioContext() {
+      if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+      if (audioCtx.state === 'suspended') audioCtx.resume();
+      return audioCtx;
+    }
+
+    function playSound(type) {
       if (!soundEnabled) return;
       try {
-        if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-        if (audioCtx.state === 'suspended') audioCtx.resume();
+        const ctx = getAudioContext();
+        const now = ctx.currentTime;
+        const osc = ctx.createOscillator();
+        const gain = ctx.createGain();
 
-        const now = audioCtx.currentTime;
-        const osc = audioCtx.createOscillator();
-        const gain = audioCtx.createGain();
-
-        // Tom pop/alegre estilo "Boing / Coin"
-        osc.type = 'triangle';
-        osc.frequency.setValueAtTime(360, now);
-        osc.frequency.exponentialRampToValueAtTime(140, now + 0.12);
-
-        gain.gain.setValueAtTime(0.35, now);
-        gain.gain.exponentialRampToValueAtTime(0.001, now + 0.14);
-
-        osc.connect(gain);
-        gain.connect(audioCtx.destination);
-
-        osc.start(now);
-        osc.stop(now + 0.15);
+        if (type === 'flap') {
+          osc.type = 'triangle';
+          osc.frequency.setValueAtTime(360, now);
+          osc.frequency.exponentialRampToValueAtTime(140, now + 0.12);
+          gain.gain.setValueAtTime(0.3, now);
+          gain.gain.exponentialRampToValueAtTime(0.001, now + 0.13);
+          osc.connect(gain);
+          gain.connect(ctx.destination);
+          osc.start(now);
+          osc.stop(now + 0.14);
+        } else if (type === 'score') {
+          osc.type = 'square';
+          osc.frequency.setValueAtTime(587, now);
+          osc.frequency.setValueAtTime(880, now + 0.08);
+          gain.gain.setValueAtTime(0.18, now);
+          gain.gain.exponentialRampToValueAtTime(0.001, now + 0.22);
+          osc.connect(gain);
+          gain.connect(ctx.destination);
+          osc.start(now);
+          osc.stop(now + 0.23);
+        } else if (type === 'crash') {
+          osc.type = 'sawtooth';
+          osc.frequency.setValueAtTime(180, now);
+          osc.frequency.exponentialRampToValueAtTime(50, now + 0.25);
+          gain.gain.setValueAtTime(0.35, now);
+          gain.gain.exponentialRampToValueAtTime(0.001, now + 0.27);
+          osc.connect(gain);
+          gain.connect(ctx.destination);
+          osc.start(now);
+          osc.stop(now + 0.28);
+        }
       } catch (e) {}
     }
 
@@ -710,126 +554,21 @@
     });
 
     // -------------------------------------------------------------
-    // 2. TEXTURA DA TELA DO PC GAMER (Estilo Super Mario Ensolarado)
+    // 2. CENA THREE.JS (ESTAÇÃO MAKER)
     // -------------------------------------------------------------
-    const monitorCanvas = document.createElement('canvas');
-    monitorCanvas.width = 512;
-    monitorCanvas.height = 320;
-    const mCtx = monitorCanvas.getContext('2d');
-
-    let dinoY = 220;
-    let dinoTargetY = 220;
-    let obstacleX = 512;
-
-    function drawMonitorScreen(isPressedNow) {
-      // Céu azul ensolarado estilo Mario
-      mCtx.fillStyle = '#7DD3FC';
-      mCtx.fillRect(0, 0, 512, 320);
-
-      // Nuvens fofas ao fundo
-      mCtx.fillStyle = '#FFFFFF';
-      mCtx.beginPath();
-      mCtx.arc(100, 60, 24, 0, Math.PI * 2);
-      mCtx.arc(130, 50, 30, 0, Math.PI * 2);
-      mCtx.arc(160, 60, 22, 0, Math.PI * 2);
-      mCtx.fill();
-
-      mCtx.beginPath();
-      mCtx.arc(380, 80, 20, 0, Math.PI * 2);
-      mCtx.arc(405, 70, 26, 0, Math.PI * 2);
-      mCtx.arc(430, 80, 18, 0, Math.PI * 2);
-      mCtx.fill();
-
-      // Sol radiante no canto
-      mCtx.fillStyle = '#FACC15';
-      mCtx.beginPath();
-      mCtx.arc(480, 30, 28, 0, Math.PI * 2);
-      mCtx.fill();
-
-      // Gramado verde vibrante
-      mCtx.fillStyle = '#22C55E';
-      mCtx.fillRect(0, 260, 512, 14);
-
-      // Terra estilo bloco de brinquedo
-      mCtx.fillStyle = '#B45309';
-      mCtx.fillRect(0, 274, 512, 46);
-
-      // Linha preta divisória
-      mCtx.strokeStyle = '#0F172A';
-      mCtx.lineWidth = 3;
-      mCtx.beginPath();
-      mCtx.moveTo(0, 260);
-      mCtx.lineTo(512, 260);
-      mCtx.stroke();
-
-      // Placa superior estilo cartaz pop
-      mCtx.fillStyle = '#FFFFFF';
-      mCtx.fillRect(20, 18, 260, 48);
-      mCtx.strokeRect(20, 18, 260, 48);
-
-      mCtx.fillStyle = '#0F172A';
-      mCtx.font = 'bold 18px "Fredoka", sans-serif';
-      mCtx.fillText('PULO DO 6º ANO B! 🎮', 32, 42);
-
-      mCtx.fillStyle = '#0284C7';
-      mCtx.font = 'bold 12px "Fredoka", sans-serif';
-      mCtx.fillText('BLUETOOTH BLE: [ESPAÇO]', 32, 58);
-
-      // Obstáculo estilo bloco de tijolo
-      mCtx.fillStyle = '#EA580C';
-      mCtx.fillRect(obstacleX, 220, 30, 40);
-      mCtx.strokeRect(obstacleX, 220, 30, 40);
-      mCtx.fillStyle = '#FFFFFF';
-      mCtx.font = 'bold 18px sans-serif';
-      mCtx.fillText('?', obstacleX + 8, 246);
-
-      // Personagem Robô Maker / Dino
-      dinoY += (dinoTargetY - dinoY) * 0.25;
-      mCtx.fillStyle = isPressedNow ? '#22C55E' : '#FF3B30';
-      mCtx.fillRect(70, dinoY, 38, 40);
-      mCtx.strokeRect(70, dinoY, 38, 40);
-
-      // Olhos grandes estilo Pop
-      mCtx.fillStyle = '#FFFFFF';
-      mCtx.fillRect(92, dinoY + 8, 12, 12);
-      mCtx.fillStyle = '#0F172A';
-      mCtx.fillRect(98, dinoY + 12, 5, 5);
-
-      // Banner flutuante no pulo
-      if (isPressedNow) {
-        mCtx.fillStyle = '#FACC15';
-        mCtx.fillRect(100, 110, 312, 50);
-        mCtx.strokeRect(100, 110, 312, 50);
-
-        mCtx.fillStyle = '#0F172A';
-        mCtx.font = 'bold 24px "Fredoka", sans-serif';
-        mCtx.fillText('⭐ PULO EXECUTADO! ⭐', 130, 144);
-      }
-
-      monitorTexture.needsUpdate = true;
-    }
-
-    const monitorTexture = new THREE.CanvasTexture(monitorCanvas);
-
-    // -------------------------------------------------------------
-    // 3. CENA THREE.JS: ESTAÇÃO MAKER / NINTENDO LABO
-    // -------------------------------------------------------------
-    const container = document.getElementById('canvas-container');
+    const container3D = document.getElementById('canvas-container');
     const scene = new THREE.Scene();
-    
-    // Fundo azul céu suave de estúdio criativo / diurno
     scene.background = new THREE.Color(0xF0F9FF);
     scene.fog = new THREE.FogExp2(0xF0F9FF, 0.03);
 
-    const camera = new THREE.PerspectiveCamera(45, container.clientWidth / container.clientHeight, 0.1, 100);
-    camera.position.set(0, 5.5, 9.5);
+    const camera = new THREE.PerspectiveCamera(45, container3D.clientWidth / container3D.clientHeight, 0.1, 100);
+    camera.position.set(0, 5.2, 9.0);
 
     const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: false });
-    renderer.setSize(container.clientWidth, container.clientHeight);
+    renderer.setSize(container3D.clientWidth, container3D.clientHeight);
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
     renderer.shadowMap.enabled = true;
-    renderer.shadowMap.type = THREE.PCFSoftShadowMap;
-    container.appendChild(renderer.domElement);
+    container3D.appendChild(renderer.domElement);
 
     const controls = new THREE.OrbitControls(camera, renderer.domElement);
     controls.enableDamping = true;
@@ -840,116 +579,74 @@
     controls.autoRotate = true;
     controls.autoRotateSpeed = 0.5;
 
-    // Iluminação diurna e acolhedora de estúdio
+    // Luzes
     const ambientLight = new THREE.AmbientLight(0xFFFFFF, 0.95);
     scene.add(ambientLight);
 
     const keyLight = new THREE.DirectionalLight(0xFFFFFF, 1.15);
     keyLight.position.set(6, 12, 8);
     keyLight.castShadow = true;
-    keyLight.shadow.mapSize.width = 1024;
-    keyLight.shadow.mapSize.height = 1024;
     scene.add(keyLight);
 
-    // Luz suave de preenchimento quente
-    const fillLight = new THREE.DirectionalLight(0xFFFBEB, 0.6);
-    fillLight.position.set(-6, 8, -4);
-    scene.add(fillLight);
-
-    // Flash verde de clique
     const clickFlashLight = new THREE.PointLight(0x22C55E, 0, 8);
     clickFlashLight.position.set(-2, 3, 0);
     scene.add(clickFlashLight);
 
-    // Grid do chão (linhas suaves combinando com o estúdio claro)
     const gridHelper = new THREE.GridHelper(24, 24, 0x94A3B8, 0xCBD5E1);
     gridHelper.position.y = -0.01;
     scene.add(gridHelper);
 
-    // GRUPO DE TODA A ESTAÇÃO MAKER
     const workstation = new THREE.Group();
     scene.add(workstation);
 
-    // ==============================================================
-    // A) A MESA / BANCADA ESCOLAR (Madeira Clara + Pés Joy-Con)
-    // ==============================================================
+    // Mesa de madeira escolar
     const tableTopGeo = new THREE.BoxGeometry(8.5, 0.25, 4.2);
-    // Madeira clara de bancada de marcenaria escolar
     const tableTopMat = new THREE.MeshStandardMaterial({ color: 0xFDE68A, roughness: 0.5, metalness: 0.05 });
     const tableTop = new THREE.Mesh(tableTopGeo, tableTopMat);
     tableTop.position.set(0, 1.0, 0);
     tableTop.receiveShadow = true;
-    tableTop.castShadow = true;
     workstation.add(tableTop);
 
-    // Pés com as cores Joy-Con (Azul e Vermelho Switch!)
+    // Pés Joy-Con
     const legGeo = new THREE.CylinderGeometry(0.12, 0.12, 1.0, 16);
-    const legMatBlue = new THREE.MeshStandardMaterial({ color: 0x00C3E3, metalness: 0.2, roughness: 0.3 });
-    const legMatRed = new THREE.MeshStandardMaterial({ color: 0xFF3B30, metalness: 0.2, roughness: 0.3 });
+    const legMatBlue = new THREE.MeshStandardMaterial({ color: 0x00C3E3, roughness: 0.3 });
+    const legMatRed = new THREE.MeshStandardMaterial({ color: 0xFF3B30, roughness: 0.3 });
     
     const leg1 = new THREE.Mesh(legGeo, legMatBlue); leg1.position.set(-3.9, 0.5, -1.8); workstation.add(leg1);
     const leg2 = new THREE.Mesh(legGeo, legMatRed);  leg2.position.set(3.9, 0.5, -1.8); workstation.add(leg2);
     const leg3 = new THREE.Mesh(legGeo, legMatBlue); leg3.position.set(-3.9, 0.5, 1.8); workstation.add(leg3);
     const leg4 = new THREE.Mesh(legGeo, legMatRed);  leg4.position.set(3.9, 0.5, 1.8); workstation.add(leg4);
 
-    // ==============================================================
-    // B) LADO ESQUERDO: CONTROLE GIGANTE EM PAPELÃO KRAFT REAL
-    // ==============================================================
+    // Botão de Papelão Kraft
     const joystickGroup = new THREE.Group();
     joystickGroup.position.set(-2.2, 1.13, 0.2);
     workstation.add(joystickGroup);
 
-    // Caixa de Papelão Kraft (#D4A373) estilo Nintendo Labo
     const boxGeo = new THREE.BoxGeometry(2.6, 0.8, 2.6);
-    const boxMat = new THREE.MeshStandardMaterial({
-      color: 0xD4A373,
-      roughness: 0.85,
-      metalness: 0.05,
-      transparent: true,
-      opacity: 1.0
-    });
+    const boxMat = new THREE.MeshStandardMaterial({ color: 0xD4A373, roughness: 0.85, transparent: true, opacity: 1.0 });
     const boxMesh = new THREE.Mesh(boxGeo, boxMat);
     boxMesh.position.y = 0.4;
-    boxMesh.castShadow = true;
-    boxMesh.receiveShadow = true;
     joystickGroup.add(boxMesh);
 
-    // Tampa superior de Papelão Kraft (#C68B59)
     const topCoverGeo = new THREE.BoxGeometry(2.4, 0.05, 2.4);
-    const topCoverMat = new THREE.MeshStandardMaterial({
-      color: 0xC68B59,
-      roughness: 0.85,
-      metalness: 0.05,
-      transparent: true,
-      opacity: 1.0
-    });
+    const topCoverMat = new THREE.MeshStandardMaterial({ color: 0xC68B59, roughness: 0.85, transparent: true, opacity: 1.0 });
     const topCover = new THREE.Mesh(topCoverGeo, topCoverMat);
     topCover.position.y = 0.82;
     joystickGroup.add(topCover);
 
-    // Aro do Botão (Plástico amarelo ou preto fosco)
     const bezelGeo = new THREE.CylinderGeometry(1.0, 1.05, 0.2, 40);
-    const bezelMat = new THREE.MeshStandardMaterial({ color: 0x0F172A, roughness: 0.4, metalness: 0.1 });
+    const bezelMat = new THREE.MeshStandardMaterial({ color: 0x0F172A, roughness: 0.4 });
     const bezel = new THREE.Mesh(bezelGeo, bezelMat);
     bezel.position.y = 0.92;
     joystickGroup.add(bezel);
 
-    // Botão Vermelho Gigante de Brinquedo (Grupo Móvel)
     const buttonCapGroup = new THREE.Group();
     buttonCapGroup.position.y = 1.02;
     joystickGroup.add(buttonCapGroup);
 
-    const buttonMat = new THREE.MeshStandardMaterial({
-      color: 0xFF2A2A,
-      roughness: 0.15,
-      metalness: 0.1,
-      emissive: 0x330000,
-      emissiveIntensity: 0.2
-    });
-
+    const buttonMat = new THREE.MeshStandardMaterial({ color: 0xFF2A2A, roughness: 0.15, emissive: 0x330000, emissiveIntensity: 0.2 });
     const buttonCylinderGeo = new THREE.CylinderGeometry(0.88, 0.88, 0.35, 40);
     const buttonCylinder = new THREE.Mesh(buttonCylinderGeo, buttonMat);
-    buttonCylinder.castShadow = true;
     buttonCapGroup.add(buttonCylinder);
 
     const buttonDomeGeo = new THREE.SphereGeometry(0.88, 32, 14, 0, Math.PI * 2, 0, Math.PI * 0.22);
@@ -957,164 +654,90 @@
     buttonDome.position.y = 0.14;
     buttonCapGroup.add(buttonDome);
 
-    // ==============================================================
-    // C) MICROCONTROLADOR ESP32 DEVKIT NA MESA
-    // ==============================================================
+    // ESP32 na mesa
     const esp32Group = new THREE.Group();
     esp32Group.position.set(-0.3, 1.14, 0.3);
     workstation.add(esp32Group);
 
-    // PCB Preta/Verde do ESP32
     const pcbGeo = new THREE.BoxGeometry(0.7, 0.05, 1.4);
-    const pcbMat = new THREE.MeshStandardMaterial({ color: 0x064E3B, roughness: 0.3, metalness: 0.2 });
+    const pcbMat = new THREE.MeshStandardMaterial({ color: 0x064E3B, roughness: 0.3 });
     const pcb = new THREE.Mesh(pcbGeo, pcbMat);
-    pcb.castShadow = true;
     esp32Group.add(pcb);
 
-    // Chip metálico prateado
     const chipGeo = new THREE.BoxGeometry(0.5, 0.04, 0.6);
     const chipMat = new THREE.MeshStandardMaterial({ color: 0xE2E8F0, metalness: 0.8, roughness: 0.2 });
     const chip = new THREE.Mesh(chipGeo, chipMat);
     chip.position.set(0, 0.04, -0.2);
     esp32Group.add(chip);
 
-    // LED de status D2
     const ledGeo = new THREE.BoxGeometry(0.08, 0.05, 0.08);
     const ledMat = new THREE.MeshBasicMaterial({ color: 0x00C3E3 });
     const ledMesh = new THREE.Mesh(ledGeo, ledMat);
     ledMesh.position.set(0.2, 0.04, -0.5);
     esp32Group.add(ledMesh);
 
-    // ==============================================================
-    // D) FIOS GARRA JACARÉ (CONECTANDO O BOTÃO AO ESP32)
-    // ==============================================================
-    // Fio Amarelo Maker (D4 ➔ Botão)
+    // Fios Jacaré (Amarelo e Preto)
     const yellowWireCurve = new THREE.CatmullRomCurve3([
       new THREE.Vector3(-0.3, 1.18, 0.6),
       new THREE.Vector3(-0.9, 1.35, 0.5),
       new THREE.Vector3(-1.4, 1.4, 0.3),
       new THREE.Vector3(-2.2, 1.5, 0.2)
     ]);
-    const wireYellowGeo = new THREE.TubeGeometry(yellowWireCurve, 28, 0.038, 8, false);
-    const wireYellowMat = new THREE.MeshStandardMaterial({ color: 0xFACC15, roughness: 0.4, metalness: 0.1 });
-    const wireYellow = new THREE.Mesh(wireYellowGeo, wireYellowMat);
+    const wireYellow = new THREE.Mesh(new THREE.TubeGeometry(yellowWireCurve, 28, 0.038, 8, false), new THREE.MeshStandardMaterial({ color: 0xFACC15 }));
     workstation.add(wireYellow);
 
-    // Fio Preto/GND (GND ➔ Botão)
     const blackWireCurve = new THREE.CatmullRomCurve3([
       new THREE.Vector3(-0.3, 1.18, 0.1),
       new THREE.Vector3(-0.9, 1.25, 0.0),
       new THREE.Vector3(-1.4, 1.3, -0.1),
       new THREE.Vector3(-2.2, 1.4, -0.1)
     ]);
-    const wireBlackGeo = new THREE.TubeGeometry(blackWireCurve, 28, 0.038, 8, false);
-    const wireBlackMat = new THREE.MeshStandardMaterial({ color: 0x0F172A, roughness: 0.4, metalness: 0.1 });
-    const wireBlack = new THREE.Mesh(wireBlackGeo, wireBlackMat);
+    const wireBlack = new THREE.Mesh(new THREE.TubeGeometry(blackWireCurve, 28, 0.038, 8, false), new THREE.MeshStandardMaterial({ color: 0x0F172A }));
     workstation.add(wireBlack);
 
-    // ==============================================================
-    // E) LADO DIREITO: PC GAMER / MONITOR ESTILO LABO CLEAN
-    // ==============================================================
+    // PC Monitor
     const pcGroup = new THREE.Group();
     pcGroup.position.set(2.2, 1.13, 0.0);
     workstation.add(pcGroup);
 
-    // Base do Monitor branca/clean
-    const standBaseGeo = new THREE.BoxGeometry(1.2, 0.06, 0.8);
-    const standMat = new THREE.MeshStandardMaterial({ color: 0xFFFFFF, metalness: 0.2, roughness: 0.2 });
-    const standBase = new THREE.Mesh(standBaseGeo, standMat);
-    standBase.position.y = 0.03;
-    pcGroup.add(standBase);
-
-    // Coluna do Monitor (Azul Joy-Con)
-    const standColGeo = new THREE.CylinderGeometry(0.08, 0.08, 1.0, 16);
-    const standColMat = new THREE.MeshStandardMaterial({ color: 0x00C3E3, roughness: 0.3 });
-    const standCol = new THREE.Mesh(standColGeo, standColMat);
-    standCol.position.set(0, 0.5, -0.15);
-    pcGroup.add(standCol);
-
-    // Moldura do Monitor (Branca com detalhes Pop)
     const frameGeo = new THREE.BoxGeometry(3.6, 2.2, 0.12);
-    const frameMat = new THREE.MeshStandardMaterial({ color: 0xFFFFFF, roughness: 0.2, metalness: 0.1 });
-    const frame = new THREE.Mesh(frameGeo, frameMat);
+    const frame = new THREE.Mesh(frameGeo, new THREE.MeshStandardMaterial({ color: 0xFFFFFF }));
     frame.position.set(0, 1.6, 0);
-    frame.castShadow = true;
     pcGroup.add(frame);
 
-    // Tela do Monitor (Com a CanvasTexture do jogo)
     const screenGeo = new THREE.PlaneGeometry(3.4, 2.0);
-    const screenMat = new THREE.MeshBasicMaterial({ map: monitorTexture });
+    const screenMat = new THREE.MeshBasicMaterial({ color: 0x0284C7 });
     const screenMesh = new THREE.Mesh(screenGeo, screenMat);
     screenMesh.position.set(0, 1.6, 0.07);
     pcGroup.add(screenMesh);
 
-    // Gabinete / Torre do Computador na mesa (Estilo Console Branco/Vermelho)
-    const caseGeo = new THREE.BoxGeometry(0.9, 2.4, 2.0);
-    const caseMat = new THREE.MeshStandardMaterial({ color: 0xF8FAFC, roughness: 0.2, metalness: 0.1 });
-    const pcCase = new THREE.Mesh(caseGeo, caseMat);
-    pcCase.position.set(3.4, 1.2, 0.2);
-    pcCase.castShadow = true;
-    workstation.add(pcCase);
-
-    // Faixa Vermelha Nintendo no gabinete
-    const caseLedGeo = new THREE.BoxGeometry(0.05, 2.0, 0.05);
-    const caseLedMat = new THREE.MeshBasicMaterial({ color: 0xFF3B30 });
-    const caseLed = new THREE.Mesh(caseLedGeo, caseLedMat);
-    caseLed.position.set(2.94, 1.2, 1.0);
-    workstation.add(caseLed);
-
-    // ==============================================================
-    // F) ONDAS DE SINAL BLUETOOTH (ANÉIS AZUIS JOY-CON)
-    // ==============================================================
-    const waveRings = [];
-    for (let i = 0; i < 4; i++) {
-      const ringGeo = new THREE.RingGeometry(0.2, 0.28, 32);
-      const ringMat = new THREE.MeshBasicMaterial({
-        color: 0x00C3E3,
-        transparent: true,
-        opacity: 0,
-        side: THREE.DoubleSide
-      });
-      const ring = new THREE.Mesh(ringGeo, ringMat);
-      ring.rotation.y = Math.PI / 2;
-      ring.position.set(-0.2 + (i * 0.6), 1.6, 0.1);
-      workstation.add(ring);
-      waveRings.push(ring);
-    }
-
-    // ==============================================================
-    // 4. LÓGICA DO MODO RAIO-X
-    // ==============================================================
+    // -------------------------------------------------------------
+    // 3. MODO RAIO-X
+    // -------------------------------------------------------------
     let xrayActive = false;
     const btnXray = document.getElementById('btn-toggle-xray');
     const xrayText = document.getElementById('xray-text');
-    const xrayIcon = document.getElementById('xray-icon');
     const xrayLegend = document.getElementById('xray-legend');
 
     btnXray.addEventListener('click', () => {
       xrayActive = !xrayActive;
-
       if (xrayActive) {
-        // Torna a caixa de papelão translúcida
         boxMat.opacity = 0.28;
         topCoverMat.opacity = 0.35;
-        btnXray.className = "btn-neo bg-pop-yellow text-pop-dark px-4 py-2.5 rounded-2xl font-display font-bold text-xs sm:text-sm flex items-center gap-2";
-        xrayText.textContent = "Ocultar Fiação (Normal)";
-        xrayIcon.textContent = "📦";
+        xrayText.textContent = "Ocultar Fiação";
         xrayLegend.style.opacity = '1';
+        btnXray.className = "btn-neo bg-pop-yellow text-pop-dark px-3 py-1.5 rounded-xl font-display font-bold text-xs flex items-center gap-1.5";
       } else {
-        // Restaura papelão sólido
         boxMat.opacity = 1.0;
         topCoverMat.opacity = 1.0;
-        btnXray.className = "btn-neo bg-pop-blue hover:bg-cyan-300 text-pop-dark px-4 py-2.5 rounded-2xl font-display font-bold text-xs sm:text-sm flex items-center gap-2";
-        xrayText.textContent = "Revelar Fiação Interna (Raio-X)";
-        xrayIcon.textContent = "🔍";
+        xrayText.textContent = "Raio-X (Fiação)";
         xrayLegend.style.opacity = '0';
+        btnXray.className = "btn-neo bg-pop-blue hover:bg-cyan-300 text-pop-dark px-3 py-1.5 rounded-xl font-display font-bold text-xs flex items-center gap-1.5";
       }
     });
 
     // -------------------------------------------------------------
-    // 5. ANIMAÇÃO DE CLIQUE, BLUETOOTH E JOGO
+    // 4. LÓGICA DE CLIQUE GLOBAL & ATUALIZAÇÃO DINÂMICA DO CÓDIGO
     // -------------------------------------------------------------
     let isPressed = false;
     let targetButtonY = 1.02;
@@ -1126,35 +749,71 @@
     const badgeEl = document.getElementById('click-feedback-badge');
     const streamStatus = document.getElementById('stream-status');
 
+    // Elementos da Seção 2 (Código Dinâmico)
+    const codeStateIndicator = document.getElementById('code-state-indicator');
+    const lineDownCheck = document.getElementById('line-down-check');
+    const lineLedOn = document.getElementById('line-led-on');
+    const lineSendDown = document.getElementById('line-send-down');
+    const lineUpCheck = document.getElementById('line-up-check');
+    const lineLedOff = document.getElementById('line-led-off');
+    const lineSendUp = document.getElementById('line-send-up');
+
+    function highlightCodeLines(pressed) {
+      if (!codeStateIndicator) return;
+      if (pressed) {
+        codeStateIndicator.textContent = "⚡ EXECUTANDO: Botão Pressionado (LOW)";
+        codeStateIndicator.className = "px-3 py-0.5 rounded-full text-[11px] font-bold bg-pop-yellow text-pop-dark border border-black animate-pulse";
+        
+        lineDownCheck.classList.add('code-line-active');
+        lineLedOn.classList.add('code-line-active');
+        lineSendDown.classList.add('code-line-active');
+
+        lineUpCheck.classList.remove('code-line-active');
+        lineLedOff.classList.remove('code-line-active');
+        lineSendUp.classList.remove('code-line-active');
+      } else {
+        codeStateIndicator.textContent = "Aguardando Entrada (HIGH / Solto)";
+        codeStateIndicator.className = "px-3 py-0.5 rounded-full text-[11px] font-bold bg-slate-800 text-slate-300 border border-slate-600";
+
+        lineDownCheck.classList.remove('code-line-active');
+        lineLedOn.classList.remove('code-line-active');
+        lineSendDown.classList.remove('code-line-active');
+
+        lineUpCheck.classList.add('code-line-active');
+        lineLedOff.classList.add('code-line-active');
+        lineSendUp.classList.add('code-line-active');
+        setTimeout(() => {
+          lineUpCheck.classList.remove('code-line-active');
+          lineLedOff.classList.remove('code-line-active');
+          lineSendUp.classList.remove('code-line-active');
+        }, 300);
+      }
+    }
+
     function doPress() {
       if (isPressed) return;
       isPressed = true;
       targetButtonY = pressedButtonY;
-      dinoTargetY = 140; // Robô pula na tela do PC!
-
       totalClicks++;
       counterEl.textContent = totalClicks;
 
-      playArcadeAudio();
+      playSound('flap');
 
-      // Botão fica verde alegre de clique!
+      // 3D Visual Feedback
       buttonMat.color.setHex(0x22C55E);
-      buttonMat.emissive.setHex(0x0E5E26);
-      buttonMat.emissiveIntensity = 0.6;
       clickFlashLight.intensity = 3.5;
       ledMat.color.setHex(0x22C55E);
 
-      // Feedback na HUD Neobrutalista
       badgeEl.style.opacity = '1';
       badgeEl.style.transform = 'translate(-50%, 0) scale(1.05)';
-      streamStatus.textContent = "DADOS TRANSMITIDOS!";
-      streamStatus.className = "text-[10px] font-display font-black text-white bg-pop-red px-2 py-0.5 rounded-full border border-pop-dark animate-bounce";
+      streamStatus.textContent = "CLIQUE!";
+      streamStatus.className = "text-[9px] font-display font-black text-white bg-pop-red px-1.5 py-0.5 rounded border border-pop-dark";
 
-      // Dispara ondas Bluetooth
-      waveRings.forEach((r, idx) => {
-        r.material.opacity = 0.85;
-        r.scale.set(1 + idx * 0.4, 1 + idx * 0.4, 1);
-      });
+      // Dispara o pulo no jogo Flappy Bird (Seção 3)!
+      handleGameJump();
+
+      // Acende as linhas correspondentes na Seção 2 (Código Dinâmico)!
+      highlightCodeLines(true);
 
       controls.autoRotate = false;
     }
@@ -1163,28 +822,24 @@
       if (!isPressed) return;
       isPressed = false;
       targetButtonY = normalButtonY;
-      dinoTargetY = 220; // Robô desce no chão
 
-      // Restaura cores originais (Vermelho plástico)
       buttonMat.color.setHex(0xFF2A2A);
-      buttonMat.emissive.setHex(0x330000);
-      buttonMat.emissiveIntensity = 0.2;
       clickFlashLight.intensity = 0;
       ledMat.color.setHex(0x00C3E3);
 
       badgeEl.style.opacity = '0';
       badgeEl.style.transform = 'translate(-50%, 0) scale(0.8)';
-      streamStatus.textContent = "SINAL PRONTO";
-      streamStatus.className = "text-[10px] font-display font-black text-pop-dark bg-pop-green px-2 py-0.5 rounded-full border border-pop-dark";
+      streamStatus.textContent = "PRONTO";
+      streamStatus.className = "text-[9px] font-display font-black text-pop-dark bg-pop-green px-1.5 py-0.5 rounded border border-pop-dark";
 
-      waveRings.forEach(r => r.material.opacity = 0);
+      highlightCodeLines(false);
 
       setTimeout(() => {
         if (!isPressed) controls.autoRotate = true;
-      }, 1800);
+      }, 1500);
     }
 
-    // Tecla ESPAÇO
+    // Tecla ESPAÇO Global
     window.addEventListener('keydown', (e) => {
       if (e.code === 'Space') {
         e.preventDefault();
@@ -1199,7 +854,7 @@
       }
     });
 
-    // Botão Manual na Tela
+    // Botão Manual na Maquete
     const manualBtn = document.getElementById('btn-manual-click');
     manualBtn.addEventListener('mousedown', doPress);
     manualBtn.addEventListener('mouseup', doRelease);
@@ -1222,90 +877,257 @@
       }
     });
 
-    // Redimensionamento Dinâmico do Canvas
-    function onWindowResize() {
-      if (!container.clientWidth || !container.clientHeight) return;
-      camera.aspect = container.clientWidth / container.clientHeight;
-      camera.updateProjectionMatrix();
-      renderer.setSize(container.clientWidth, container.clientHeight);
+    // -------------------------------------------------------------
+    // 5. SEÇÃO 3: JOGO FLAPPY BIRD 6B COM HIGHSCORE LOCAL
+    // -------------------------------------------------------------
+    const flappyCanvas = document.getElementById('flappy-canvas');
+    const fCtx = flappyCanvas.getContext('2d');
+    const overlay = document.getElementById('game-overlay');
+    const overlayTitle = document.getElementById('overlay-title');
+    const overlayMsg = document.getElementById('overlay-msg');
+    const overlayTag = document.getElementById('overlay-tag');
+    const btnStartGame = document.getElementById('btn-start-game');
+    const currentScoreEl = document.getElementById('game-current-score');
+    const bestScoreEl = document.getElementById('game-best-score');
+    const btnResetHighscore = document.getElementById('btn-reset-highscore');
+
+    function resizeFlappyCanvas() {
+      flappyCanvas.width = flappyCanvas.clientWidth;
+      flappyCanvas.height = flappyCanvas.clientHeight;
     }
-    window.addEventListener('resize', onWindowResize);
+    window.addEventListener('resize', resizeFlappyCanvas);
+    resizeFlappyCanvas();
 
-    // -------------------------------------------------------------
-    // 6. LOOP DE ANIMAÇÃO E RENDERIZAÇÃO
-    // -------------------------------------------------------------
-    let clock = new THREE.Clock();
+    // Highscore Local
+    let highscore = parseInt(localStorage.getItem('inovacev_flappy_6b_best') || '0', 10);
+    bestScoreEl.textContent = highscore;
 
-    function animate() {
-      requestAnimationFrame(animate);
-      const delta = clock.getDelta();
+    btnResetHighscore.addEventListener('click', () => {
+      if (confirm("Deseja zerar o recorde da feira?")) {
+        highscore = 0;
+        localStorage.setItem('inovacev_flappy_6b_best', '0');
+        bestScoreEl.textContent = '0';
+      }
+    });
 
-      // Movimento do obstáculo na tela do jogo
-      obstacleX -= 3.5;
-      if (obstacleX < -30) obstacleX = 512;
-      drawMonitorScreen(isPressed);
+    // Estados do jogo
+    let gameState = 'START'; // 'START', 'PLAYING', 'GAMEOVER'
+    let score = 0;
+    let birdY = 150;
+    let birdVelocity = 0;
+    const gravity = 0.38;
+    const jumpStrength = -6.8;
 
-      // Animação da mola física do botão
-      buttonCapGroup.position.y += (targetButtonY - buttonCapGroup.position.y) * 0.35;
+    let pipes = [];
+    const pipeWidth = 52;
+    const pipeGap = 125;
+    let pipeTimer = 0;
 
-      // Animação das ondas Bluetooth no ar
-      if (isPressed) {
-        waveRings.forEach((ring, idx) => {
-          ring.position.x += 0.05;
-          if (ring.position.x > 1.8) ring.position.x = -0.2;
-        });
+    function resetGame() {
+      score = 0;
+      currentScoreEl.textContent = '0';
+      birdY = flappyCanvas.height / 2;
+      birdVelocity = 0;
+      pipes = [];
+      pipeTimer = 0;
+    }
+
+    function handleGameJump() {
+      if (gameState === 'START' || gameState === 'GAMEOVER') {
+        resetGame();
+        gameState = 'PLAYING';
+        overlay.classList.add('hidden');
+        birdVelocity = jumpStrength;
+      } else if (gameState === 'PLAYING') {
+        birdVelocity = jumpStrength;
+      }
+    }
+
+    btnStartGame.addEventListener('click', handleGameJump);
+    flappyCanvas.addEventListener('pointerdown', (e) => {
+      e.preventDefault();
+      doPress();
+      setTimeout(doRelease, 150);
+    });
+
+    function triggerGameOver() {
+      gameState = 'GAMEOVER';
+      playSound('crash');
+
+      if (score > highscore) {
+        highscore = score;
+        localStorage.setItem('inovacev_flappy_6b_best', highscore.toString());
+        bestScoreEl.textContent = highscore;
+        overlayTag.textContent = "🏆 NOVO RECORDE DA FEIRA!";
+        overlayTag.className = "text-xs font-display font-black uppercase bg-pop-green text-pop-dark px-3 py-1 rounded-full border border-pop-dark shadow-neo-sm inline-block";
+      } else {
+        overlayTag.textContent = "💥 FIM DE JOGO!";
+        overlayTag.className = "text-xs font-display font-black uppercase bg-pop-red text-white px-3 py-1 rounded-full border border-pop-dark shadow-neo-sm inline-block";
       }
 
-      controls.update();
-      renderer.render(scene, camera);
+      overlayTitle.textContent = `PONTUAÇÃO: ${score}`;
+      overlayMsg.textContent = "Bata no botão gigante de papelão ou aperte ESPAÇO para tentar de novo!";
+      btnStartGame.textContent = "BATER PARA JOGAR NOVAMENTE 🔄";
+      overlay.classList.remove('hidden');
+    }
+
+    function updateAndDrawFlappy() {
+      const W = flappyCanvas.width;
+      const H = flappyCanvas.height;
+
+      // Fundo Céu Ensolarado
+      fCtx.fillStyle = '#7DD3FC';
+      fCtx.fillRect(0, 0, W, H);
+
+      // Nuvens no fundo
+      fCtx.fillStyle = '#FFFFFF';
+      fCtx.beginPath();
+      fCtx.arc(100, 70, 24, 0, Math.PI * 2);
+      fCtx.arc(130, 60, 30, 0, Math.PI * 2);
+      fCtx.arc(160, 70, 22, 0, Math.PI * 2);
+      fCtx.fill();
+
+      fCtx.beginPath();
+      fCtx.arc(W - 140, 90, 20, 0, Math.PI * 2);
+      fCtx.arc(W - 110, 80, 26, 0, Math.PI * 2);
+      fCtx.arc(W - 80, 90, 18, 0, Math.PI * 2);
+      fCtx.fill();
+
+      // Chão do Jogo
+      const groundY = H - 36;
+      fCtx.fillStyle = '#22C55E';
+      fCtx.fillRect(0, groundY, W, 10);
+      fCtx.fillStyle = '#B45309';
+      fCtx.fillRect(0, groundY + 10, W, 26);
+      fCtx.strokeStyle = '#0F172A';
+      fCtx.lineWidth = 3;
+      fCtx.strokeRect(0, groundY, W, 36);
+
+      if (gameState === 'PLAYING') {
+        // Gravidade e Física do Personagem
+        birdVelocity += gravity;
+        birdY += birdVelocity;
+
+        // Limites do teto e chão
+        if (birdY < 16) {
+          birdY = 16;
+          birdVelocity = 0;
+        }
+        if (birdY + 28 >= groundY) {
+          triggerGameOver();
+        }
+
+        // Geração de Canos / Obstáculos
+        pipeTimer++;
+        if (pipeTimer > 100) {
+          pipeTimer = 0;
+          const minH = 45;
+          const maxH = groundY - pipeGap - minH;
+          const topH = Math.floor(Math.random() * (maxH - minH + 1)) + minH;
+          pipes.push({ x: W + 10, topH: topH, passed: false });
+        }
+
+        // Movimento e Colisão dos Canos
+        for (let i = pipes.length - 1; i >= 0; i--) {
+          const p = pipes[i];
+          p.x -= 2.6;
+
+          const bottomY = p.topH + pipeGap;
+          const bottomH = groundY - bottomY;
+
+          // Desenho dos Canos Neobrutalistas estilo Labo / Lego
+          fCtx.fillStyle = '#FFCC00';
+          fCtx.strokeStyle = '#0F172A';
+          fCtx.lineWidth = 3;
+
+          // Cano Superior
+          fCtx.fillRect(p.x, 0, pipeWidth, p.topH);
+          fCtx.strokeRect(p.x, 0, pipeWidth, p.topH);
+          fCtx.fillStyle = '#EAB308';
+          fCtx.fillRect(p.x - 4, p.topH - 18, pipeWidth + 8, 18);
+          fCtx.strokeRect(p.x - 4, p.topH - 18, pipeWidth + 8, 18);
+
+          // Cano Inferior
+          fCtx.fillStyle = '#FFCC00';
+          fCtx.fillRect(p.x, bottomY, pipeWidth, bottomH);
+          fCtx.strokeRect(p.x, bottomY, pipeWidth, bottomH);
+          fCtx.fillStyle = '#EAB308';
+          fCtx.fillRect(p.x - 4, bottomY, pipeWidth + 8, 18);
+          fCtx.strokeRect(p.x - 4, bottomY, pipeWidth + 8, 18);
+
+          // Colisão com o Robozinho (hitbox de 32x28)
+          const birdX = 70;
+          const birdW = 32;
+          const birdH = 28;
+
+          if (birdX + birdW > p.x && birdX < p.x + pipeWidth) {
+            if (birdY < p.topH || (birdY + birdH) > bottomY) {
+              triggerGameOver();
+            }
+          }
+
+          // Ponto conquistado
+          if (!p.passed && p.x + pipeWidth < birdX) {
+            p.passed = true;
+            score++;
+            currentScoreEl.textContent = score;
+            playSound('score');
+          }
+
+          // Remove canos que saíram da tela
+          if (p.x < -pipeWidth - 20) {
+            pipes.splice(i, 1);
+          }
+        }
+      }
+
+      // Desenho do Mascote Robô do 6º B
+      const robotX = 70;
+      fCtx.save();
+      fCtx.translate(robotX + 16, birdY + 14);
+      const angle = Math.min(Math.PI / 4, Math.max(-Math.PI / 4, birdVelocity * 0.08));
+      fCtx.rotate(angle);
+
+      // Corpo do Robô
+      fCtx.fillStyle = isPressed ? '#22C55E' : '#FF3B30';
+      fCtx.strokeStyle = '#0F172A';
+      fCtx.lineWidth = 3;
+      fCtx.fillRect(-16, -14, 32, 28);
+      fCtx.strokeRect(-16, -14, 32, 28);
+
+      // Olho Pop
+      fCtx.fillStyle = '#FFFFFF';
+      fCtx.fillRect(2, -8, 10, 10);
+      fCtx.fillStyle = '#0F172A';
+      fCtx.fillRect(7, -5, 4, 4);
+
+      // Antena do Robô
+      fCtx.strokeStyle = '#0F172A';
+      fCtx.lineWidth = 2;
+      fCtx.beginPath();
+      fCtx.moveTo(0, -14);
+      fCtx.lineTo(0, -22);
+      fCtx.stroke();
+      fCtx.fillStyle = '#00C3E3';
+      fCtx.beginPath();
+      fCtx.arc(0, -24, 4, 0, Math.PI * 2);
+      fCtx.fill();
+      fCtx.stroke();
+
+      fCtx.restore();
     }
 
     // -------------------------------------------------------------
-    // 7. CONEXÃO DIRETA VIA CABO USB (Web Serial API Plug-and-Play)
+    // 6. CONEXÃO DIRETA VIA CABO USB (Web Serial API Plug-and-Play)
     // -------------------------------------------------------------
-    const usbButtons = [
-      { btn: document.getElementById('btn-header-connect-usb'), text: document.getElementById('header-usb-btn-text') },
-      { btn: document.getElementById('btn-banner-connect-usb'), text: document.getElementById('banner-usb-btn-text') },
-      { btn: document.getElementById('btn-connect-usb'), text: document.getElementById('usb-btn-text') },
-      { btn: document.getElementById('btn-bottom-connect-usb'), text: document.getElementById('bottom-usb-btn-text') }
-    ].filter(item => item.btn != null);
-
-    const bannerBadge = document.getElementById('banner-status-badge');
-    const fileWarning = document.getElementById('file-protocol-warning');
+    const btnHeaderConnectUsb = document.getElementById('btn-header-connect-usb');
+    const headerUsbBtnText = document.getElementById('header-usb-btn-text');
     let serialPort = null;
     let serialReader = null;
 
-    // Detecta se a página está sendo aberta por arquivo local file:// (onde o Chrome bloqueia Web Serial)
-    if (window.location.protocol === 'file:' && fileWarning) {
-      fileWarning.classList.remove('hidden');
-    }
-
-    function updateUsbUI(isConnected) {
-      usbButtons.forEach(item => {
-        if (!item.btn) return;
-        if (isConnected) {
-          if (item.text) item.text.textContent = "DESCONECTAR USB";
-          item.btn.className = "btn-neo bg-pop-yellow text-pop-dark px-4 py-2 rounded-xl font-display font-black text-xs sm:text-sm flex items-center gap-1.5 shadow-neo-sm";
-        } else {
-          if (item.text) item.text.textContent = "CONECTAR CONTROLE USB";
-          item.btn.className = "btn-neo bg-pop-green hover:bg-emerald-300 text-pop-dark px-4 py-2 rounded-xl font-display font-black text-xs sm:text-sm flex items-center gap-1.5 shadow-neo-sm animate-pulse";
-        }
-      });
-
-      if (bannerBadge) {
-        if (isConnected) {
-          bannerBadge.textContent = "CONECTADO ONLINE (COM)";
-          bannerBadge.className = "text-xs font-display font-black text-emerald-950 bg-pop-green px-2 py-0.5 rounded border border-pop-dark";
-        } else {
-          bannerBadge.textContent = "Aguardando Conexão";
-          bannerBadge.className = "text-xs font-display font-bold text-slate-700 bg-amber-200 px-2 py-0.5 rounded border border-pop-dark";
-        }
-      }
-    }
-
     async function toggleUsbConnection() {
       if (!('serial' in navigator)) {
-        alert("Atenção: A conexão USB direta pelo navegador requer o Google Chrome ou Microsoft Edge em uma conexão segura HTTPS.\n\nAcesse pelo link oficial: https://luisfpatrocinio.github.io/GiantJoystick/\n\nOu use a tecla ESPAÇO / script ponte_teclado_usb.py!");
+        alert("Atenção: A conexão USB direta pelo navegador requer o Google Chrome ou Microsoft Edge no link seguro HTTPS:\n\nhttps://luisfpatrocinio.github.io/GiantJoystick/\n\nOu use a tecla ESPAÇO!");
         return;
       }
 
@@ -1315,18 +1137,17 @@
           await serialPort.close();
         } catch(e) {}
         serialPort = null;
-        updateUsbUI(false);
-        streamStatus.textContent = "SINAL PRONTO";
+        headerUsbBtnText.textContent = "CONECTAR USB";
+        btnHeaderConnectUsb.className = "btn-neo bg-pop-green hover:bg-emerald-300 text-pop-dark px-3 sm:px-4 py-2 rounded-xl text-xs sm:text-sm font-display font-black flex items-center gap-1.5 shadow-neo-sm";
         return;
       }
 
       try {
         serialPort = await navigator.serial.requestPort();
         await serialPort.open({ baudRate: 115200 });
-        
-        updateUsbUI(true);
-        streamStatus.textContent = "USB: ONLINE!";
-        streamStatus.className = "text-[10px] font-display font-black text-pop-dark bg-pop-green px-2 py-0.5 rounded-full border border-pop-dark animate-pulse";
+
+        headerUsbBtnText.textContent = "USB ONLINE!";
+        btnHeaderConnectUsb.className = "btn-neo bg-pop-yellow text-pop-dark px-3 sm:px-4 py-2 rounded-xl text-xs sm:text-sm font-display font-black flex items-center gap-1.5 shadow-neo-sm";
 
         const textDecoder = new TextDecoderStream();
         serialPort.readable.pipeTo(textDecoder.writable);
@@ -1350,16 +1171,39 @@
         }
       } catch (err) {
         console.warn("Erro ao conectar Web Serial:", err);
-        updateUsbUI(false);
-        alert("Aviso: Não foi possível abrir a porta USB.\n\n1. Verifique se o cabo está conectado no computador.\n2. Feche o Monitor Serial do PlatformIO/VS Code para não ocupar a porta COM.\n3. Se estiver em arquivo local, abra pelo link online do GitHub Pages!");
+        alert("Aviso: Não foi possível conectar à porta USB. Verifique o cabo e feche o Monitor Serial do PlatformIO/VS Code para liberar a porta COM!");
       }
     }
 
-    usbButtons.forEach(item => {
-      if (item.btn) {
-        item.btn.addEventListener('click', toggleUsbConnection);
+    if (btnHeaderConnectUsb) {
+      btnHeaderConnectUsb.addEventListener('click', toggleUsbConnection);
+    }
+
+    // -------------------------------------------------------------
+    // 7. LOOP PRINCIPAL DE ANIMAÇÃO (3D + JOGO FLAPPY BIRD)
+    // -------------------------------------------------------------
+    function animate() {
+      requestAnimationFrame(animate);
+
+      // Animação da mola física do botão 3D
+      buttonCapGroup.position.y += (targetButtonY - buttonCapGroup.position.y) * 0.35;
+
+      controls.update();
+      renderer.render(scene, camera);
+
+      // Loop do jogo Flappy Bird da Seção 3
+      updateAndDrawFlappy();
+    }
+
+    function onWindowResize() {
+      if (container3D.clientWidth && container3D.clientHeight) {
+        camera.aspect = container3D.clientWidth / container3D.clientHeight;
+        camera.updateProjectionMatrix();
+        renderer.setSize(container3D.clientWidth, container3D.clientHeight);
       }
-    });
+      resizeFlappyCanvas();
+    }
+    window.addEventListener('resize', onWindowResize);
 
     animate();
   </script>
