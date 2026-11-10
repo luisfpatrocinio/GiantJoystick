@@ -189,12 +189,58 @@
             </div>
           </div>
 
-          <!-- Botão de Raio-X (Fiação) -->
-          <div class="absolute top-3 right-3 z-20">
-            <button id="btn-toggle-xray" class="btn-neo bg-pop-blue hover:bg-cyan-300 text-pop-dark px-3 py-1.5 rounded-xl font-display font-bold text-xs flex items-center gap-1.5">
-              <span id="xray-icon">🔍</span>
-              <span id="xray-text">Raio-X (Fiação)</span>
+          <!-- Botões de Controle da Maquete 3D -->
+          <div class="absolute top-3 right-3 z-20 flex items-center gap-2">
+            <button id="btn-toggle-exploded" class="btn-neo bg-pop-blue hover:bg-cyan-300 text-pop-dark px-3 py-1.5 rounded-xl font-display font-black text-xs flex items-center gap-1.5 shadow-neo">
+              <span id="exploded-icon">💥</span>
+              <span id="exploded-text">Vista Explodida</span>
             </button>
+            <button id="btn-toggle-xray" class="btn-neo bg-white hover:bg-slate-100 text-pop-dark px-2.5 py-1.5 rounded-xl font-display font-bold text-xs flex items-center gap-1 shadow-neo">
+              <span id="xray-icon">🔍</span>
+              <span id="xray-text">Raio-X</span>
+            </button>
+          </div>
+
+          <!-- Painel Flutuante da Vista Explodida (Blueprint das 6 Camadas) -->
+          <div id="exploded-panel" class="absolute top-12 right-3 opacity-0 transition-all duration-300 pointer-events-none translate-x-4 bg-white/95 backdrop-blur-md border-3 border-pop-dark rounded-2xl p-3 text-[11px] font-display text-pop-dark space-y-1.5 shadow-neo max-w-[240px] z-20">
+            <div class="flex items-center justify-between pb-1 border-b border-slate-200">
+              <span class="font-black text-xs uppercase tracking-wider text-pop-blue">📐 Blueprint das Camadas</span>
+              <span class="text-[9px] font-mono font-bold bg-slate-100 px-1.5 py-0.5 rounded border border-slate-300">6 Níveis</span>
+            </div>
+            
+            <div class="flex items-center gap-2 p-1 rounded-lg hover:bg-slate-100 transition cursor-pointer layer-tag" data-layer-id="buttonDome">
+              <span class="w-3 h-3 rounded-full bg-pop-red border border-black shrink-0"></span>
+              <span class="font-bold text-[11px] leading-tight">1. Domo Vermelho (11cm)</span>
+            </div>
+            
+            <div class="flex items-center gap-2 p-1 rounded-lg hover:bg-slate-100 transition cursor-pointer layer-tag" data-layer-id="suspension">
+              <span class="w-3 h-3 rounded-sm bg-amber-400 border border-black shrink-0"></span>
+              <span class="font-bold text-[11px] leading-tight">2. Suspensão (4 Esponjas)</span>
+            </div>
+
+            <div class="flex items-center gap-2 p-1 rounded-lg hover:bg-slate-100 transition cursor-pointer layer-tag" data-layer-id="ledRing">
+              <span class="w-3 h-3 rounded-full bg-cyan-400 border border-black shrink-0"></span>
+              <span class="font-bold text-[11px] leading-tight">3. Anel Difusor de LED</span>
+            </div>
+
+            <div class="flex items-center gap-2 p-1 rounded-lg hover:bg-slate-100 transition cursor-pointer layer-tag" data-layer-id="topPanel">
+              <span class="w-3 h-3 rounded-sm bg-slate-800 border border-black shrink-0"></span>
+              <span class="font-bold text-[11px] leading-tight">4. Tampo Superior a Laser</span>
+            </div>
+
+            <div class="flex items-center gap-2 p-1 rounded-lg hover:bg-slate-100 transition cursor-pointer layer-tag" data-layer-id="electronics">
+              <span class="w-3 h-3 rounded-sm bg-emerald-600 border border-black shrink-0"></span>
+              <span class="font-bold text-[11px] leading-tight">5. Bandeja com ESP32</span>
+            </div>
+
+            <div class="flex items-center gap-2 p-1 rounded-lg hover:bg-slate-100 transition cursor-pointer layer-tag" data-layer-id="base">
+              <span class="w-3 h-3 rounded-sm bg-slate-900 border border-black shrink-0"></span>
+              <span class="font-bold text-[11px] leading-tight">6. Chassi Base Chanfrado</span>
+            </div>
+
+            <div class="pt-1 border-t border-slate-200 text-[10px] text-slate-500 font-sans italic leading-tight">
+              Gire com o mouse para examinar o espaçamento entre as peças.
+            </div>
           </div>
 
           <!-- Legenda do Raio-X -->
@@ -797,8 +843,16 @@
       return texture;
     }
 
-    // 1. Chassi Chanfrado Octogonal (Base da Caixa)
-    const boxGeo = createChamferedBoxGeometry(3.3, 1.15, 3.3, 0.46);
+    // ==============================================================
+    // CRIAÇÃO DAS 6 CAMADAS MODULARES DA VISTA EXPLODIDA
+    // (Estruturadas individualmente para permitir alteração e ajuste fácil)
+    // ==============================================================
+
+    // CAMADA 6: Chassi Base Chanfrado (Bottom Base)
+    const layerBase = new THREE.Group();
+    joystickGroup.add(layerBase);
+
+    const boxGeo = createChamferedBoxGeometry(3.3, 0.95, 3.3, 0.46);
     const boxMat = new THREE.MeshStandardMaterial({
       color: 0x181A1F,
       roughness: 0.35,
@@ -807,57 +861,133 @@
       opacity: 1.0
     });
     const boxMesh = new THREE.Mesh(boxGeo, boxMat);
-    boxMesh.position.y = 0.58;
+    boxMesh.position.y = 0.48;
     boxMesh.castShadow = true;
     boxMesh.receiveShadow = true;
-    joystickGroup.add(boxMesh);
+    layerBase.add(boxMesh);
 
-    // Pés de borracha nos 4 cantos
+    // Pés de borracha
     const footGeo = new THREE.CylinderGeometry(0.12, 0.14, 0.05, 16);
     const footMat = new THREE.MeshStandardMaterial({ color: 0x0A0B0D, roughness: 0.9 });
     [[-1.3, -1.3], [1.3, -1.3], [-1.3, 1.3], [1.3, 1.3]].forEach(([fx, fz]) => {
       const foot = new THREE.Mesh(footGeo, footMat);
       foot.position.set(fx, 0.025, fz);
-      joystickGroup.add(foot);
+      layerBase.add(foot);
     });
 
-    // 2. Aletas Laterais de Ventilação Chanfradas (Grelhas com Neon Ciano Interno)
+    // Aletas Laterais Chanfradas com Neon Azul
     const ventMat = new THREE.MeshBasicMaterial({ color: 0x00E5FF });
     const finMat = new THREE.MeshStandardMaterial({ color: 0x14161A, roughness: 0.4 });
     const sideVentsGroup = new THREE.Group();
-    joystickGroup.add(sideVentsGroup);
+    layerBase.add(sideVentsGroup);
 
     function createSideVentWall(x, z, rotY) {
       const ventSubGroup = new THREE.Group();
-      ventSubGroup.position.set(x, 0.58, z);
+      ventSubGroup.position.set(x, 0.48, z);
       ventSubGroup.rotation.y = rotY;
 
-      // Placa de fundo emissiva neon azul
-      const glowPlate = new THREE.Mesh(new THREE.PlaneGeometry(1.6, 0.65), ventMat);
+      const glowPlate = new THREE.Mesh(new THREE.PlaneGeometry(1.6, 0.55), ventMat);
       glowPlate.position.set(0, 0, -0.02);
       ventSubGroup.add(glowPlate);
 
-      // Aletas pretas inclinadas a 45 graus
       for (let i = -3; i <= 3; i++) {
-        const fin = new THREE.Mesh(new THREE.BoxGeometry(0.06, 0.6, 0.04), finMat);
+        const fin = new THREE.Mesh(new THREE.BoxGeometry(0.06, 0.52, 0.04), finMat);
         fin.position.set(i * 0.22, 0, 0.01);
         fin.rotation.z = Math.PI / 4;
         ventSubGroup.add(fin);
       }
       return ventSubGroup;
     }
-    // Adiciona as aletas nas 4 faces retas
     sideVentsGroup.add(createSideVentWall(0, 1.66, 0));
     sideVentsGroup.add(createSideVentWall(0, -1.66, Math.PI));
     sideVentsGroup.add(createSideVentWall(1.66, 0, Math.PI / 2));
     sideVentsGroup.add(createSideVentWall(-1.66, 0, -Math.PI / 2));
 
-    // Luz neon interna da caixa
     const internalNeon = new THREE.PointLight(0x00E5FF, 1.8, 3.5);
-    internalNeon.position.set(0, 0.55, 0);
-    joystickGroup.add(internalNeon);
+    internalNeon.position.set(0, 0.48, 0);
+    layerBase.add(internalNeon);
 
-    // 3. Tampo Superior Gravado a Laser com Trilhas e "6B JOGANDO JUNTO"
+    // Cabo USB traseiro
+    const usbCurve = new THREE.CatmullRomCurve3([
+      new THREE.Vector3(0, 0.48, -1.65),
+      new THREE.Vector3(0, 0.35, -2.1),
+      new THREE.Vector3(0.5, 0.04, -2.6),
+      new THREE.Vector3(1.2, 0.03, -3.2)
+    ]);
+    const usbCableGeo = new THREE.TubeGeometry(usbCurve, 32, 0.04, 10, false);
+    const usbCableMat = new THREE.MeshStandardMaterial({ color: 0x0A0B0E, roughness: 0.6 });
+    const usbCable = new THREE.Mesh(usbCableGeo, usbCableMat);
+    layerBase.add(usbCable);
+
+
+    // CAMADA 5: Bandeja Eletrônica & ESP32 (Electronics Tray)
+    const layerElectronics = new THREE.Group();
+    layerElectronics.position.y = 0.25;
+    joystickGroup.add(layerElectronics);
+
+    const trayGeo = new THREE.BoxGeometry(2.7, 0.04, 2.7);
+    const trayMat = new THREE.MeshStandardMaterial({
+      color: 0x38BDF8,
+      roughness: 0.2,
+      metalness: 0.1,
+      transparent: true,
+      opacity: 0.6
+    });
+    const internalTray = new THREE.Mesh(trayGeo, trayMat);
+    layerElectronics.add(internalTray);
+
+    // Microswitch com alavanca
+    const switchBodyGeo = new THREE.BoxGeometry(0.42, 0.22, 0.2);
+    const switchMat = new THREE.MeshStandardMaterial({ color: 0x1E293B, roughness: 0.5 });
+    const switchBody = new THREE.Mesh(switchBodyGeo, switchMat);
+    switchBody.position.set(0, 0.22, 0);
+    layerElectronics.add(switchBody);
+
+    const switchActuatorGeo = new THREE.BoxGeometry(0.08, 0.08, 0.08);
+    const switchActuator = new THREE.Mesh(switchActuatorGeo, new THREE.MeshBasicMaterial({ color: 0xEF4444 }));
+    switchActuator.position.set(0, 0.35, 0);
+    layerElectronics.add(switchActuator);
+
+    // Placa ESP32 DevKit V1
+    const pcbGeo = new THREE.BoxGeometry(0.7, 0.04, 1.35);
+    const pcbMat = new THREE.MeshStandardMaterial({ color: 0x064E3B, roughness: 0.3 });
+    const pcb = new THREE.Mesh(pcbGeo, pcbMat);
+    pcb.position.set(0, 0.04, -0.65);
+    layerElectronics.add(pcb);
+
+    const shieldGeo = new THREE.BoxGeometry(0.5, 0.04, 0.55);
+    const shieldMat = new THREE.MeshStandardMaterial({ color: 0xE2E8F0, metalness: 0.85, roughness: 0.2 });
+    const shield = new THREE.Mesh(shieldGeo, shieldMat);
+    shield.position.set(0, 0.08, -0.8);
+    layerElectronics.add(shield);
+
+    const espLed = new THREE.Mesh(new THREE.BoxGeometry(0.06, 0.04, 0.06), new THREE.MeshBasicMaterial({ color: 0x00E5FF }));
+    espLed.position.set(0.2, 0.08, -0.4);
+    layerElectronics.add(espLed);
+
+    // Fiação interna com garras tipo jacaré / jumpers
+    const wireYellowCurve = new THREE.CatmullRomCurve3([
+      new THREE.Vector3(0.22, 0.08, -0.4),
+      new THREE.Vector3(0.35, 0.24, -0.2),
+      new THREE.Vector3(0.18, 0.28, 0.0)
+    ]);
+    const wireYellow = new THREE.Mesh(new THREE.TubeGeometry(wireYellowCurve, 20, 0.026, 8, false), new THREE.MeshStandardMaterial({ color: 0xFACC15 }));
+    layerElectronics.add(wireYellow);
+
+    const wireBlackCurve = new THREE.CatmullRomCurve3([
+      new THREE.Vector3(-0.22, 0.08, -0.4),
+      new THREE.Vector3(-0.35, 0.24, -0.2),
+      new THREE.Vector3(-0.18, 0.28, 0.0)
+    ]);
+    const wireBlack = new THREE.Mesh(new THREE.TubeGeometry(wireBlackCurve, 20, 0.026, 8, false), new THREE.MeshStandardMaterial({ color: 0x0F172A }));
+    layerElectronics.add(wireBlack);
+
+
+    // CAMADA 4: Tampo Superior Gravado a Laser (Chassis Top)
+    const layerTopPanel = new THREE.Group();
+    layerTopPanel.position.y = 1.05;
+    joystickGroup.add(layerTopPanel);
+
     const topPanelTexture = createTopPanelTexture();
     const topPanelMat = new THREE.MeshStandardMaterial({
       color: 0xFFFFFF,
@@ -869,12 +999,16 @@
     });
     const topPanelGeo = createChamferedBoxGeometry(3.3, 0.06, 3.3, 0.46);
     const topCover = new THREE.Mesh(topPanelGeo, topPanelMat);
-    topCover.position.y = 1.18;
     topCover.receiveShadow = true;
-    joystickGroup.add(topCover);
-    const topCoverMat = topPanelMat; // Para suporte ao modo Raio-X
+    layerTopPanel.add(topCover);
+    const topCoverMat = topPanelMat; // Suporte ao Raio-X
 
-    // 4. Anel Difusor de LED Halo (Cyan Glowing Ring)
+
+    // CAMADA 3: Anel Difusor de LED Halo (LED Layer / Diffuser Ring)
+    const layerLedRing = new THREE.Group();
+    layerLedRing.position.y = 1.15;
+    joystickGroup.add(layerLedRing);
+
     const haloRingGeo = new THREE.TorusGeometry(0.96, 0.11, 24, 64);
     haloRingGeo.rotateX(Math.PI / 2);
     const haloRingMat = new THREE.MeshStandardMaterial({
@@ -887,26 +1021,41 @@
       opacity: 0.95
     });
     const haloRing = new THREE.Mesh(haloRingGeo, haloRingMat);
-    haloRing.position.y = 1.25;
-    joystickGroup.add(haloRing);
+    layerLedRing.add(haloRing);
     const ledMat = haloRingMat; // Compatibilidade com animação
 
-    // Luz pontual emanando do halo de LED
     const haloLight = new THREE.PointLight(0x06B6D4, 2.6, 4.0);
-    haloLight.position.set(0, 1.45, 0);
-    joystickGroup.add(haloLight);
+    haloLight.position.set(0, 0.15, 0);
+    layerLedRing.add(haloLight);
 
-    // Aro preto interno (Bezel de retenção do domo)
     const bezelGeo = new THREE.CylinderGeometry(0.85, 0.88, 0.12, 48);
     const bezelMat = new THREE.MeshStandardMaterial({ color: 0x111317, roughness: 0.35, metalness: 0.4 });
     const bezel = new THREE.Mesh(bezelGeo, bezelMat);
-    bezel.position.y = 1.26;
-    joystickGroup.add(bezel);
+    bezel.position.y = 0.02;
+    layerLedRing.add(bezel);
 
-    // 5. Domo Central Vermelho Alto Brilho (Hero Arcade Dome)
+
+    // CAMADA 2: Suspensão (4x Corner Foam Blocks / Almofadas de Esponja)
+    const layerSuspension = new THREE.Group();
+    layerSuspension.position.y = 1.18;
+    joystickGroup.add(layerSuspension);
+
+    const foamMat = new THREE.MeshStandardMaterial({ color: 0xFBBF24, roughness: 0.95 });
+    const foamGeo = new THREE.BoxGeometry(0.44, 0.45, 0.44);
+    [[-0.65, -0.65], [0.65, -0.65], [-0.65, 0.65], [0.65, 0.65]].forEach(([sx, sz]) => {
+      const foam = new THREE.Mesh(foamGeo, foamMat);
+      foam.position.set(sx, 0, sz);
+      layerSuspension.add(foam);
+    });
+
+
+    // CAMADA 1: Domo Vermelho Gigante (Top Layer / Strike Button)
+    const layerButtonDome = new THREE.Group();
+    layerButtonDome.position.y = 1.34;
+    joystickGroup.add(layerButtonDome);
+
     const buttonCapGroup = new THREE.Group();
-    buttonCapGroup.position.y = 1.34;
-    joystickGroup.add(buttonCapGroup);
+    layerButtonDome.add(buttonCapGroup);
 
     const buttonMat = new THREE.MeshStandardMaterial({
       color: 0xEE1122,
@@ -925,118 +1074,127 @@
     buttonDome.position.y = 0.08;
     buttonCapGroup.add(buttonDome);
 
-    // Haste interna do botão para acionar o microswitch
     const stemGeo = new THREE.CylinderGeometry(0.12, 0.12, 0.8, 16);
     const stemMat = new THREE.MeshStandardMaterial({ color: 0xCBD5E1, metalness: 0.8, roughness: 0.2 });
     const stemMesh = new THREE.Mesh(stemGeo, stemMat);
     stemMesh.position.y = -0.4;
     buttonCapGroup.add(stemMesh);
 
-    // 6. Cabo USB traseiro saindo da caixa
-    const usbCurve = new THREE.CatmullRomCurve3([
-      new THREE.Vector3(0, 0.5, -1.65),
-      new THREE.Vector3(0, 0.35, -2.1),
-      new THREE.Vector3(0.5, 0.04, -2.6),
-      new THREE.Vector3(1.2, 0.03, -3.2)
-    ]);
-    const usbCableGeo = new THREE.TubeGeometry(usbCurve, 32, 0.04, 10, false);
-    const usbCableMat = new THREE.MeshStandardMaterial({ color: 0x0A0B0E, roughness: 0.6 });
-    const usbCable = new THREE.Mesh(usbCableGeo, usbCableMat);
-    joystickGroup.add(usbCable);
 
-    // 7. Componentes Internos (Modo Raio-X)
-    const internalsGroup = new THREE.Group();
-    internalsGroup.visible = false;
-    joystickGroup.add(internalsGroup);
+    // ==============================================================
+    // LINHAS GUIA PONTILHADAS DO BLUEPRINT (DASHED GUIDELINES)
+    // ==============================================================
+    const guidelinesGroup = new THREE.Group();
+    guidelinesGroup.visible = false;
+    joystickGroup.add(guidelinesGroup);
 
-    // Bandeja interna de acrílico
-    const trayGeo = new THREE.BoxGeometry(2.6, 0.03, 2.6);
-    const trayMat = new THREE.MeshStandardMaterial({ color: 0x38BDF8, transparent: true, opacity: 0.4 });
-    const internalTray = new THREE.Mesh(trayGeo, trayMat);
-    internalTray.position.y = 0.25;
-    internalsGroup.add(internalTray);
-
-    // 4 Almofadas de Esponja nos 4 quadrantes (Amortecimento e Retorno Suave)
-    const foamMat = new THREE.MeshStandardMaterial({ color: 0xFBBF24, roughness: 0.95 });
-    const foamGeo = new THREE.BoxGeometry(0.38, 0.45, 0.38);
-    [[-0.85, -0.85], [0.85, -0.85], [-0.85, 0.85], [0.85, 0.85]].forEach(([sx, sz]) => {
-      const foam = new THREE.Mesh(foamGeo, foamMat);
-      foam.position.set(sx, 0.88, sz);
-      internalsGroup.add(foam);
+    const guidelineMat = new THREE.LineDashedMaterial({
+      color: 0x38BDF8,
+      dashSize: 0.14,
+      gapSize: 0.12,
+      transparent: true,
+      opacity: 0.0
     });
 
-    // Microswitch Central com Haste Metálica
-    const switchBodyGeo = new THREE.BoxGeometry(0.42, 0.22, 0.2);
-    const switchMat = new THREE.MeshStandardMaterial({ color: 0x1E293B, roughness: 0.5 });
-    const switchBody = new THREE.Mesh(switchBodyGeo, switchMat);
-    switchBody.position.set(0, 0.65, 0);
-    internalsGroup.add(switchBody);
+    function createDashedGuideline(x, z, yStart, yEnd) {
+      const points = [new THREE.Vector3(x, yStart, z), new THREE.Vector3(x, yEnd, z)];
+      const lineGeo = new THREE.BufferGeometry().setFromPoints(points);
+      const line = new THREE.Line(lineGeo, guidelineMat);
+      line.computeLineDistances();
+      return line;
+    }
+    // Eixo central e 4 eixos nos cantos dos parafusos
+    guidelinesGroup.add(createDashedGuideline(0, 0, 0.2, 6.2));
+    guidelinesGroup.add(createDashedGuideline(1.22, 1.22, 0.4, 6.0));
+    guidelinesGroup.add(createDashedGuideline(-1.22, 1.22, 0.4, 6.0));
+    guidelinesGroup.add(createDashedGuideline(1.22, -1.22, 0.4, 6.0));
+    guidelinesGroup.add(createDashedGuideline(-1.22, -1.22, 0.4, 6.0));
 
-    const switchActuatorGeo = new THREE.BoxGeometry(0.08, 0.08, 0.08);
-    const switchActuator = new THREE.Mesh(switchActuatorGeo, new THREE.MeshBasicMaterial({ color: 0xEF4444 }));
-    switchActuator.position.set(0, 0.78, 0);
-    internalsGroup.add(switchActuator);
 
-    // Placa ESP32 DevKit V1 interna
-    const pcbGeo = new THREE.BoxGeometry(0.7, 0.04, 1.35);
-    const pcbMat = new THREE.MeshStandardMaterial({ color: 0x064E3B, roughness: 0.3 });
-    const pcb = new THREE.Mesh(pcbGeo, pcbMat);
-    pcb.position.set(0, 0.3, -0.65);
-    internalsGroup.add(pcb);
+    // ==============================================================
+    // CONFIGURAÇÃO DECLARATIVA DA VISTA EXPLODIDA (FÁCIL DE ALTERAR)
+    // Para alterar alturas ou adicionar peças, edite este array:
+    // ==============================================================
+    const EXPLODED_LAYERS_CONFIG = [
+      { id: 'base', name: 'Chassi Base Chanfrado', group: layerBase, normalY: 0.0, explodedY: 0.0 },
+      { id: 'electronics', name: 'Bandeja Eletrônica & ESP32', group: layerElectronics, normalY: 0.25, explodedY: 1.15 },
+      { id: 'topPanel', name: 'Tampo Superior a Laser', group: layerTopPanel, normalY: 1.05, explodedY: 2.35 },
+      { id: 'ledRing', name: 'Anel Difusor de LED (Halo)', group: layerLedRing, normalY: 1.15, explodedY: 3.50 },
+      { id: 'suspension', name: 'Suspensão (4 Esponjas)', group: layerSuspension, normalY: 1.18, explodedY: 4.65 },
+      { id: 'buttonDome', name: 'Domo Vermelho (11cm)', group: layerButtonDome, normalY: 1.34, explodedY: 5.85 }
+    ];
 
-    const shieldGeo = new THREE.BoxGeometry(0.5, 0.04, 0.55);
-    const shieldMat = new THREE.MeshStandardMaterial({ color: 0xE2E8F0, metalness: 0.85, roughness: 0.2 });
-    const shield = new THREE.Mesh(shieldGeo, shieldMat);
-    shield.position.set(0, 0.34, -0.8);
-    internalsGroup.add(shield);
-
-    // LED de Status ESP32 (Azul)
-    const espLed = new THREE.Mesh(new THREE.BoxGeometry(0.06, 0.04, 0.06), new THREE.MeshBasicMaterial({ color: 0x00E5FF }));
-    espLed.position.set(0.2, 0.34, -0.4);
-    internalsGroup.add(espLed);
-
-    // Fiação interna: Fio Amarelo (GPIO 4) e Fio Preto (GND)
-    const wireYellowCurve = new THREE.CatmullRomCurve3([
-      new THREE.Vector3(0.22, 0.32, -0.4),
-      new THREE.Vector3(0.35, 0.5, -0.2),
-      new THREE.Vector3(0.18, 0.62, 0.0)
-    ]);
-    const wireYellow = new THREE.Mesh(new THREE.TubeGeometry(wireYellowCurve, 20, 0.026, 8, false), new THREE.MeshStandardMaterial({ color: 0xFACC15 }));
-    internalsGroup.add(wireYellow);
-
-    const wireBlackCurve = new THREE.CatmullRomCurve3([
-      new THREE.Vector3(-0.22, 0.32, -0.4),
-      new THREE.Vector3(-0.35, 0.48, -0.2),
-      new THREE.Vector3(-0.18, 0.62, 0.0)
-    ]);
-    const wireBlack = new THREE.Mesh(new THREE.TubeGeometry(wireBlackCurve, 20, 0.026, 8, false), new THREE.MeshStandardMaterial({ color: 0x0F172A }));
-    internalsGroup.add(wireBlack);
-
-    // Modo Raio-X
+    let isExploded = false;
     let xrayActive = false;
+
+    // Controles da Vista Explodida
+    const btnExploded = document.getElementById('btn-toggle-exploded');
+    const explodedIcon = document.getElementById('exploded-icon');
+    const explodedText = document.getElementById('exploded-text');
+    const explodedPanel = document.getElementById('exploded-panel');
+
+    function setExplodedMode(exploded) {
+      isExploded = exploded;
+      if (isExploded) {
+        explodedIcon.textContent = '📦';
+        explodedText.textContent = 'Montar Controle';
+        btnExploded.className = 'btn-neo bg-pop-green hover:bg-emerald-400 text-pop-dark px-3 py-1.5 rounded-xl font-display font-black text-xs flex items-center gap-1.5 shadow-neo';
+        explodedPanel.classList.remove('pointer-events-none', 'opacity-0', 'translate-x-4');
+        explodedPanel.classList.add('opacity-100', 'translate-x-0');
+      } else {
+        explodedIcon.textContent = '💥';
+        explodedText.textContent = 'Vista Explodida';
+        btnExploded.className = 'btn-neo bg-pop-blue hover:bg-cyan-300 text-pop-dark px-3 py-1.5 rounded-xl font-display font-black text-xs flex items-center gap-1.5 shadow-neo';
+        explodedPanel.classList.add('pointer-events-none', 'opacity-0', 'translate-x-4');
+        explodedPanel.classList.remove('opacity-100', 'translate-x-0');
+      }
+    }
+
+    if (btnExploded) {
+      btnExploded.addEventListener('click', () => setExplodedMode(!isExploded));
+    }
+
+    // Interatividade com as tags do blueprint no HUD
+    document.querySelectorAll('.layer-tag').forEach(tag => {
+      tag.addEventListener('mouseenter', () => {
+        const layerId = tag.getAttribute('data-layer-id');
+        const found = EXPLODED_LAYERS_CONFIG.find(l => l.id === layerId);
+        if (found && found.group) {
+          found.group.scale.set(1.05, 1.05, 1.05);
+        }
+      });
+      tag.addEventListener('mouseleave', () => {
+        const layerId = tag.getAttribute('data-layer-id');
+        const found = EXPLODED_LAYERS_CONFIG.find(l => l.id === layerId);
+        if (found && found.group) {
+          found.group.scale.set(1.0, 1.0, 1.0);
+        }
+      });
+    });
+
+    // Controles do Modo Raio-X
     const btnXray = document.getElementById('btn-toggle-xray');
     const xrayText = document.getElementById('xray-text');
     const xrayLegend = document.getElementById('xray-legend');
 
     btnXray.addEventListener('click', () => {
       xrayActive = !xrayActive;
-      internalsGroup.visible = xrayActive;
       if (xrayActive) {
         boxMat.opacity = 0.22;
         boxMat.roughness = 0.1;
         topCoverMat.opacity = 0.25;
         topCoverMat.roughness = 0.1;
-        xrayText.textContent = "Ocultar Raio-X";
+        xrayText.textContent = "Ocultar";
         xrayLegend.style.opacity = '1';
-        btnXray.className = "btn-neo bg-pop-yellow text-pop-dark px-3 py-1.5 rounded-xl font-display font-bold text-xs flex items-center gap-1.5";
+        btnXray.className = "btn-neo bg-pop-yellow text-pop-dark px-2.5 py-1.5 rounded-xl font-display font-bold text-xs flex items-center gap-1 shadow-neo";
       } else {
         boxMat.opacity = 1.0;
         boxMat.roughness = 0.35;
         topCoverMat.opacity = 1.0;
         topCoverMat.roughness = 0.35;
-        xrayText.textContent = "Raio-X (Fiação)";
+        xrayText.textContent = "Raio-X";
         xrayLegend.style.opacity = '0';
-        btnXray.className = "btn-neo bg-pop-blue hover:bg-cyan-300 text-pop-dark px-3 py-1.5 rounded-xl font-display font-bold text-xs flex items-center gap-1.5";
+        btnXray.className = "btn-neo bg-white hover:bg-slate-100 text-pop-dark px-2.5 py-1.5 rounded-xl font-display font-bold text-xs flex items-center gap-1 shadow-neo";
       }
     });
 
@@ -1473,8 +1631,30 @@
     function animate() {
       requestAnimationFrame(animate);
 
-      // Animação da mola física do botão 3D
-      buttonCapGroup.position.y += (targetButtonY - buttonCapGroup.position.y) * 0.35;
+      // 1. Interpolação suave de elevação das 6 camadas para a Vista Explodida
+      const lerpSpeed = 0.08;
+      EXPLODED_LAYERS_CONFIG.forEach(layer => {
+        if (!layer.group) return;
+        const targetY = isExploded ? layer.explodedY : layer.normalY;
+        layer.group.position.y += (targetY - layer.group.position.y) * lerpSpeed;
+      });
+
+      // 2. Animação da mola do botão ao pressionar (quando montado)
+      if (!isExploded) {
+        const pressOffset = isPressed ? -0.2 : 0;
+        buttonCapGroup.position.y += (pressOffset - buttonCapGroup.position.y) * 0.35;
+      } else {
+        buttonCapGroup.position.y += (0 - buttonCapGroup.position.y) * 0.2;
+      }
+
+      // 3. Alvo suave da câmera (enquadra toda a torre explodida no centro)
+      const targetCamY = isExploded ? 2.8 : 0.75;
+      controls.target.y += (targetCamY - controls.target.y) * 0.05;
+
+      // 4. Linhas guia pontilhadas (fade in/out do blueprint)
+      const targetLineOpacity = isExploded ? 0.75 : 0.0;
+      guidelineMat.opacity += (targetLineOpacity - guidelineMat.opacity) * 0.1;
+      guidelinesGroup.visible = guidelineMat.opacity > 0.02;
 
       controls.update();
       renderer.render(scene, camera);
