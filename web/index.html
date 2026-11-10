@@ -198,14 +198,22 @@
           </div>
 
           <!-- Legenda do Raio-X -->
-          <div id="xray-legend" class="absolute top-12 right-3 opacity-0 transition-opacity duration-300 pointer-events-none bg-white border-2 border-pop-dark rounded-xl p-2.5 text-[10px] font-mono font-bold text-pop-dark space-y-1 shadow-neo z-20">
+          <div id="xray-legend" class="absolute top-12 right-3 opacity-0 transition-opacity duration-300 pointer-events-none bg-white border-2 border-pop-dark rounded-xl p-2.5 text-[10px] font-mono font-bold text-pop-dark space-y-1.5 shadow-neo z-20">
             <div class="flex items-center gap-1.5">
               <span class="w-2.5 h-2.5 rounded-full bg-pop-yellow border border-pop-dark"></span>
               <span>Fio Amarelo ➔ D4 (GPIO 4)</span>
             </div>
             <div class="flex items-center gap-1.5">
-              <span class="w-2.5 h-2.5 rounded-full bg-pop-blue border border-pop-dark"></span>
+              <span class="w-2.5 h-2.5 rounded-full bg-pop-dark border border-pop-dark"></span>
               <span>Fio Preto ➔ GND (Terra)</span>
+            </div>
+            <div class="flex items-center gap-1.5">
+              <span class="w-2.5 h-2.5 rounded-sm bg-amber-400 border border-pop-dark"></span>
+              <span>4 Esponjas (Retorno Amortecido)</span>
+            </div>
+            <div class="flex items-center gap-1.5">
+              <span class="w-2.5 h-2.5 rounded-sm bg-emerald-600 border border-pop-dark"></span>
+              <span>ESP32 Interno + Anel LED</span>
             </div>
           </div>
 
@@ -556,162 +564,453 @@
     });
 
     // -------------------------------------------------------------
-    // 3. CENA THREE.JS (MAQUETE 3D)
+    // 3. CENA THREE.JS (MAQUETE 3D CYBERPUNK - MODELO REAL DO PROTÓTIPO)
     // -------------------------------------------------------------
     const container3D = document.getElementById('canvas-container');
     const scene = new THREE.Scene();
     scene.background = new THREE.Color(0xF0F9FF);
-    scene.fog = new THREE.FogExp2(0xF0F9FF, 0.03);
+    scene.fog = new THREE.FogExp2(0xF0F9FF, 0.025);
 
-    const camera = new THREE.PerspectiveCamera(45, container3D.clientWidth / container3D.clientHeight, 0.1, 100);
-    camera.position.set(0, 5.2, 9.0);
+    const camera = new THREE.PerspectiveCamera(42, container3D.clientWidth / container3D.clientHeight, 0.1, 100);
+    camera.position.set(3.3, 3.2, 3.8);
 
     const renderer = new THREE.WebGLRenderer({ antialias: true, alpha: false });
     renderer.setSize(container3D.clientWidth, container3D.clientHeight);
     renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
     renderer.shadowMap.enabled = true;
+    renderer.shadowMap.type = THREE.PCFSoftShadowMap;
     container3D.appendChild(renderer.domElement);
 
     const controls = new THREE.OrbitControls(camera, renderer.domElement);
     controls.enableDamping = true;
     controls.dampingFactor = 0.05;
-    controls.maxPolarAngle = Math.PI / 2 - 0.05;
-    controls.minDistance = 4;
-    controls.maxDistance = 16;
+    controls.target.set(0, 0.75, 0);
+    controls.maxPolarAngle = Math.PI / 2 - 0.04;
+    controls.minDistance = 2.5;
+    controls.maxDistance = 10;
     controls.autoRotate = true;
-    controls.autoRotateSpeed = 0.5;
+    controls.autoRotateSpeed = 0.6;
 
-    // Iluminação
-    const ambientLight = new THREE.AmbientLight(0xFFFFFF, 0.95);
+    // Iluminação de Estúdio & Luzes Cyberpunk
+    const ambientLight = new THREE.AmbientLight(0xFFFFFF, 0.85);
     scene.add(ambientLight);
 
-    const keyLight = new THREE.DirectionalLight(0xFFFFFF, 1.15);
-    keyLight.position.set(6, 12, 8);
+    const keyLight = new THREE.DirectionalLight(0xFFFFFF, 1.25);
+    keyLight.position.set(5, 9, 6);
     keyLight.castShadow = true;
+    keyLight.shadow.mapSize.width = 1024;
+    keyLight.shadow.mapSize.height = 1024;
     scene.add(keyLight);
 
+    const rimLight = new THREE.DirectionalLight(0x00E5FF, 0.6);
+    rimLight.position.set(-6, 4, -5);
+    scene.add(rimLight);
+
     const clickFlashLight = new THREE.PointLight(0x22C55E, 0, 8);
-    clickFlashLight.position.set(-2, 3, 0);
+    clickFlashLight.position.set(0, 2.4, 0);
     scene.add(clickFlashLight);
 
-    const gridHelper = new THREE.GridHelper(24, 24, 0x94A3B8, 0xCBD5E1);
+    // Grid de referência
+    const gridHelper = new THREE.GridHelper(16, 16, 0x94A3B8, 0xCBD5E1);
     gridHelper.position.y = -0.01;
     scene.add(gridHelper);
 
-    const workstation = new THREE.Group();
-    scene.add(workstation);
+    // Bancada de Madeira Clara (Workbench Maker)
+    const tableGeo = new THREE.BoxGeometry(10, 0.25, 8);
+    const tableMat = new THREE.MeshStandardMaterial({
+      color: 0xEAD8B1,
+      roughness: 0.55,
+      metalness: 0.05
+    });
+    const tableMesh = new THREE.Mesh(tableGeo, tableMat);
+    tableMesh.position.set(0, -0.125, 0);
+    tableMesh.receiveShadow = true;
+    scene.add(tableMesh);
 
-    // Mesa de madeira escolar
-    const tableTopGeo = new THREE.BoxGeometry(8.5, 0.25, 4.2);
-    const tableTopMat = new THREE.MeshStandardMaterial({ color: 0xFDE68A, roughness: 0.5, metalness: 0.05 });
-    const tableTop = new THREE.Mesh(tableTopGeo, tableTopMat);
-    tableTop.position.set(0, 1.0, 0);
-    tableTop.receiveShadow = true;
-    workstation.add(tableTop);
-
-    // Pés Joy-Con
-    const legGeo = new THREE.CylinderGeometry(0.12, 0.12, 1.0, 16);
-    const legMatBlue = new THREE.MeshStandardMaterial({ color: 0x00C3E3, roughness: 0.3 });
-    const legMatRed = new THREE.MeshStandardMaterial({ color: 0xFF3B30, roughness: 0.3 });
-    
-    const leg1 = new THREE.Mesh(legGeo, legMatBlue); leg1.position.set(-3.9, 0.5, -1.8); workstation.add(leg1);
-    const leg2 = new THREE.Mesh(legGeo, legMatRed);  leg2.position.set(3.9, 0.5, -1.8); workstation.add(leg2);
-    const leg3 = new THREE.Mesh(legGeo, legMatBlue); leg3.position.set(-3.9, 0.5, 1.8); workstation.add(leg3);
-    const leg4 = new THREE.Mesh(legGeo, legMatRed);  leg4.position.set(3.9, 0.5, 1.8); workstation.add(leg4);
-
-    // Botão de Papelão Kraft
+    // Grupo Principal do Joystick Gigante
     const joystickGroup = new THREE.Group();
-    joystickGroup.position.set(-2.2, 1.13, 0.2);
-    workstation.add(joystickGroup);
+    joystickGroup.position.set(0, 0, 0);
+    scene.add(joystickGroup);
 
-    const boxGeo = new THREE.BoxGeometry(2.6, 0.8, 2.6);
-    const boxMat = new THREE.MeshStandardMaterial({ color: 0xD4A373, roughness: 0.85, transparent: true, opacity: 1.0 });
+    // -------------------------------------------------------------
+    // FUNÇÕES AUXILIARES DE GEOMETRIA E TEXTURA
+    // -------------------------------------------------------------
+    function createChamferedBoxGeometry(width, height, depth, chamfer) {
+      const halfW = width / 2;
+      const halfD = depth / 2;
+      const shape = new THREE.Shape();
+      shape.moveTo(-halfW + chamfer, -halfD);
+      shape.lineTo(halfW - chamfer, -halfD);
+      shape.lineTo(halfW, -halfD + chamfer);
+      shape.lineTo(halfW, halfD - chamfer);
+      shape.lineTo(halfW - chamfer, halfD);
+      shape.lineTo(-halfW + chamfer, halfD);
+      shape.lineTo(-halfW, halfD - chamfer);
+      shape.lineTo(-halfW, -halfD + chamfer);
+      shape.closePath();
+
+      const extrudeSettings = {
+        depth: height,
+        bevelEnabled: true,
+        bevelSegments: 2,
+        steps: 1,
+        bevelSize: 0.02,
+        bevelThickness: 0.02
+      };
+      const geo = new THREE.ExtrudeGeometry(shape, extrudeSettings);
+      geo.center();
+      geo.rotateX(-Math.PI / 2);
+      return geo;
+    }
+
+    function createTopPanelTexture() {
+      const canvas = document.createElement('canvas');
+      canvas.width = 1024;
+      canvas.height = 1024;
+      const ctx = canvas.getContext('2d');
+
+      // Fundo preto fosco (acrílico / MDF cortado a laser)
+      ctx.fillStyle = '#17191D';
+      ctx.fillRect(0, 0, 1024, 1024);
+
+      // Borda Chanfrada Externa
+      const p = 44;
+      const c = 145;
+      ctx.strokeStyle = '#2A2F3A';
+      ctx.lineWidth = 5;
+      ctx.beginPath();
+      ctx.moveTo(p + c, p);
+      ctx.lineTo(1024 - p - c, p);
+      ctx.lineTo(1024 - p, p + c);
+      ctx.lineTo(1024 - p, 1024 - p - c);
+      ctx.lineTo(1024 - p - c, 1024 - p);
+      ctx.lineTo(p + c, 1024 - p);
+      ctx.lineTo(p, 1024 - p - c);
+      ctx.lineTo(p, p + c);
+      ctx.closePath();
+      ctx.stroke();
+
+      // Segundo anel interno chanfrado
+      const p2 = 70;
+      const c2 = 130;
+      ctx.strokeStyle = '#222731';
+      ctx.lineWidth = 3;
+      ctx.beginPath();
+      ctx.moveTo(p2 + c2, p2);
+      ctx.lineTo(1024 - p2 - c2, p2);
+      ctx.lineTo(1024 - p2, p2 + c2);
+      ctx.lineTo(1024 - p2, 1024 - p2 - c2);
+      ctx.lineTo(1024 - p2 - c2, 1024 - p2);
+      ctx.lineTo(p2 + c2, 1024 - p2);
+      ctx.lineTo(p2, 1024 - p2 - c2);
+      ctx.lineTo(p2, p2 + c2);
+      ctx.closePath();
+      ctx.stroke();
+
+      // Anel central do botão e difusor
+      ctx.beginPath();
+      ctx.arc(512, 512, 290, 0, Math.PI * 2);
+      ctx.strokeStyle = '#252B36';
+      ctx.lineWidth = 4;
+      ctx.stroke();
+
+      // Trilhas de Circuito Eletrônico Cyberpunk (PCB Laser Engraved Traces)
+      ctx.strokeStyle = '#374151';
+      ctx.lineWidth = 5;
+      ctx.lineCap = 'round';
+      ctx.lineJoin = 'round';
+
+      function drawPcbTrace(points) {
+        ctx.beginPath();
+        ctx.moveTo(points[0][0], points[0][1]);
+        for (let i = 1; i < points.length; i++) {
+          ctx.lineTo(points[i][0], points[i][1]);
+        }
+        ctx.stroke();
+        const last = points[points.length - 1];
+        ctx.fillStyle = '#4B5563';
+        ctx.beginPath();
+        ctx.arc(last[0], last[1], 8, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.fillStyle = '#17191D';
+        ctx.beginPath();
+        ctx.arc(last[0], last[1], 3.5, 0, Math.PI * 2);
+        ctx.fill();
+      }
+
+      // Trilhas canto superior esquerdo
+      drawPcbTrace([[130, 260], [250, 260], [330, 340], [330, 390]]);
+      drawPcbTrace([[170, 210], [290, 210], [370, 290], [370, 360]]);
+      drawPcbTrace([[230, 160], [350, 160], [430, 240], [430, 330]]);
+
+      // Trilhas canto superior direito
+      drawPcbTrace([[894, 260], [774, 260], [694, 340], [694, 390]]);
+      drawPcbTrace([[854, 210], [734, 210], [654, 290], [654, 360]]);
+      drawPcbTrace([[794, 160], [674, 160], [594, 240], [594, 330]]);
+
+      // Trilhas cantos inferiores
+      drawPcbTrace([[130, 764], [250, 764], [330, 684], [330, 634]]);
+      drawPcbTrace([[170, 814], [290, 814], [370, 734], [370, 664]]);
+      drawPcbTrace([[894, 764], [774, 764], [694, 684], [694, 634]]);
+      drawPcbTrace([[854, 814], [734, 814], [654, 734], [654, 664]]);
+
+      // Inscrição gravada a laser: "6B JOGANDO JUNTO"
+      ctx.save();
+      ctx.font = '900 48px "Fredoka", "Arial Black", sans-serif';
+      ctx.fillStyle = '#475569';
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      ctx.fillText('6B JOGANDO JUNTO', 512, 915);
+
+      // Marcação técnica inferior
+      ctx.font = '700 20px "JetBrains Mono", monospace';
+      ctx.fillStyle = '#334155';
+      ctx.fillText('ONE-SWITCH ACCESSIBILITY // INOVACEV 2026', 512, 965);
+      ctx.restore();
+
+      // Parafusos Allen nos 4 cantos
+      const screws = [[140, 140], [884, 140], [140, 884], [884, 884]];
+      screws.forEach(([sx, sy]) => {
+        ctx.fillStyle = '#0F1115';
+        ctx.beginPath();
+        ctx.arc(sx, sy, 16, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.fillStyle = '#475569';
+        ctx.beginPath();
+        ctx.arc(sx, sy, 11, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.fillStyle = '#0F1115';
+        ctx.beginPath();
+        for (let a = 0; a < 6; a++) {
+          const angle = (a * Math.PI) / 3;
+          const px = sx + Math.cos(angle) * 5.5;
+          const py = sy + Math.sin(angle) * 5.5;
+          if (a === 0) ctx.moveTo(px, py);
+          else ctx.lineTo(px, py);
+        }
+        ctx.closePath();
+        ctx.fill();
+      });
+
+      const texture = new THREE.CanvasTexture(canvas);
+      texture.anisotropy = 4;
+      return texture;
+    }
+
+    // 1. Chassi Chanfrado Octogonal (Base da Caixa)
+    const boxGeo = createChamferedBoxGeometry(3.3, 1.15, 3.3, 0.46);
+    const boxMat = new THREE.MeshStandardMaterial({
+      color: 0x181A1F,
+      roughness: 0.35,
+      metalness: 0.15,
+      transparent: true,
+      opacity: 1.0
+    });
     const boxMesh = new THREE.Mesh(boxGeo, boxMat);
-    boxMesh.position.y = 0.4;
+    boxMesh.position.y = 0.58;
+    boxMesh.castShadow = true;
+    boxMesh.receiveShadow = true;
     joystickGroup.add(boxMesh);
 
-    const topCoverGeo = new THREE.BoxGeometry(2.4, 0.05, 2.4);
-    const topCoverMat = new THREE.MeshStandardMaterial({ color: 0xC68B59, roughness: 0.85, transparent: true, opacity: 1.0 });
-    const topCover = new THREE.Mesh(topCoverGeo, topCoverMat);
-    topCover.position.y = 0.82;
-    joystickGroup.add(topCover);
+    // Pés de borracha nos 4 cantos
+    const footGeo = new THREE.CylinderGeometry(0.12, 0.14, 0.05, 16);
+    const footMat = new THREE.MeshStandardMaterial({ color: 0x0A0B0D, roughness: 0.9 });
+    [[-1.3, -1.3], [1.3, -1.3], [-1.3, 1.3], [1.3, 1.3]].forEach(([fx, fz]) => {
+      const foot = new THREE.Mesh(footGeo, footMat);
+      foot.position.set(fx, 0.025, fz);
+      joystickGroup.add(foot);
+    });
 
-    const bezelGeo = new THREE.CylinderGeometry(1.0, 1.05, 0.2, 40);
-    const bezelMat = new THREE.MeshStandardMaterial({ color: 0x0F172A, roughness: 0.4 });
+    // 2. Aletas Laterais de Ventilação Chanfradas (Grelhas com Neon Ciano Interno)
+    const ventMat = new THREE.MeshBasicMaterial({ color: 0x00E5FF });
+    const finMat = new THREE.MeshStandardMaterial({ color: 0x14161A, roughness: 0.4 });
+    const sideVentsGroup = new THREE.Group();
+    joystickGroup.add(sideVentsGroup);
+
+    function createSideVentWall(x, z, rotY) {
+      const ventSubGroup = new THREE.Group();
+      ventSubGroup.position.set(x, 0.58, z);
+      ventSubGroup.rotation.y = rotY;
+
+      // Placa de fundo emissiva neon azul
+      const glowPlate = new THREE.Mesh(new THREE.PlaneGeometry(1.6, 0.65), ventMat);
+      glowPlate.position.set(0, 0, -0.02);
+      ventSubGroup.add(glowPlate);
+
+      // Aletas pretas inclinadas a 45 graus
+      for (let i = -3; i <= 3; i++) {
+        const fin = new THREE.Mesh(new THREE.BoxGeometry(0.06, 0.6, 0.04), finMat);
+        fin.position.set(i * 0.22, 0, 0.01);
+        fin.rotation.z = Math.PI / 4;
+        ventSubGroup.add(fin);
+      }
+      return ventSubGroup;
+    }
+    // Adiciona as aletas nas 4 faces retas
+    sideVentsGroup.add(createSideVentWall(0, 1.66, 0));
+    sideVentsGroup.add(createSideVentWall(0, -1.66, Math.PI));
+    sideVentsGroup.add(createSideVentWall(1.66, 0, Math.PI / 2));
+    sideVentsGroup.add(createSideVentWall(-1.66, 0, -Math.PI / 2));
+
+    // Luz neon interna da caixa
+    const internalNeon = new THREE.PointLight(0x00E5FF, 1.8, 3.5);
+    internalNeon.position.set(0, 0.55, 0);
+    joystickGroup.add(internalNeon);
+
+    // 3. Tampo Superior Gravado a Laser com Trilhas e "6B JOGANDO JUNTO"
+    const topPanelTexture = createTopPanelTexture();
+    const topPanelMat = new THREE.MeshStandardMaterial({
+      color: 0xFFFFFF,
+      map: topPanelTexture,
+      roughness: 0.35,
+      metalness: 0.1,
+      transparent: true,
+      opacity: 1.0
+    });
+    const topPanelGeo = createChamferedBoxGeometry(3.3, 0.06, 3.3, 0.46);
+    const topCover = new THREE.Mesh(topPanelGeo, topPanelMat);
+    topCover.position.y = 1.18;
+    topCover.receiveShadow = true;
+    joystickGroup.add(topCover);
+    const topCoverMat = topPanelMat; // Para suporte ao modo Raio-X
+
+    // 4. Anel Difusor de LED Halo (Cyan Glowing Ring)
+    const haloRingGeo = new THREE.TorusGeometry(0.96, 0.11, 24, 64);
+    haloRingGeo.rotateX(Math.PI / 2);
+    const haloRingMat = new THREE.MeshStandardMaterial({
+      color: 0x22D3EE,
+      emissive: 0x06B6D4,
+      emissiveIntensity: 1.8,
+      roughness: 0.15,
+      metalness: 0.1,
+      transparent: true,
+      opacity: 0.95
+    });
+    const haloRing = new THREE.Mesh(haloRingGeo, haloRingMat);
+    haloRing.position.y = 1.25;
+    joystickGroup.add(haloRing);
+    const ledMat = haloRingMat; // Compatibilidade com animação
+
+    // Luz pontual emanando do halo de LED
+    const haloLight = new THREE.PointLight(0x06B6D4, 2.6, 4.0);
+    haloLight.position.set(0, 1.45, 0);
+    joystickGroup.add(haloLight);
+
+    // Aro preto interno (Bezel de retenção do domo)
+    const bezelGeo = new THREE.CylinderGeometry(0.85, 0.88, 0.12, 48);
+    const bezelMat = new THREE.MeshStandardMaterial({ color: 0x111317, roughness: 0.35, metalness: 0.4 });
     const bezel = new THREE.Mesh(bezelGeo, bezelMat);
-    bezel.position.y = 0.92;
+    bezel.position.y = 1.26;
     joystickGroup.add(bezel);
 
+    // 5. Domo Central Vermelho Alto Brilho (Hero Arcade Dome)
     const buttonCapGroup = new THREE.Group();
-    buttonCapGroup.position.y = 1.02;
+    buttonCapGroup.position.y = 1.34;
     joystickGroup.add(buttonCapGroup);
 
-    const buttonMat = new THREE.MeshStandardMaterial({ color: 0xFF2A2A, roughness: 0.15, emissive: 0x330000, emissiveIntensity: 0.2 });
-    const buttonCylinderGeo = new THREE.CylinderGeometry(0.88, 0.88, 0.35, 40);
-    const buttonCylinder = new THREE.Mesh(buttonCylinderGeo, buttonMat);
-    buttonCapGroup.add(buttonCylinder);
+    const buttonMat = new THREE.MeshStandardMaterial({
+      color: 0xEE1122,
+      roughness: 0.08,
+      metalness: 0.15,
+      emissive: 0x440008,
+      emissiveIntensity: 0.2
+    });
 
-    const buttonDomeGeo = new THREE.SphereGeometry(0.88, 32, 14, 0, Math.PI * 2, 0, Math.PI * 0.22);
+    const buttonBaseGeo = new THREE.CylinderGeometry(0.74, 0.74, 0.22, 48);
+    const buttonBaseMesh = new THREE.Mesh(buttonBaseGeo, buttonMat);
+    buttonCapGroup.add(buttonBaseMesh);
+
+    const buttonDomeGeo = new THREE.SphereGeometry(0.74, 48, 20, 0, Math.PI * 2, 0, Math.PI * 0.28);
     const buttonDome = new THREE.Mesh(buttonDomeGeo, buttonMat);
-    buttonDome.position.y = 0.14;
+    buttonDome.position.y = 0.08;
     buttonCapGroup.add(buttonDome);
 
-    // ESP32 na mesa
-    const esp32Group = new THREE.Group();
-    esp32Group.position.set(-0.3, 1.14, 0.3);
-    workstation.add(esp32Group);
+    // Haste interna do botão para acionar o microswitch
+    const stemGeo = new THREE.CylinderGeometry(0.12, 0.12, 0.8, 16);
+    const stemMat = new THREE.MeshStandardMaterial({ color: 0xCBD5E1, metalness: 0.8, roughness: 0.2 });
+    const stemMesh = new THREE.Mesh(stemGeo, stemMat);
+    stemMesh.position.y = -0.4;
+    buttonCapGroup.add(stemMesh);
 
-    const pcbGeo = new THREE.BoxGeometry(0.7, 0.05, 1.4);
+    // 6. Cabo USB traseiro saindo da caixa
+    const usbCurve = new THREE.CatmullRomCurve3([
+      new THREE.Vector3(0, 0.5, -1.65),
+      new THREE.Vector3(0, 0.35, -2.1),
+      new THREE.Vector3(0.5, 0.04, -2.6),
+      new THREE.Vector3(1.2, 0.03, -3.2)
+    ]);
+    const usbCableGeo = new THREE.TubeGeometry(usbCurve, 32, 0.04, 10, false);
+    const usbCableMat = new THREE.MeshStandardMaterial({ color: 0x0A0B0E, roughness: 0.6 });
+    const usbCable = new THREE.Mesh(usbCableGeo, usbCableMat);
+    joystickGroup.add(usbCable);
+
+    // 7. Componentes Internos (Modo Raio-X)
+    const internalsGroup = new THREE.Group();
+    internalsGroup.visible = false;
+    joystickGroup.add(internalsGroup);
+
+    // Bandeja interna de acrílico
+    const trayGeo = new THREE.BoxGeometry(2.6, 0.03, 2.6);
+    const trayMat = new THREE.MeshStandardMaterial({ color: 0x38BDF8, transparent: true, opacity: 0.4 });
+    const internalTray = new THREE.Mesh(trayGeo, trayMat);
+    internalTray.position.y = 0.25;
+    internalsGroup.add(internalTray);
+
+    // 4 Almofadas de Esponja nos 4 quadrantes (Amortecimento e Retorno Suave)
+    const foamMat = new THREE.MeshStandardMaterial({ color: 0xFBBF24, roughness: 0.95 });
+    const foamGeo = new THREE.BoxGeometry(0.38, 0.45, 0.38);
+    [[-0.85, -0.85], [0.85, -0.85], [-0.85, 0.85], [0.85, 0.85]].forEach(([sx, sz]) => {
+      const foam = new THREE.Mesh(foamGeo, foamMat);
+      foam.position.set(sx, 0.88, sz);
+      internalsGroup.add(foam);
+    });
+
+    // Microswitch Central com Haste Metálica
+    const switchBodyGeo = new THREE.BoxGeometry(0.42, 0.22, 0.2);
+    const switchMat = new THREE.MeshStandardMaterial({ color: 0x1E293B, roughness: 0.5 });
+    const switchBody = new THREE.Mesh(switchBodyGeo, switchMat);
+    switchBody.position.set(0, 0.65, 0);
+    internalsGroup.add(switchBody);
+
+    const switchActuatorGeo = new THREE.BoxGeometry(0.08, 0.08, 0.08);
+    const switchActuator = new THREE.Mesh(switchActuatorGeo, new THREE.MeshBasicMaterial({ color: 0xEF4444 }));
+    switchActuator.position.set(0, 0.78, 0);
+    internalsGroup.add(switchActuator);
+
+    // Placa ESP32 DevKit V1 interna
+    const pcbGeo = new THREE.BoxGeometry(0.7, 0.04, 1.35);
     const pcbMat = new THREE.MeshStandardMaterial({ color: 0x064E3B, roughness: 0.3 });
     const pcb = new THREE.Mesh(pcbGeo, pcbMat);
-    esp32Group.add(pcb);
+    pcb.position.set(0, 0.3, -0.65);
+    internalsGroup.add(pcb);
 
-    const chipGeo = new THREE.BoxGeometry(0.5, 0.04, 0.6);
-    const chipMat = new THREE.MeshStandardMaterial({ color: 0xE2E8F0, metalness: 0.8, roughness: 0.2 });
-    const chip = new THREE.Mesh(chipGeo, chipMat);
-    chip.position.set(0, 0.04, -0.2);
-    esp32Group.add(chip);
+    const shieldGeo = new THREE.BoxGeometry(0.5, 0.04, 0.55);
+    const shieldMat = new THREE.MeshStandardMaterial({ color: 0xE2E8F0, metalness: 0.85, roughness: 0.2 });
+    const shield = new THREE.Mesh(shieldGeo, shieldMat);
+    shield.position.set(0, 0.34, -0.8);
+    internalsGroup.add(shield);
 
-    const ledGeo = new THREE.BoxGeometry(0.08, 0.05, 0.08);
-    const ledMat = new THREE.MeshBasicMaterial({ color: 0x00C3E3 });
-    const ledMesh = new THREE.Mesh(ledGeo, ledMat);
-    ledMesh.position.set(0.2, 0.04, -0.5);
-    esp32Group.add(ledMesh);
+    // LED de Status ESP32 (Azul)
+    const espLed = new THREE.Mesh(new THREE.BoxGeometry(0.06, 0.04, 0.06), new THREE.MeshBasicMaterial({ color: 0x00E5FF }));
+    espLed.position.set(0.2, 0.34, -0.4);
+    internalsGroup.add(espLed);
 
-    // Fios Jacaré (Amarelo e Preto)
-    const yellowWireCurve = new THREE.CatmullRomCurve3([
-      new THREE.Vector3(-0.3, 1.18, 0.6),
-      new THREE.Vector3(-0.9, 1.35, 0.5),
-      new THREE.Vector3(-1.4, 1.4, 0.3),
-      new THREE.Vector3(-2.2, 1.5, 0.2)
+    // Fiação interna: Fio Amarelo (GPIO 4) e Fio Preto (GND)
+    const wireYellowCurve = new THREE.CatmullRomCurve3([
+      new THREE.Vector3(0.22, 0.32, -0.4),
+      new THREE.Vector3(0.35, 0.5, -0.2),
+      new THREE.Vector3(0.18, 0.62, 0.0)
     ]);
-    const wireYellow = new THREE.Mesh(new THREE.TubeGeometry(yellowWireCurve, 28, 0.038, 8, false), new THREE.MeshStandardMaterial({ color: 0xFACC15 }));
-    workstation.add(wireYellow);
+    const wireYellow = new THREE.Mesh(new THREE.TubeGeometry(wireYellowCurve, 20, 0.026, 8, false), new THREE.MeshStandardMaterial({ color: 0xFACC15 }));
+    internalsGroup.add(wireYellow);
 
-    const blackWireCurve = new THREE.CatmullRomCurve3([
-      new THREE.Vector3(-0.3, 1.18, 0.1),
-      new THREE.Vector3(-0.9, 1.25, 0.0),
-      new THREE.Vector3(-1.4, 1.3, -0.1),
-      new THREE.Vector3(-2.2, 1.4, -0.1)
+    const wireBlackCurve = new THREE.CatmullRomCurve3([
+      new THREE.Vector3(-0.22, 0.32, -0.4),
+      new THREE.Vector3(-0.35, 0.48, -0.2),
+      new THREE.Vector3(-0.18, 0.62, 0.0)
     ]);
-    const wireBlack = new THREE.Mesh(new THREE.TubeGeometry(blackWireCurve, 28, 0.038, 8, false), new THREE.MeshStandardMaterial({ color: 0x0F172A }));
-    workstation.add(wireBlack);
-
-    // PC Monitor
-    const pcGroup = new THREE.Group();
-    pcGroup.position.set(2.2, 1.13, 0.0);
-    workstation.add(pcGroup);
-
-    const frameGeo = new THREE.BoxGeometry(3.6, 2.2, 0.12);
-    const frame = new THREE.Mesh(frameGeo, new THREE.MeshStandardMaterial({ color: 0xFFFFFF }));
-    frame.position.set(0, 1.6, 0);
-    pcGroup.add(frame);
-
-    const screenGeo = new THREE.PlaneGeometry(3.4, 2.0);
-    const screenMat = new THREE.MeshBasicMaterial({ color: 0x0284C7 });
-    const screenMesh = new THREE.Mesh(screenGeo, screenMat);
-    screenMesh.position.set(0, 1.6, 0.07);
-    pcGroup.add(screenMesh);
+    const wireBlack = new THREE.Mesh(new THREE.TubeGeometry(wireBlackCurve, 20, 0.026, 8, false), new THREE.MeshStandardMaterial({ color: 0x0F172A }));
+    internalsGroup.add(wireBlack);
 
     // Modo Raio-X
     let xrayActive = false;
@@ -721,15 +1020,20 @@
 
     btnXray.addEventListener('click', () => {
       xrayActive = !xrayActive;
+      internalsGroup.visible = xrayActive;
       if (xrayActive) {
-        boxMat.opacity = 0.28;
-        topCoverMat.opacity = 0.35;
-        xrayText.textContent = "Ocultar Fiação";
+        boxMat.opacity = 0.22;
+        boxMat.roughness = 0.1;
+        topCoverMat.opacity = 0.25;
+        topCoverMat.roughness = 0.1;
+        xrayText.textContent = "Ocultar Raio-X";
         xrayLegend.style.opacity = '1';
         btnXray.className = "btn-neo bg-pop-yellow text-pop-dark px-3 py-1.5 rounded-xl font-display font-bold text-xs flex items-center gap-1.5";
       } else {
         boxMat.opacity = 1.0;
+        boxMat.roughness = 0.35;
         topCoverMat.opacity = 1.0;
+        topCoverMat.roughness = 0.35;
         xrayText.textContent = "Raio-X (Fiação)";
         xrayLegend.style.opacity = '0';
         btnXray.className = "btn-neo bg-pop-blue hover:bg-cyan-300 text-pop-dark px-3 py-1.5 rounded-xl font-display font-bold text-xs flex items-center gap-1.5";
@@ -740,9 +1044,9 @@
     // 4. LÓGICA DE CLIQUE GLOBAL & ATUALIZAÇÃO DO CÓDIGO DINÂMICO
     // -------------------------------------------------------------
     let isPressed = false;
-    let targetButtonY = 1.02;
-    const normalButtonY = 1.02;
-    const pressedButtonY = 0.78;
+    let targetButtonY = 1.34;
+    const normalButtonY = 1.34;
+    const pressedButtonY = 1.14;
     let totalClicks = 0;
 
     const counterEl = document.getElementById('click-counter');
@@ -826,9 +1130,9 @@
       isPressed = false;
       targetButtonY = normalButtonY;
 
-      buttonMat.color.setHex(0xFF2A2A);
+      buttonMat.color.setHex(0xEE1122);
       clickFlashLight.intensity = 0;
-      ledMat.color.setHex(0x00C3E3);
+      ledMat.color.setHex(0x22D3EE);
 
       badgeEl.style.opacity = '0';
       badgeEl.style.transform = 'translate(-50%, 0) scale(0.8)';
@@ -874,7 +1178,7 @@
       mouse.y = -((e.clientY - rect.top) / rect.height) * 2 + 1;
       raycaster.setFromCamera(mouse, camera);
 
-      if (raycaster.intersectObjects([buttonCylinder, buttonDome], true).length > 0) {
+      if (raycaster.intersectObjects(buttonCapGroup.children, true).length > 0) {
         doPress();
         window.addEventListener('pointerup', () => doRelease(), { once: true });
       }
