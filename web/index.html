@@ -430,6 +430,8 @@
     // -------------------------------------------------------------
     // 1. SISTEMA DE NAVEGAÇÃO ENTRE AS 3 ABAS (SEM SCROLL)
     // -------------------------------------------------------------
+    let currentActiveTab = 'maquete';
+
     const tabs = {
       maquete: {
         btn: document.getElementById('tab-btn-maquete'),
@@ -446,6 +448,7 @@
     };
 
     function setActiveTab(tabKey) {
+      currentActiveTab = tabKey;
       Object.keys(tabs).forEach(key => {
         const item = tabs[key];
         const isActive = key === tabKey;
@@ -463,9 +466,10 @@
       if (tabKey === 'maquete') {
         onWindowResize();
       }
-      // Se mudar para o Jogo, reajusta dimensões do canvas do jogo
+      // Se mudar para o Jogo, reajusta dimensões do canvas do jogo e redesenha
       if (tabKey === 'jogo') {
         resizeFlappyCanvas();
+        updateAndDrawFlappy();
       }
     }
 
@@ -487,6 +491,11 @@
 
     function playSound(type) {
       if (!soundEnabled) return;
+      // REGRA: Sons de videogame (flap, score, crash) NUNCA tocam fora da aba do jogo!
+      if ((type === 'flap' || type === 'score' || type === 'crash') && currentActiveTab !== 'jogo') {
+        return;
+      }
+
       try {
         const ctx = getAudioContext();
         const now = ctx.currentTime;
@@ -523,6 +532,17 @@
           gain.connect(ctx.destination);
           osc.start(now);
           osc.stop(now + 0.28);
+        } else if (type === 'click') {
+          // Clique mecânico sutil para feedback tátil nas abas Maquete e Código
+          osc.type = 'sine';
+          osc.frequency.setValueAtTime(900, now);
+          osc.frequency.exponentialRampToValueAtTime(300, now + 0.035);
+          gain.gain.setValueAtTime(0.06, now);
+          gain.gain.exponentialRampToValueAtTime(0.001, now + 0.04);
+          osc.connect(gain);
+          gain.connect(ctx.destination);
+          osc.start(now);
+          osc.stop(now + 0.045);
         }
       } catch (e) {}
     }
@@ -777,7 +797,13 @@
       totalClicks++;
       counterEl.textContent = totalClicks;
 
-      playSound('flap');
+      // Sons e mecânicas específicas por aba:
+      if (currentActiveTab === 'jogo') {
+        playSound('flap');
+        handleGameJump();
+      } else {
+        playSound('click'); // Clique mecânico discreto para feedback tátil
+      }
 
       // 3D Visual Feedback
       buttonMat.color.setHex(0x22C55E);
@@ -788,9 +814,6 @@
       badgeEl.style.transform = 'translate(-50%, 0) scale(1.05)';
       streamStatus.textContent = "CLIQUE!";
       streamStatus.className = "text-[9px] font-display font-black text-white bg-pop-red px-1.5 py-0.5 rounded border border-pop-dark";
-
-      // Dispara o pulo no Flappy Bird
-      handleGameJump();
 
       // Acende as linhas correspondentes no Código Dinâmico
       highlightCodeLines(true);
@@ -910,6 +933,7 @@
     }
 
     function handleGameJump() {
+      if (currentActiveTab !== 'jogo') return;
       if (gameState === 'START' || gameState === 'GAMEOVER') {
         resetGame();
         gameState = 'PLAYING';
@@ -928,6 +952,7 @@
     });
 
     function triggerGameOver() {
+      if (currentActiveTab !== 'jogo') return;
       gameState = 'GAMEOVER';
       playSound('crash');
 
@@ -1150,8 +1175,10 @@
       controls.update();
       renderer.render(scene, camera);
 
-      // Renderização do jogo Flappy Bird
-      updateAndDrawFlappy();
+      // Renderização do jogo Flappy Bird (apenas se a aba do videogame estiver ativa)
+      if (currentActiveTab === 'jogo') {
+        updateAndDrawFlappy();
+      }
     }
 
     function onWindowResize() {
