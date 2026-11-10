@@ -50,13 +50,14 @@
   </script>
 
   <style>
-    /* Trava 100% da tela no Viewport (Zero Scroll / Modo Kiosk) */
+    /* Mobile-First: Zero overflow horizontal, rolagem vertical natural */
     html, body {
-      height: 100%;
-      overflow: hidden;
+      min-height: 100%;
+      overflow-x: hidden;
       margin: 0;
       padding: 0;
-      user-select: none;
+      scroll-behavior: smooth;
+      -webkit-tap-highlight-color: transparent;
     }
 
     body {
@@ -66,10 +67,16 @@
       color: #0F172A;
     }
 
+    .touch-action-btn {
+      touch-action: manipulation;
+      user-select: none;
+    }
+
     .btn-neo {
       transition: all 0.15s ease-out;
       border: 3px solid #0F172A;
       box-shadow: 3px 3px 0px 0px #0F172A;
+      touch-action: manipulation;
     }
     .btn-neo:hover {
       transform: translate(-1px, -1px);
@@ -117,152 +124,166 @@
     }
   </style>
 </head>
-<body class="h-screen flex flex-col font-sans selection:bg-pop-yellow selection:text-pop-dark">
+<body class="min-h-screen flex flex-col font-sans selection:bg-pop-yellow selection:text-pop-dark overflow-x-hidden">
 
-  <!-- ==================== HEADER COM NAVEGAÇÃO POR ABAS ==================== -->
-  <header class="h-16 sm:h-20 border-b-4 border-pop-dark bg-white/95 backdrop-blur-md px-3 sm:px-6 flex items-center justify-between gap-3 shrink-0 z-40">
+  <!-- ==================== FLASH VERDE VIBRANTE AO REDOR DA TELA ==================== -->
+  <div id="screen-flash-border" class="fixed inset-0 pointer-events-none border-[8px] sm:border-[12px] border-pop-green opacity-0 transition-opacity duration-75 z-50"></div>
+
+  <!-- ==================== BARRA UNIFICADA NO TOPO ==================== -->
+  <div class="w-full bg-pop-dark text-pop-yellow border-b-3 border-pop-dark px-3 py-1.5 text-center text-[11px] sm:text-xs font-display font-bold tracking-wide shrink-0 z-40">
+    🚀 Mostra de Robótica &amp; Inclusão InovaCEV — 6º Ano | Orientação: <span class="text-white">Prof. Luis Felipe Patrocinio</span>
+  </div>
+
+  <!-- ==================== HEADER RESPONSIVO COM ABAS E MODO ESTANDE ==================== -->
+  <header class="sticky top-0 border-b-4 border-pop-dark bg-white/95 backdrop-blur-md px-3 sm:px-6 py-2.5 flex flex-wrap md:flex-nowrap items-center justify-between gap-2 sm:gap-3 shrink-0 z-40">
     
     <!-- Identidade do Projeto -->
-    <div class="flex items-center space-x-2.5 shrink-0">
-      <div class="w-10 h-10 sm:w-11 sm:h-11 rounded-2xl bg-pop-red border-3 border-pop-dark flex items-center justify-center font-display font-black text-white text-xl sm:text-2xl shadow-neo-sm transform -rotate-3 shrink-0">
+    <div class="flex items-center space-x-2 shrink-0 order-1">
+      <div class="w-9 h-9 sm:w-11 sm:h-11 rounded-2xl bg-pop-red border-3 border-pop-dark flex items-center justify-center font-display font-black text-white text-lg sm:text-2xl shadow-neo-sm transform -rotate-3 shrink-0">
         6B
       </div>
       <div>
         <div class="flex items-center gap-1.5">
-          <span class="text-[10px] font-display font-bold tracking-wider text-pop-dark uppercase bg-pop-yellow px-2 py-0.5 rounded-full border border-pop-dark shadow-neo-sm hidden sm:inline-block">
+          <span class="text-[9px] sm:text-[10px] font-display font-bold tracking-wider text-pop-dark uppercase bg-pop-yellow px-2 py-0.5 rounded-full border border-pop-dark shadow-neo-sm hidden sm:inline-block">
             InovaCEV 2026
           </span>
         </div>
-        <h1 class="text-base sm:text-lg font-display font-black tracking-tight text-pop-dark uppercase">
+        <h1 class="text-sm sm:text-lg font-display font-black tracking-tight text-pop-dark uppercase leading-tight">
           JOGANDO JUNTO
         </h1>
       </div>
     </div>
 
-    <!-- AS 3 ABAS DE NAVEGAÇÃO POP MAKER (SEM SCROLL) -->
-    <nav class="flex items-center bg-slate-100 p-1 rounded-2xl border-3 border-pop-dark shadow-neo-sm font-display text-xs sm:text-sm">
-      <button id="tab-btn-maquete" class="tab-button px-3 sm:px-4 py-1.5 rounded-xl font-black bg-pop-blue text-pop-dark border-2 border-pop-dark shadow-neo-sm transition flex items-center gap-1.5">
+    <!-- AS 3 ABAS DE NAVEGAÇÃO POP MAKER (RESPONSIVAS) -->
+    <nav class="w-full md:w-auto order-3 md:order-2 flex items-center justify-center bg-slate-100 p-1 rounded-2xl border-3 border-pop-dark shadow-neo-sm font-display text-[11px] sm:text-xs md:text-sm">
+      <button id="tab-btn-maquete" class="tab-button flex-1 md:flex-initial justify-center px-2 sm:px-4 py-1.5 rounded-xl font-black bg-pop-blue text-pop-dark border-2 border-pop-dark shadow-neo-sm transition flex items-center gap-1 sm:gap-1.5">
         <span>🕹️</span>
-        <span class="hidden md:inline">1.</span>
-        <span>Maquete & Justificativa</span>
+        <span class="hidden lg:inline">1.</span>
+        <span>Maquete 3D</span>
       </button>
 
-      <button id="tab-btn-codigo" class="tab-button px-3 sm:px-4 py-1.5 rounded-xl font-bold text-slate-700 hover:text-pop-dark transition flex items-center gap-1.5">
+      <button id="tab-btn-codigo" class="tab-button flex-1 md:flex-initial justify-center px-2 sm:px-4 py-1.5 rounded-xl font-bold text-slate-700 hover:text-pop-dark transition flex items-center gap-1 sm:gap-1.5">
         <span>⚡</span>
-        <span class="hidden md:inline">2.</span>
-        <span>Código Dinâmico</span>
+        <span class="hidden lg:inline">2.</span>
+        <span>Código</span>
       </button>
 
-      <button id="tab-btn-jogo" class="tab-button px-3 sm:px-4 py-1.5 rounded-xl font-bold text-slate-700 hover:text-pop-dark transition flex items-center gap-1.5">
+      <button id="tab-btn-jogo" class="tab-button flex-1 md:flex-initial justify-center px-2 sm:px-4 py-1.5 rounded-xl font-bold text-slate-700 hover:text-pop-dark transition flex items-center gap-1 sm:gap-1.5">
         <span>🎮</span>
-        <span class="hidden md:inline">3.</span>
-        <span>Jogo (Flappy 6B)</span>
+        <span class="hidden lg:inline">3.</span>
+        <span>Jogo</span>
       </button>
     </nav>
 
-    <!-- Ações: Conectar USB e Áudio -->
-    <div class="flex items-center gap-2 shrink-0">
-      <button id="btn-header-connect-usb" class="btn-neo bg-pop-green hover:bg-emerald-300 text-pop-dark px-2.5 sm:px-3.5 py-1.5 sm:py-2 rounded-xl text-xs font-display font-black flex items-center gap-1.5">
-        <span class="text-sm">🔌</span>
-        <span id="header-usb-btn-text" class="hidden sm:inline">CONECTAR USB</span>
+    <!-- Ações: Conectar USB, Modo Estande e Áudio -->
+    <div class="flex items-center gap-1.5 sm:gap-2 shrink-0 order-2 md:order-3">
+      <button id="btn-header-connect-usb" class="btn-neo bg-pop-green hover:bg-emerald-300 text-pop-dark px-2.5 sm:px-3 py-1.5 rounded-xl text-[11px] sm:text-xs font-display font-black flex items-center gap-1" title="Conectar ESP32 via USB">
+        <span>🔌</span>
+        <span id="header-usb-btn-text" class="hidden sm:inline">USB</span>
       </button>
 
-      <button id="btn-sound-toggle" class="btn-neo bg-pop-yellow hover:bg-yellow-300 text-pop-dark px-2.5 py-1.5 sm:py-2 rounded-xl text-xs font-display font-bold flex items-center gap-1" title="Áudio">
+      <button id="btn-booth-mode" class="btn-neo bg-purple-200 hover:bg-purple-300 text-pop-dark px-2.5 sm:px-3 py-1.5 rounded-xl text-[11px] sm:text-xs font-display font-black flex items-center gap-1" title="Ativar Tela Cheia e Auto-Retorno em 45s para o Estande">
+        <span id="booth-icon">📺</span>
+        <span id="booth-text" class="hidden lg:inline">Modo Estande</span>
+      </button>
+
+      <button id="btn-sound-toggle" class="btn-neo bg-pop-yellow hover:bg-yellow-300 text-pop-dark px-2.5 py-1.5 rounded-xl text-xs font-display font-bold flex items-center gap-1" title="Áudio">
         <span id="sound-icon">🔊</span>
       </button>
     </div>
 
   </header>
 
-  <!-- ==================== ÁREA CENTRAL COM CONTEÚDO DAS 3 ABAS (100% VIEWPORT) ==================== -->
-  <main class="flex-1 p-3 sm:p-4 overflow-hidden relative flex flex-col">
+  <!-- ==================== ÁREA PRINCIPAL COM SEÇÕES RESPONSIVAS ==================== -->
+  <main class="flex-1 w-full max-w-7xl mx-auto p-3 sm:p-5 space-y-6 sm:space-y-8 overflow-x-hidden">
 
-    <!-- ============================================================== -->
-    <!-- ABA 1: MAQUETE 3D + JUSTIFICATIVA DO PROJETO AO LADO            -->
-    <!-- ============================================================== -->
-    <div id="tab-view-maquete" class="tab-view-panel w-full h-full grid grid-cols-1 lg:grid-cols-12 gap-3 sm:gap-4 overflow-hidden">
-      
-      <!-- COLUNA DA MAQUETE 3D (7 Colunas no Desktop) -->
-      <div class="lg:col-span-7 h-full rounded-3xl border-4 border-pop-dark bg-sky-100 overflow-hidden shadow-neo-lg relative flex flex-col">
+    <!-- ==================== SEÇÃO DO SIMULADOR 3D, CÓDIGO E JOGO ==================== -->
+    <section id="simulator-section" class="w-full">
+
+      <!-- ============================================================== -->
+      <!-- ABA 1: MAQUETE 3D + JUSTIFICATIVA + CLIQUES INCLUSIVOS         -->
+      <!-- ============================================================== -->
+      <div id="tab-view-maquete" class="tab-view-panel w-full grid grid-cols-1 lg:grid-cols-12 gap-4 items-stretch">
         
-        <div id="canvas-container" class="w-full h-full cursor-grab active:cursor-grabbing relative">
+        <!-- COLUNA DA MAQUETE 3D (7 Colunas no Desktop) -->
+        <div class="lg:col-span-7 rounded-3xl border-4 border-pop-dark bg-sky-100 overflow-hidden shadow-neo-lg relative flex flex-col">
           
-          <!-- Notificação de Clique Detectado -->
-          <div id="click-feedback-badge" class="absolute top-4 left-1/2 -translate-x-1/2 opacity-0 pointer-events-none transition-all duration-150 transform scale-75 bg-pop-green text-pop-dark border-3 border-pop-dark font-display font-black px-5 py-2 rounded-full shadow-neo flex items-center gap-2 z-30">
-            <span class="text-xl">⚡</span>
-            <span class="text-xs sm:text-sm tracking-wider uppercase">CLIQUE DETECTADO! [ESPAÇO]</span>
-          </div>
-
-          <!-- HUD Superior Esquerdo: Telemetria de Pulos -->
-          <div class="absolute top-3 left-3 z-20 pointer-events-none bg-white border-3 border-pop-dark rounded-2xl p-3 shadow-neo space-y-1 max-w-[190px]">
-            <div class="flex items-center justify-between gap-2">
-              <span class="text-[10px] font-display font-bold text-slate-500 uppercase">Telemetria</span>
-              <span id="stream-status" class="text-[9px] font-display font-black text-pop-dark bg-pop-green px-1.5 py-0.5 rounded border border-pop-dark">
-                PRONTO
-              </span>
+          <!-- HUD Superior (Empilhado limpo acima do Canvas no Mobile; Flutuante no Desktop md+) -->
+          <div class="relative md:static z-20 flex flex-wrap items-center justify-between gap-2 p-2.5 md:p-0 bg-white/90 md:bg-transparent border-b-3 md:border-b-0 border-pop-dark">
+            
+            <!-- Telemetria de Pulos -->
+            <div class="md:absolute md:top-3 md:left-3 bg-white border-2 md:border-3 border-pop-dark rounded-xl md:rounded-2xl px-2.5 py-1.5 md:p-3 shadow-neo-sm md:shadow-neo flex md:block items-center gap-2 pointer-events-none">
+              <div class="flex items-center justify-between gap-1.5">
+                <span class="text-[10px] font-display font-bold text-slate-500 uppercase">Pulos</span>
+                <span id="stream-status" class="text-[9px] font-display font-black text-pop-dark bg-pop-green px-1.5 py-0.5 rounded border border-pop-dark">
+                  PRONTO
+                </span>
+              </div>
+              <div class="flex items-baseline gap-1.5">
+                <span id="click-counter" class="text-xl sm:text-2xl md:text-3xl font-display font-black text-pop-red leading-none">0</span>
+              </div>
             </div>
-            <div class="flex items-baseline gap-2">
-              <span id="click-counter" class="text-2xl sm:text-3xl font-display font-black text-pop-red">0</span>
-              <span class="text-[11px] font-display font-bold text-slate-600 uppercase">Pulos</span>
+
+            <!-- Botões Vista Explodida & Raio-X -->
+            <div class="md:absolute md:top-3 md:right-3 flex items-center gap-1.5 sm:gap-2">
+              <button id="btn-toggle-exploded" class="btn-neo bg-pop-blue hover:bg-cyan-300 text-pop-dark px-2.5 sm:px-3 py-1.5 rounded-xl font-display font-black text-[11px] sm:text-xs flex items-center gap-1 shadow-neo-sm md:shadow-neo">
+                <span id="exploded-icon">💥</span>
+                <span id="exploded-text">Explodida</span>
+              </button>
+              <button id="btn-toggle-xray" class="btn-neo bg-white hover:bg-slate-100 text-pop-dark px-2.5 py-1.5 rounded-xl font-display font-bold text-[11px] sm:text-xs flex items-center gap-1 shadow-neo-sm md:shadow-neo">
+                <span id="xray-icon">🔍</span>
+                <span id="xray-text">Raio-X</span>
+              </button>
             </div>
           </div>
 
-          <!-- Botões de Controle da Maquete 3D -->
-          <div class="absolute top-3 right-3 z-20 flex items-center gap-2">
-            <button id="btn-toggle-exploded" class="btn-neo bg-pop-blue hover:bg-cyan-300 text-pop-dark px-3 py-1.5 rounded-xl font-display font-black text-xs flex items-center gap-1.5 shadow-neo">
-              <span id="exploded-icon">💥</span>
-              <span id="exploded-text">Vista Explodida</span>
-            </button>
-            <button id="btn-toggle-xray" class="btn-neo bg-white hover:bg-slate-100 text-pop-dark px-2.5 py-1.5 rounded-xl font-display font-bold text-xs flex items-center gap-1 shadow-neo">
-              <span id="xray-icon">🔍</span>
-              <span id="xray-text">Raio-X</span>
-            </button>
+          <!-- Canvas 3D Desobstruído -->
+          <div id="canvas-container" class="w-full h-[300px] sm:h-[370px] md:h-[500px] lg:h-[540px] cursor-grab active:cursor-grabbing relative">
+            
+            <!-- Notificação de Clique Detectado -->
+            <div id="click-feedback-badge" class="absolute top-3 left-1/2 -translate-x-1/2 opacity-0 pointer-events-none transition-all duration-150 transform scale-75 bg-pop-green text-pop-dark border-3 border-pop-dark font-display font-black px-4 py-1.5 rounded-full shadow-neo flex items-center gap-1.5 z-30 whitespace-nowrap">
+              <span class="text-base sm:text-xl">⚡</span>
+              <span class="text-[11px] sm:text-sm tracking-wider uppercase">CLIQUE DETECTADO!</span>
+            </div>
+
           </div>
 
-          <!-- Painel Flutuante da Vista Explodida (Blueprint das 6 Camadas) -->
-          <div id="exploded-panel" class="absolute top-12 right-3 opacity-0 transition-all duration-300 pointer-events-none translate-x-4 bg-white/95 backdrop-blur-md border-3 border-pop-dark rounded-2xl p-3 text-[11px] font-display text-pop-dark space-y-1.5 shadow-neo max-w-[240px] z-20">
+          <!-- Painel da Vista Explodida (Abaixo no Mobile, Flutuante à Direita no Desktop) -->
+          <div id="exploded-panel" class="hidden md:block md:absolute md:top-14 md:right-3 opacity-0 transition-all duration-300 pointer-events-none md:translate-x-4 bg-white/95 backdrop-blur-md border-t-3 md:border-3 border-pop-dark md:rounded-2xl p-3 text-[11px] font-display text-pop-dark space-y-1.5 md:shadow-neo md:max-w-[235px] z-20">
             <div class="flex items-center justify-between pb-1 border-b border-slate-200">
-              <span class="font-black text-xs uppercase tracking-wider text-pop-blue">📐 Blueprint das Camadas</span>
-              <span class="text-[9px] font-mono font-bold bg-slate-100 px-1.5 py-0.5 rounded border border-slate-300">6 Níveis</span>
+              <span class="font-black text-xs uppercase tracking-wider text-pop-blue">📐 Blueprint (6 Camadas)</span>
             </div>
             
-            <div class="flex items-center gap-2 p-1 rounded-lg hover:bg-slate-100 transition cursor-pointer layer-tag" data-layer-id="buttonDome">
-              <span class="w-3 h-3 rounded-full bg-pop-red border border-black shrink-0"></span>
-              <span class="font-bold text-[11px] leading-tight">1. Domo Vermelho (11cm)</span>
-            </div>
-            
-            <div class="flex items-center gap-2 p-1 rounded-lg hover:bg-slate-100 transition cursor-pointer layer-tag" data-layer-id="suspension">
-              <span class="w-3 h-3 rounded-sm bg-amber-400 border border-black shrink-0"></span>
-              <span class="font-bold text-[11px] leading-tight">2. Suspensão (4 Esponjas)</span>
-            </div>
-
-            <div class="flex items-center gap-2 p-1 rounded-lg hover:bg-slate-100 transition cursor-pointer layer-tag" data-layer-id="ledRing">
-              <span class="w-3 h-3 rounded-full bg-cyan-400 border border-black shrink-0"></span>
-              <span class="font-bold text-[11px] leading-tight">3. Anel Difusor de LED</span>
-            </div>
-
-            <div class="flex items-center gap-2 p-1 rounded-lg hover:bg-slate-100 transition cursor-pointer layer-tag" data-layer-id="topPanel">
-              <span class="w-3 h-3 rounded-sm bg-slate-800 border border-black shrink-0"></span>
-              <span class="font-bold text-[11px] leading-tight">4. Tampo Superior a Laser</span>
-            </div>
-
-            <div class="flex items-center gap-2 p-1 rounded-lg hover:bg-slate-100 transition cursor-pointer layer-tag" data-layer-id="electronics">
-              <span class="w-3 h-3 rounded-sm bg-emerald-600 border border-black shrink-0"></span>
-              <span class="font-bold text-[11px] leading-tight">5. Bandeja com ESP32</span>
-            </div>
-
-            <div class="flex items-center gap-2 p-1 rounded-lg hover:bg-slate-100 transition cursor-pointer layer-tag" data-layer-id="base">
-              <span class="w-3 h-3 rounded-sm bg-slate-900 border border-black shrink-0"></span>
-              <span class="font-bold text-[11px] leading-tight">6. Chassi Base Chanfrado</span>
-            </div>
-
-            <div class="pt-1 border-t border-slate-200 text-[10px] text-slate-500 font-sans italic leading-tight">
-              Gire com o mouse para examinar o espaçamento entre as peças.
+            <div class="grid grid-cols-2 md:grid-cols-1 gap-1">
+              <div class="flex items-center gap-2 p-1 rounded-lg hover:bg-slate-100 transition cursor-pointer layer-tag" data-layer-id="buttonDome">
+                <span class="w-2.5 h-2.5 rounded-full bg-pop-red border border-black shrink-0"></span>
+                <span class="font-bold text-[10px] sm:text-[11px] leading-tight">1. Domo Vermelho</span>
+              </div>
+              <div class="flex items-center gap-2 p-1 rounded-lg hover:bg-slate-100 transition cursor-pointer layer-tag" data-layer-id="suspension">
+                <span class="w-2.5 h-2.5 rounded-sm bg-amber-400 border border-black shrink-0"></span>
+                <span class="font-bold text-[10px] sm:text-[11px] leading-tight">2. 4 Esponjas</span>
+              </div>
+              <div class="flex items-center gap-2 p-1 rounded-lg hover:bg-slate-100 transition cursor-pointer layer-tag" data-layer-id="ledRing">
+                <span class="w-2.5 h-2.5 rounded-full bg-cyan-400 border border-black shrink-0"></span>
+                <span class="font-bold text-[10px] sm:text-[11px] leading-tight">3. Anel LED Halo</span>
+              </div>
+              <div class="flex items-center gap-2 p-1 rounded-lg hover:bg-slate-100 transition cursor-pointer layer-tag" data-layer-id="topPanel">
+                <span class="w-2.5 h-2.5 rounded-sm bg-slate-800 border border-black shrink-0"></span>
+                <span class="font-bold text-[10px] sm:text-[11px] leading-tight">4. Tampo Laser</span>
+              </div>
+              <div class="flex items-center gap-2 p-1 rounded-lg hover:bg-slate-100 transition cursor-pointer layer-tag" data-layer-id="electronics">
+                <span class="w-2.5 h-2.5 rounded-sm bg-emerald-600 border border-black shrink-0"></span>
+                <span class="font-bold text-[10px] sm:text-[11px] leading-tight">5. Bandeja ESP32</span>
+              </div>
+              <div class="flex items-center gap-2 p-1 rounded-lg hover:bg-slate-100 transition cursor-pointer layer-tag" data-layer-id="base">
+                <span class="w-2.5 h-2.5 rounded-sm bg-slate-900 border border-black shrink-0"></span>
+                <span class="font-bold text-[10px] sm:text-[11px] leading-tight">6. Chassi Base</span>
+              </div>
             </div>
           </div>
 
-          <!-- Legenda do Raio-X -->
-          <div id="xray-legend" class="absolute top-12 right-3 opacity-0 transition-opacity duration-300 pointer-events-none bg-white border-2 border-pop-dark rounded-xl p-2.5 text-[10px] font-mono font-bold text-pop-dark space-y-1.5 shadow-neo z-20">
+          <!-- Legenda do Raio-X (Abaixo no Mobile, Flutuante no Desktop) -->
+          <div id="xray-legend" class="hidden md:block md:absolute md:top-14 md:right-3 opacity-0 transition-opacity duration-300 pointer-events-none bg-white border-t-3 md:border-2 border-pop-dark md:rounded-xl p-2.5 text-[10px] font-mono font-bold text-pop-dark space-y-1 md:shadow-neo z-20">
             <div class="flex items-center gap-1.5">
               <span class="w-2.5 h-2.5 rounded-full bg-pop-yellow border border-pop-dark"></span>
               <span>Fio Amarelo ➔ D4 (GPIO 4)</span>
@@ -281,243 +302,487 @@
             </div>
           </div>
 
-          <!-- Barra Inferior da Maquete 3D -->
-          <div class="absolute bottom-3 left-3 right-3 z-20 flex flex-wrap items-center justify-between gap-2 bg-white/95 backdrop-blur-md border-3 border-pop-dark px-3.5 py-2 rounded-2xl shadow-neo text-xs font-display">
-            <div class="flex items-center gap-2 text-pop-dark font-bold text-[11px]">
+          <!-- Barra Inferior de Ação (Abaixo do Canvas no Mobile, Flutuante no Desktop) -->
+          <div class="md:absolute md:bottom-3 md:left-3 md:right-3 z-20 flex flex-col sm:flex-row items-center justify-between gap-2 bg-white/95 backdrop-blur-md border-t-3 md:border-3 border-pop-dark px-3.5 py-2.5 md:py-2 md:rounded-2xl md:shadow-neo text-xs font-display">
+            <div class="hidden md:flex items-center gap-2 text-pop-dark font-bold text-[11px]">
               <kbd class="px-2 py-0.5 bg-pop-yellow text-pop-dark rounded border-2 border-pop-dark font-mono font-black text-xs shadow-neo-sm">ESPAÇO</kbd>
-              <span class="hidden sm:inline">Bata no controle gigante ou aperte espaço</span>
+              <span>Bata no controle gigante ou aperte espaço</span>
             </div>
 
-            <button id="btn-manual-click" class="btn-neo bg-pop-red text-white font-display font-black text-xs px-4 py-1.5 rounded-xl flex items-center gap-1.5">
+            <button id="btn-manual-click" class="btn-neo touch-action-btn w-full sm:w-auto justify-center bg-pop-red hover:bg-red-500 text-white font-display font-black text-sm md:text-xs px-5 py-2.5 md:py-1.5 rounded-xl flex items-center gap-2">
               <span>🔴</span>
-              <span>BATER NO BOTÃO</span>
+              <span>BATER NO BOTÃO GIGANTE</span>
             </button>
           </div>
 
         </div>
 
-      </div>
-
-      <!-- COLUNA DA JUSTIFICATIVA SOCIAL (5 Colunas no Desktop) -->
-      <div class="lg:col-span-5 h-full flex flex-col justify-between gap-3 overflow-hidden">
-        
-        <!-- Card 1: Justificativa & Inclusão -->
-        <div class="card-neo-lg bg-white rounded-3xl p-4 sm:p-5 flex flex-col justify-between flex-1 overflow-hidden">
-          <div>
-            <div class="flex items-center justify-between mb-1.5">
-              <span class="text-[10px] font-display font-black text-purple-700 bg-purple-100 px-2.5 py-0.5 rounded-full border border-pop-dark shadow-neo-sm">
-                ♿ Inclusão & Acessibilidade
-              </span>
-              <span class="text-xs">🎮 🧩</span>
-            </div>
-            <h2 class="text-sm sm:text-base font-display font-black text-pop-dark uppercase">
-              Por Que Criamos o "Jogando Junto"?
-            </h2>
-            <p class="text-xs font-semibold text-slate-700 mt-1.5 leading-relaxed">
-              Controles comuns de videogame possuem mais de <strong class="text-pop-red">16 botões minúsculos e 2 analógicos</strong>. Para crianças com paralisia cerebral, atrofia muscular ou dificuldades motoras finas, jogar videogame convencional é fisicamente impossível.
-            </p>
-            <p class="text-xs font-semibold text-slate-600 mt-1 leading-relaxed">
-              Com o conceito <strong class="text-pop-dark">One-Switch Gaming</strong>, qualquer toque voluntário (usando a mão aberta, antebraço, pé ou queixo) garante autonomia completa no jogo.
-            </p>
-          </div>
-
-          <!-- Comparativo Rápido de Preço -->
-          <div class="grid grid-cols-2 gap-2 mt-2 text-center text-xs font-display">
-            <div class="p-2 rounded-xl border-2 border-pop-dark bg-red-50">
-              <span class="text-slate-600 block text-[9px] font-bold">Controle Adaptado Comercial</span>
-              <span class="text-pop-red font-black text-xs sm:text-sm">R$ 1.800+</span>
-            </div>
-            <div class="p-2 rounded-xl border-2 border-pop-dark bg-emerald-50">
-              <span class="text-emerald-900 block text-[9px] font-bold">Projeto Jogando Junto</span>
-              <span class="text-pop-green font-black text-xs sm:text-sm">&lt; R$ 45 (Maker)</span>
-            </div>
-          </div>
-        </div>
-
-        <!-- Card 2: Post-it do Manifesto dos Alunos -->
-        <div class="bg-pop-yellow card-neo rounded-3xl p-4 transform -rotate-0.5 flex items-center gap-3">
-          <span class="text-2xl sm:text-3xl shrink-0">📢</span>
-          <div>
-            <span class="text-[10px] font-display font-black uppercase text-pop-dark bg-white px-2 py-0.5 rounded-md border border-pop-dark">
-              Mural do 6º Ano B
-            </span>
-            <blockquote class="text-xs sm:text-sm font-display font-black text-pop-dark leading-snug mt-1">
-              "Jogar junto não é sobre quem tem o controle mais caro. É sobre ninguém ficar de fora da partida."
-            </blockquote>
-          </div>
-        </div>
-
-      </div>
-
-    </div>
-
-    <!-- ============================================================== -->
-    <!-- ABA 2: VISUALIZAÇÃO DINÂMICA DO CÓDIGO C++ (AO VIVO!)           -->
-    <!-- ============================================================== -->
-    <div id="tab-view-codigo" class="tab-view-panel hidden w-full h-full flex flex-col justify-between overflow-hidden gap-3">
-      
-      <!-- Terminal Interativo de Código -->
-      <div class="card-neo-lg bg-slate-900 text-slate-100 rounded-3xl p-4 sm:p-5 flex-1 flex flex-col justify-between overflow-hidden shadow-neo-lg">
-        
-        <!-- Barra de Janela -->
-        <div class="flex items-center justify-between pb-2 border-b-2 border-slate-700 font-mono text-xs shrink-0">
-          <div class="flex items-center gap-2">
-            <span class="w-3 h-3 rounded-full bg-pop-red border border-black inline-block"></span>
-            <span class="w-3 h-3 rounded-full bg-pop-yellow border border-black inline-block"></span>
-            <span class="w-3 h-3 rounded-full bg-pop-green border border-black inline-block"></span>
-            <span class="ml-2 font-bold text-slate-300">firmware/src/main.cpp (ESP32 DevKit V1)</span>
-          </div>
-          <span id="code-state-indicator" class="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-slate-800 text-slate-300 border border-slate-600">
-            Aguardando Entrada (HIGH / Solto)
-          </span>
-        </div>
-
-        <!-- Linhas de Código com Destaque Dinâmico em Região Contígua -->
-        <div class="font-mono text-xs sm:text-sm leading-relaxed overflow-x-auto my-auto py-1 space-y-2">
+        <!-- COLUNA DA JUSTIFICATIVA + CLIQUES INCLUSIVOS (5 Colunas no Desktop) -->
+        <div class="lg:col-span-5 flex flex-col justify-between gap-3 sm:gap-4">
           
-          <!-- Bloco Superior: Leitura e Debounce -->
-          <div class="px-3 py-1.5 rounded-xl bg-slate-800/40 border border-slate-700/50 text-slate-300">
-            <span class="text-slate-500 block text-[11px] mb-0.5">// 1. Leitura com Pull-Up interno & Filtro anti-trepidação (40ms)</span>
-            <div><span class="text-sky-400 font-bold">int</span> leituraAtual = <span class="text-amber-300 font-bold">digitalRead</span>(<span class="text-pink-400 font-semibold">PINO_BOTAO</span>);</div>
-            <div><span class="text-sky-400 font-bold">if</span> ((<span class="text-amber-300 font-bold">millis</span>() - tempoUltimaMudanca) &gt; <span class="text-pink-400 font-semibold">TEMPO_DEBOUNCE</span>) {</div>
+          <!-- Badge de Destaque: Cliques Inclusivos Hoje (LocalStorage) -->
+          <div class="card-neo bg-gradient-to-r from-amber-100 to-yellow-200 rounded-3xl p-3.5 sm:p-4 flex items-center justify-between gap-2">
+            <div class="flex items-center gap-2.5">
+              <span class="text-2xl sm:text-3xl animate-pulse">🔥</span>
+              <div>
+                <span class="text-[10px] font-display font-black uppercase text-amber-900 tracking-wider block">Impacto ao Vivo</span>
+                <div class="text-xs sm:text-sm font-display font-black text-pop-dark flex flex-wrap items-center gap-1.5">
+                  <span>Cliques Inclusivos Hoje:</span>
+                  <span id="inclusive-clicks-count" class="text-pop-red text-base sm:text-lg font-black px-2 py-0.5 bg-white rounded-xl border-2 border-pop-dark shadow-neo-sm">0</span>
+                </div>
+              </div>
+            </div>
+            <button id="btn-reset-inclusive-clicks" class="text-[10px] font-display font-bold text-slate-600 hover:text-pop-red underline px-2 py-1 rounded-lg bg-white/70 border border-pop-dark/30 shrink-0" title="Zerar contador de hoje">
+              ↺ Zerar
+            </button>
           </div>
 
-          <!-- REGIÃO A: BOTÃO PRESSIONADO (LOW / 0V) - Bloco Contíguo Inteiro que se Ilumina -->
-          <div id="region-code-down" class="code-region-block">
-            <div class="flex items-center justify-between mb-1">
-              <span class="text-slate-400 text-[11px] font-semibold">// 2. CASO A: Botão pressionado (circuito fecha em LOW / 0V)</span>
-              <span id="badge-down" class="hidden text-[9px] font-mono font-black uppercase px-2 py-0.5 rounded-full bg-pop-yellow text-pop-dark border border-black shadow-sm">
-                ⚡ EXECUTANDO AGORA
+          <!-- Card 1: Justificativa & Inclusão -->
+          <div class="card-neo-lg bg-white rounded-3xl p-4 sm:p-5 flex flex-col justify-between flex-1">
+            <div>
+              <div class="flex items-center justify-between mb-2">
+                <span class="text-[10px] font-display font-black text-purple-700 bg-purple-100 px-2.5 py-0.5 rounded-full border border-pop-dark shadow-neo-sm">
+                  ♿ Inclusão &amp; Acessibilidade
+                </span>
+                <span class="text-sm">🎮 🧩</span>
+              </div>
+              <h2 class="text-lg sm:text-xl md:text-2xl font-display font-black text-pop-dark uppercase leading-tight">
+                Por Que Criamos o "Jogando Junto"?
+              </h2>
+              <p class="text-xs sm:text-sm font-semibold text-slate-700 mt-2 leading-relaxed">
+                Controles comuns de videogame possuem mais de <strong class="text-pop-red">16 botões minúsculos e 2 analógicos</strong>. Para crianças com paralisia cerebral, atrofia muscular ou dificuldades motoras finas, jogar videogame convencional é fisicamente impossível.
+              </p>
+              <p class="text-xs sm:text-sm font-semibold text-slate-600 mt-2 leading-relaxed">
+                Com o conceito <strong class="text-pop-dark">One-Switch Gaming</strong>, qualquer toque voluntário (usando a mão aberta, antebraço, pé ou queixo) garante autonomia completa no jogo.
+              </p>
+            </div>
+
+            <!-- Comparativo Rápido de Preço -->
+            <div class="grid grid-cols-2 gap-2.5 mt-4 text-center text-xs font-display">
+              <div class="p-2.5 rounded-2xl border-2 border-pop-dark bg-red-50">
+                <span class="text-slate-600 block text-[10px] font-bold">Adaptado Comercial</span>
+                <span class="text-pop-red font-black text-sm sm:text-base">R$ 1.800+</span>
+              </div>
+              <div class="p-2.5 rounded-2xl border-2 border-pop-dark bg-emerald-50">
+                <span class="text-emerald-900 block text-[10px] font-bold">Projeto Jogando Junto</span>
+                <span class="text-pop-green font-black text-sm sm:text-base">&lt; R$ 45 (Maker)</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Card 2: Post-it do Manifesto dos Alunos -->
+          <div class="bg-pop-yellow card-neo rounded-3xl p-4 flex items-center gap-3">
+            <span class="text-2xl sm:text-3xl shrink-0">📢</span>
+            <div>
+              <span class="text-[10px] font-display font-black uppercase text-pop-dark bg-white px-2 py-0.5 rounded-md border border-pop-dark">
+                Mural do 6º Ano B
               </span>
-            </div>
-            <div class="pl-2 space-y-0.5 text-slate-200">
-              <div><span class="text-sky-400 font-bold">if</span> (estadoEstavelBotao == <span class="text-pink-400 font-bold">LOW</span>) {</div>
-              <div class="pl-4"><span class="text-amber-300 font-bold">digitalWrite</span>(<span class="text-pink-400 font-semibold">PINO_LED</span>, <span class="text-emerald-400 font-bold">HIGH</span>); <span class="text-slate-400 text-[11px]">// Acende o anel de LED e LED do ESP</span></div>
-              <div class="pl-4"><span class="text-amber-300 font-bold">Serial</span>.<span class="text-sky-300">println</span>(<span class="text-emerald-300 font-bold">"SPACE:DOWN"</span>); <span class="text-slate-400 text-[11px]">// Dispara o pulo no videogame via USB</span></div>
-              <div>}</div>
+              <blockquote class="text-xs sm:text-sm font-display font-black text-pop-dark leading-snug mt-1">
+                "Jogar junto não é sobre quem tem o controle mais caro. É sobre ninguém ficar de fora da partida."
+              </blockquote>
             </div>
           </div>
 
-          <!-- REGIÃO B: BOTÃO SOLTO (HIGH / 3.3V) - Bloco Contíguo de Repouso -->
-          <div id="region-code-up" class="code-region-block">
-            <div class="flex items-center justify-between mb-1">
-              <span class="text-slate-400 text-[11px] font-semibold">// 3. CASO B: Botão solto (retorna a 3.3V pelo resistor Pull-Up)</span>
-              <span id="badge-up" class="hidden text-[9px] font-mono font-black uppercase px-2 py-0.5 rounded-full bg-sky-200 text-sky-900 border border-sky-400 shadow-sm">
-                🔄 REPOUSO (HIGH)
-              </span>
-            </div>
-            <div class="pl-2 space-y-0.5 text-slate-200">
-              <div><span class="text-sky-400 font-bold">else</span> {</div>
-              <div class="pl-4"><span class="text-amber-300 font-bold">digitalWrite</span>(<span class="text-pink-400 font-semibold">PINO_LED</span>, <span class="text-slate-400 font-bold">LOW</span>); <span class="text-slate-400 text-[11px]">// Apaga o LED</span></div>
-              <div class="pl-4"><span class="text-amber-300 font-bold">Serial</span>.<span class="text-sky-300">println</span>(<span class="text-amber-300 font-bold">"SPACE:UP"</span>); <span class="text-slate-400 text-[11px]">// Libera o pulo</span></div>
-              <div>}</div>
-            </div>
-          </div>
-
-          <div class="text-slate-500 pl-2">} <span class="text-[11px]">// Fim do loop principal</span></div>
-
-        </div>
-
-        <!-- Dica de Interatividade do Código -->
-        <div class="pt-2 border-t border-slate-800 text-[11px] font-display text-pop-yellow font-bold flex items-center justify-between">
-          <span>⚡ Dica: Aperte ESPAÇO ou bata no botão de papelão para ver o bloco de código acender ao vivo!</span>
-          <span class="text-slate-400">Taxa: 115200 bps</span>
         </div>
 
       </div>
 
-      <!-- 3 Cards Explicativos da Engenharia -->
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-3 shrink-0 text-xs font-sans">
-        <div class="bg-white p-3 rounded-2xl border-3 border-pop-dark shadow-neo-sm">
-          <strong class="font-display text-amber-700 text-xs uppercase block mb-0.5">⚡ INPUT_PULLUP</strong>
-          <p class="text-slate-600 leading-relaxed text-[11px]">
-            O ESP32 ativa um resistor interno de 45 kΩ ligado aos 3.3V. Enquanto solto, lê 1 (HIGH). Ao encostar no GND, vai a 0 (LOW).
-          </p>
+      <!-- ============================================================== -->
+      <!-- ABA 2: VISUALIZAÇÃO DINÂMICA DO CÓDIGO C++ (AO VIVO!)           -->
+      <!-- ============================================================== -->
+      <div id="tab-view-codigo" class="tab-view-panel hidden w-full flex flex-col justify-between gap-4">
+        
+        <!-- Terminal Interativo de Código -->
+        <div class="card-neo-lg bg-slate-900 text-slate-100 rounded-3xl p-4 sm:p-5 flex flex-col justify-between shadow-neo-lg">
+          
+          <!-- Barra de Janela -->
+          <div class="flex flex-wrap items-center justify-between gap-2 pb-2.5 border-b-2 border-slate-700 font-mono text-xs shrink-0">
+            <div class="flex items-center gap-2">
+              <span class="w-3 h-3 rounded-full bg-pop-red border border-black inline-block"></span>
+              <span class="w-3 h-3 rounded-full bg-pop-yellow border border-black inline-block"></span>
+              <span class="w-3 h-3 rounded-full bg-pop-green border border-black inline-block"></span>
+              <span class="ml-1 font-bold text-slate-300 text-[11px] sm:text-xs">src/main.cpp (ESP32)</span>
+            </div>
+            <span id="code-state-indicator" class="px-2.5 py-0.5 rounded-full text-[10px] font-bold bg-slate-800 text-slate-300 border border-slate-600">
+              Aguardando Entrada (HIGH / Solto)
+            </span>
+          </div>
+
+          <!-- Linhas de Código com Destaque Dinâmico em Região Contígua -->
+          <div class="font-mono text-xs sm:text-sm leading-relaxed overflow-x-auto my-2 py-1 space-y-2">
+            
+            <!-- Bloco Superior: Leitura e Debounce -->
+            <div class="px-3 py-1.5 rounded-xl bg-slate-800/40 border border-slate-700/50 text-slate-300">
+              <span class="text-slate-500 block text-[11px] mb-0.5">// 1. Leitura com Pull-Up interno &amp; Filtro anti-trepidação (40ms)</span>
+              <div><span class="text-sky-400 font-bold">int</span> leituraAtual = <span class="text-amber-300 font-bold">digitalRead</span>(<span class="text-pink-400 font-semibold">PINO_BOTAO</span>);</div>
+              <div><span class="text-sky-400 font-bold">if</span> ((<span class="text-amber-300 font-bold">millis</span>() - tempoUltimaMudanca) &gt; <span class="text-pink-400 font-semibold">TEMPO_DEBOUNCE</span>) {</div>
+            </div>
+
+            <!-- REGIÃO A: BOTÃO PRESSIONADO (LOW / 0V) - Bloco Contíguo Inteiro que se Ilumina -->
+            <div id="region-code-down" class="code-region-block">
+              <div class="flex flex-wrap items-center justify-between gap-1 mb-1">
+                <span class="text-slate-400 text-[11px] font-semibold">// 2. CASO A: Botão pressionado (circuito fecha em LOW / 0V)</span>
+                <span id="badge-down" class="hidden text-[9px] font-mono font-black uppercase px-2 py-0.5 rounded-full bg-pop-yellow text-pop-dark border border-black shadow-sm">
+                  ⚡ EXECUTANDO AGORA
+                </span>
+              </div>
+              <div class="pl-2 space-y-0.5 text-slate-200">
+                <div><span class="text-sky-400 font-bold">if</span> (estadoEstavelBotao == <span class="text-pink-400 font-bold">LOW</span>) {</div>
+                <div class="pl-4"><span class="text-amber-300 font-bold">digitalWrite</span>(<span class="text-pink-400 font-semibold">PINO_LED</span>, <span class="text-emerald-400 font-bold">HIGH</span>); <span class="text-slate-400 text-[11px]">// Acende o anel de LED e LED do ESP</span></div>
+                <div class="pl-4"><span class="text-amber-300 font-bold">Serial</span>.<span class="text-sky-300">println</span>(<span class="text-emerald-300 font-bold">"SPACE:DOWN"</span>); <span class="text-slate-400 text-[11px]">// Dispara o pulo no videogame via USB</span></div>
+                <div>}</div>
+              </div>
+            </div>
+
+            <!-- REGIÃO B: BOTÃO SOLTO (HIGH / 3.3V) - Bloco Contíguo de Repouso -->
+            <div id="region-code-up" class="code-region-block">
+              <div class="flex flex-wrap items-center justify-between gap-1 mb-1">
+                <span class="text-slate-400 text-[11px] font-semibold">// 3. CASO B: Botão solto (retorna a 3.3V pelo resistor Pull-Up)</span>
+                <span id="badge-up" class="hidden text-[9px] font-mono font-black uppercase px-2 py-0.5 rounded-full bg-sky-200 text-sky-900 border border-sky-400 shadow-sm">
+                  🔄 REPOUSO (HIGH)
+                </span>
+              </div>
+              <div class="pl-2 space-y-0.5 text-slate-200">
+                <div><span class="text-sky-400 font-bold">else</span> {</div>
+                <div class="pl-4"><span class="text-amber-300 font-bold">digitalWrite</span>(<span class="text-pink-400 font-semibold">PINO_LED</span>, <span class="text-slate-400 font-bold">LOW</span>); <span class="text-slate-400 text-[11px]">// Apaga o LED</span></div>
+                <div class="pl-4"><span class="text-amber-300 font-bold">Serial</span>.<span class="text-sky-300">println</span>(<span class="text-amber-300 font-bold">"SPACE:UP"</span>); <span class="text-slate-400 text-[11px]">// Libera o pulo</span></div>
+                <div>}</div>
+              </div>
+            </div>
+
+            <div class="text-slate-500 pl-2">} <span class="text-[11px]">// Fim do loop principal</span></div>
+
+          </div>
+
+          <!-- Dica de Interatividade do Código -->
+          <div class="pt-2 border-t border-slate-800 text-[11px] font-display text-pop-yellow font-bold flex flex-wrap items-center justify-between gap-2">
+            <span>⚡ Dica: Aperte ESPAÇO ou toque no botão abaixo para ver o bloco acender ao vivo!</span>
+            <button id="btn-code-test-press" class="btn-neo touch-action-btn bg-pop-yellow text-pop-dark px-3 py-1 rounded-xl text-[11px] font-black">
+              🔴 SIMULAR CLIQUE NO CÓDIGO
+            </button>
+          </div>
+
         </div>
-        <div class="bg-white p-3 rounded-2xl border-3 border-pop-dark shadow-neo-sm">
-          <strong class="font-display text-emerald-700 text-xs uppercase block mb-0.5">⏱️ Debounce de 40ms</strong>
-          <p class="text-slate-600 leading-relaxed text-[11px]">
-            Filtro no firmware que descarta o repique mecânico das placas de papelão antes de enviar o sinal ao jogo.
-          </p>
+
+        <!-- 3 Cards Explicativos da Engenharia -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-3 text-xs font-sans">
+          <div class="bg-white p-3.5 rounded-2xl border-3 border-pop-dark shadow-neo-sm">
+            <strong class="font-display text-amber-700 text-xs uppercase block mb-0.5">⚡ INPUT_PULLUP</strong>
+            <p class="text-slate-600 leading-relaxed text-[11px]">
+              O ESP32 ativa um resistor interno de 45 kΩ ligado aos 3.3V. Enquanto solto, lê 1 (HIGH). Ao encostar no GND, vai a 0 (LOW).
+            </p>
+          </div>
+          <div class="bg-white p-3.5 rounded-2xl border-3 border-pop-dark shadow-neo-sm">
+            <strong class="font-display text-emerald-700 text-xs uppercase block mb-0.5">⏱️ Debounce de 40ms</strong>
+            <p class="text-slate-600 leading-relaxed text-[11px]">
+              Filtro no firmware que descarta o repique mecânico do botão gigante antes de enviar o sinal ao jogo.
+            </p>
+          </div>
+          <div class="bg-white p-3.5 rounded-2xl border-3 border-pop-dark shadow-neo-sm">
+            <strong class="font-display text-pop-blue text-xs uppercase block mb-0.5">🔌 Web Serial API</strong>
+            <p class="text-slate-600 leading-relaxed text-[11px]">
+              Comunicação direta a 115200 bps pelo cabo USB: latência zero e sem risco de interferência de sinal na feira.
+            </p>
+          </div>
         </div>
-        <div class="bg-white p-3 rounded-2xl border-3 border-pop-dark shadow-neo-sm">
-          <strong class="font-display text-pop-blue text-xs uppercase block mb-0.5">🔌 Web Serial API</strong>
-          <p class="text-slate-600 leading-relaxed text-[11px]">
-            Comunicação direta a 115200 bps pelo cabo USB: latência zero e sem risco de interferência de sinal na feira.
-          </p>
-        </div>
+
       </div>
 
-    </div>
+      <!-- ============================================================== -->
+      <!-- ABA 3: JOGO FLAPPY BIRD 6B COM HIGHSCORE LOCAL                  -->
+      <!-- ============================================================== -->
+      <div id="tab-view-jogo" class="tab-view-panel hidden w-full flex flex-col justify-between gap-3">
+        
+        <!-- Topo do Jogo: Placares -->
+        <div class="flex flex-wrap items-center justify-between gap-2.5 bg-white p-3 rounded-2xl border-3 border-pop-dark shadow-neo-sm font-display">
+          <div class="flex items-center gap-2">
+            <span class="w-3 h-3 rounded-full bg-pop-green animate-ping shrink-0"></span>
+            <span class="text-xs sm:text-sm font-black text-pop-dark uppercase">Arena de Teste: Salto do 6º B!</span>
+          </div>
 
-    <!-- ============================================================== -->
-    <!-- ABA 3: JOGO FLAPPY BIRD 6B COM HIGHSCORE LOCAL                  -->
-    <!-- ============================================================== -->
-    <div id="tab-view-jogo" class="tab-view-panel hidden w-full h-full flex flex-col justify-between overflow-hidden gap-3">
-      
-      <!-- Topo do Jogo: Placares -->
-      <div class="flex items-center justify-between gap-3 bg-white p-3 rounded-2xl border-3 border-pop-dark shadow-neo-sm shrink-0 font-display">
-        <div class="flex items-center gap-2">
-          <span class="w-3 h-3 rounded-full bg-pop-green animate-ping"></span>
-          <span class="text-xs sm:text-sm font-black text-pop-dark uppercase">Arena de Teste: Salto do 6º B!</span>
+          <div class="flex items-center gap-2">
+            <div class="bg-slate-100 px-3 py-1 rounded-xl border-2 border-pop-dark flex items-center gap-1.5">
+              <span class="text-[11px] text-slate-500 font-bold uppercase">Pontos:</span>
+              <span id="game-current-score" class="text-base sm:text-lg font-black text-pop-dark">0</span>
+            </div>
+
+            <div class="bg-pop-yellow px-3 py-1 rounded-xl border-2 border-pop-dark flex items-center gap-1.5 shadow-neo-sm">
+              <span class="text-[11px] text-amber-950 font-black uppercase">🏆 Recorde:</span>
+              <span id="game-best-score" class="text-base sm:text-lg font-black text-pop-dark">0</span>
+            </div>
+
+            <button id="btn-reset-highscore" class="text-[10px] text-slate-500 hover:text-pop-red underline font-bold ml-1" title="Zerar recorde">
+              Zerar
+            </button>
+          </div>
         </div>
 
-        <div class="flex items-center gap-2.5">
-          <div class="bg-slate-100 px-3 py-1 rounded-xl border-2 border-pop-dark flex items-center gap-1.5">
-            <span class="text-[11px] text-slate-500 font-bold uppercase">Pontos:</span>
-            <span id="game-current-score" class="text-lg font-black text-pop-dark">0</span>
+        <!-- Container do Canvas do Flappy Bird -->
+        <div class="card-neo-lg bg-sky-200 rounded-3xl p-2.5 sm:p-3 flex flex-col justify-center overflow-hidden relative shadow-neo-lg">
+          
+          <div class="relative w-full h-[360px] sm:h-[430px] lg:h-[490px] rounded-2xl border-3 border-pop-dark bg-sky-300 overflow-hidden shadow-inner">
+            <canvas id="flappy-canvas" class="w-full h-full block cursor-pointer touch-action-btn"></canvas>
+
+            <!-- Overlay de Start / Game Over -->
+            <div id="game-overlay" class="absolute inset-0 bg-black/40 backdrop-blur-xs flex flex-col items-center justify-center p-4 text-center z-10">
+              <div class="bg-white card-neo rounded-3xl p-4 sm:p-6 max-w-sm w-full space-y-3">
+                <span id="overlay-tag" class="text-[10px] font-display font-black uppercase bg-pop-yellow px-2.5 py-0.5 rounded-full border border-pop-dark shadow-neo-sm inline-block">
+                  🎮 TESTE DO CONTROLE
+                </span>
+                <h3 id="overlay-title" class="text-lg sm:text-2xl font-display font-black text-pop-dark uppercase">
+                  SALTO DO 6º ANO B!
+                </h3>
+                <p id="overlay-msg" class="text-xs font-semibold text-slate-600">
+                  Bata no botão gigante físico, toque na tela ou aperte ESPAÇO para fazer o robozinho voar!
+                </p>
+                <button id="btn-start-game" class="btn-neo touch-action-btn bg-pop-green hover:bg-emerald-300 text-pop-dark font-display font-black text-xs sm:text-sm px-5 py-2.5 rounded-xl w-full">
+                  BATER PARA JOGAR! 🚀
+                </button>
+                <button id="btn-send-to-leaderboard" class="hidden btn-neo bg-pop-yellow hover:bg-yellow-300 text-pop-dark font-display font-black text-xs px-4 py-2 rounded-xl w-full">
+                  🏆 ENVIAR PONTUAÇÃO PARA O TOP 5!
+                </button>
+              </div>
+            </div>
           </div>
 
-          <div class="bg-pop-yellow px-3 py-1 rounded-xl border-2 border-pop-dark flex items-center gap-1.5 shadow-neo-sm">
-            <span class="text-[11px] text-amber-950 font-black uppercase">🏆 Recorde:</span>
-            <span id="game-best-score" class="text-lg font-black text-pop-dark">0</span>
-          </div>
+        </div>
 
-          <button id="btn-reset-highscore" class="text-[10px] text-slate-500 hover:text-pop-red underline font-bold ml-1" title="Zerar recorde">
-            Zerar
+        <!-- Instruções no Rodapé do Jogo -->
+        <div class="flex flex-wrap items-center justify-between gap-2 px-2 text-xs font-display text-slate-600 font-bold">
+          <span>🕹️ Cada toque / batida = 1 pulo do robozinho</span>
+          <span>Use ESPAÇO, toque na tela ou botão USB!</span>
+        </div>
+
+      </div>
+
+    </section>
+
+    <!-- ==================== SEÇÃO 2: LEADERBOARD AO VIVO & TABELA COMPARATIVA ==================== -->
+    <section class="grid grid-cols-1 lg:grid-cols-12 gap-5 items-start">
+
+      <!-- TOP 5 DA FEIRA (Placar de Recordes Ao Vivo com LocalStorage) -->
+      <div id="leaderboard-section" class="lg:col-span-5 card-neo-lg bg-white rounded-3xl p-4 sm:p-5 space-y-4">
+        <div class="flex items-center justify-between gap-2 border-b-3 border-pop-dark pb-2.5">
+          <div>
+            <span class="text-[10px] font-display font-black uppercase bg-pop-yellow px-2 py-0.5 rounded-md border border-pop-dark">Ao Vivo no Estande</span>
+            <h2 class="text-xl sm:text-2xl font-display font-black text-pop-dark uppercase mt-1">
+              🏆 TOP 5 DA FEIRA
+            </h2>
+          </div>
+          <button id="btn-reset-leaderboard" class="text-[11px] font-display font-bold text-slate-500 hover:text-pop-red underline">
+            Limpar Placar
           </button>
         </div>
+
+        <!-- Formulário Rápido para Alunos Registrarem Visitantes -->
+        <form id="leaderboard-form" class="flex flex-col sm:flex-row gap-2">
+          <input id="lb-player-name" type="text" maxlength="22" required placeholder="Nome do Visitante" class="flex-1 px-3 py-2 rounded-xl border-2 border-pop-dark font-sans text-xs sm:text-sm font-bold focus:outline-none focus:ring-2 focus:ring-pop-blue bg-slate-50" />
+          <div class="flex gap-2">
+            <input id="lb-player-score" type="number" min="0" max="9999" required placeholder="Pts" class="w-24 px-3 py-2 rounded-xl border-2 border-pop-dark font-mono text-xs sm:text-sm font-bold focus:outline-none focus:ring-2 focus:ring-pop-blue bg-slate-50" />
+            <button type="submit" class="btn-neo bg-pop-green hover:bg-emerald-400 text-pop-dark px-3.5 py-2 rounded-xl font-display font-black text-xs sm:text-sm whitespace-nowrap">
+              + Salvar
+            </button>
+          </div>
+        </form>
+
+        <!-- Lista Ordenada do 1º ao 5º Lugar -->
+        <ul id="leaderboard-list" class="space-y-2">
+          <!-- Preenchido via JS -->
+        </ul>
       </div>
 
-      <!-- Container do Canvas do Flappy Bird -->
-      <div class="card-neo-lg bg-sky-200 rounded-3xl p-3 flex-1 flex flex-col justify-center overflow-hidden relative shadow-neo-lg">
-        
-        <div class="relative w-full h-full rounded-2xl border-3 border-pop-dark bg-sky-300 overflow-hidden shadow-inner">
-          <canvas id="flappy-canvas" class="w-full h-full block cursor-pointer"></canvas>
+      <!-- TABELA COMPARATIVA COM OVERFLOW-X-AUTO MOBILE-FIRST -->
+      <div class="lg:col-span-7 card-neo-lg bg-white rounded-3xl p-4 sm:p-5 space-y-4">
+        <div>
+          <span class="text-[10px] font-display font-black uppercase bg-pop-blue text-pop-dark px-2.5 py-0.5 rounded-full border border-pop-dark">Engenharia Social</span>
+          <h2 class="text-2xl sm:text-3xl md:text-4xl font-display font-black text-pop-dark uppercase mt-1 leading-tight">
+            Comparativo de Acessibilidade
+          </h2>
+          <p class="text-xs sm:text-sm text-slate-600 font-semibold mt-1">
+            Por que construir tecnologia assistiva aberta faz toda a diferença na escola:
+          </p>
+        </div>
 
-          <!-- Overlay de Start / Game Over -->
-          <div id="game-overlay" class="absolute inset-0 bg-black/40 backdrop-blur-xs flex flex-col items-center justify-center p-4 text-center z-10">
-            <div class="bg-white card-neo rounded-3xl p-5 sm:p-6 max-w-sm w-full space-y-3">
-              <span id="overlay-tag" class="text-[10px] font-display font-black uppercase bg-pop-yellow px-2.5 py-0.5 rounded-full border border-pop-dark shadow-neo-sm inline-block">
-                🎮 TESTE DO CONTROLE
-              </span>
-              <h3 id="overlay-title" class="text-xl sm:text-2xl font-display font-black text-pop-dark uppercase">
-                SALTO DO 6º ANO B!
-              </h3>
-              <p id="overlay-msg" class="text-xs font-semibold text-slate-600">
-                Bata no botão gigante físico ou aperte ESPAÇO para fazer o robozinho voar e desviar dos canos!
-              </p>
-              <button id="btn-start-game" class="btn-neo bg-pop-green hover:bg-emerald-300 text-pop-dark font-display font-black text-xs sm:text-sm px-5 py-2.5 rounded-xl w-full">
-                BATER PARA JOGAR! 🚀
-              </button>
+        <!-- Wrapper com overflow-x-auto para rolagem suave no mobile sem quebrar layout -->
+        <div class="overflow-x-auto rounded-2xl border-3 border-pop-dark shadow-neo-sm bg-white">
+          <table class="w-full min-w-[500px] text-left border-collapse font-sans text-xs sm:text-sm">
+            <thead>
+              <tr class="bg-pop-dark text-white font-display uppercase text-[11px] sm:text-xs">
+                <th class="p-3 border-r border-slate-700">Critério</th>
+                <th class="p-3 border-r border-slate-700">Controle Comum</th>
+                <th class="p-3 border-r border-slate-700">Adaptado Comercial</th>
+                <th class="p-3 bg-pop-green text-pop-dark font-black">🌟 Jogando Junto (6º B)</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y-2 divide-pop-dark font-bold">
+              <tr class="hover:bg-slate-50">
+                <td class="p-3 border-r-2 border-pop-dark bg-slate-100">Custo Estimado</td>
+                <td class="p-3 border-r-2 border-pop-dark text-slate-600">R$ 300 – R$ 500</td>
+                <td class="p-3 border-r-2 border-pop-dark text-pop-red">R$ 1.800+</td>
+                <td class="p-3 bg-emerald-50 text-emerald-800 font-black">&lt; R$ 45 (Maker)</td>
+              </tr>
+              <tr class="hover:bg-slate-50">
+                <td class="p-3 border-r-2 border-pop-dark bg-slate-100">Área de Acionamento</td>
+                <td class="p-3 border-r-2 border-pop-dark text-slate-600">Botões de 8mm</td>
+                <td class="p-3 border-r-2 border-pop-dark text-slate-600">60mm – 100mm</td>
+                <td class="p-3 bg-emerald-50 text-emerald-800 font-black">110mm (Mão, Pé, Queixo)</td>
+              </tr>
+              <tr class="hover:bg-slate-50">
+                <td class="p-3 border-r-2 border-pop-dark bg-slate-100">Conexão ao PC</td>
+                <td class="p-3 border-r-2 border-pop-dark text-slate-600">Proprietária / USB</td>
+                <td class="p-3 border-r-2 border-pop-dark text-slate-600">Hub Especial (P2)</td>
+                <td class="p-3 bg-emerald-50 text-emerald-800 font-black">Web Serial USB Direto</td>
+              </tr>
+              <tr class="hover:bg-slate-50">
+                <td class="p-3 border-r-2 border-pop-dark bg-slate-100">Código &amp; Reparo</td>
+                <td class="p-3 border-r-2 border-pop-dark text-slate-600">Fechado</td>
+                <td class="p-3 border-r-2 border-pop-dark text-slate-600">Assistência Técnica</td>
+                <td class="p-3 bg-emerald-50 text-emerald-800 font-black">100% Open Source (ESP32)</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+    </section>
+
+    <!-- ==================== SEÇÃO 3: QUEM FAZ ACONTECER (NOSSA STARTUP - 6º ANO B) ==================== -->
+    <section class="py-4 space-y-5">
+      <div class="text-center space-y-2">
+        <span class="inline-block text-xs font-display font-black uppercase bg-pop-yellow text-pop-dark px-3 py-1 rounded-full border-2 border-pop-dark shadow-neo-sm">
+          Time Oficial InovaCEV 2026
+        </span>
+        <h2 class="text-3xl md:text-5xl font-display font-black text-pop-dark uppercase tracking-tight">
+          🌟 Quem Faz Acontecer <span class="text-pop-red block sm:inline text-2xl md:text-4xl">(Nossa Startup - 6º Ano B)</span>
+        </h2>
+        <p class="text-xs sm:text-sm text-slate-600 font-semibold max-w-2xl mx-auto">
+          Todo projeto de impacto nasce do trabalho em equipe. Conheça os departamentos formados pelos alunos do 6º Ano B:
+        </p>
+      </div>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4">
+        
+        <!-- Departamento 1: Marketing -->
+        <div class="card-neo bg-pink-100 rounded-3xl p-4 flex flex-col justify-between space-y-3">
+          <div>
+            <div class="flex items-center gap-2 border-b-2 border-pop-dark pb-2 mb-2.5">
+              <span class="text-2xl">📸</span>
+              <h3 class="font-display font-black text-base text-pop-dark uppercase">Marketing</h3>
+            </div>
+            <div class="flex flex-wrap gap-1.5">
+              <span class="px-2.5 py-1 bg-white border-2 border-pop-dark rounded-xl text-xs font-bold shadow-neo-sm">Alicia</span>
+              <span class="px-2.5 py-1 bg-white border-2 border-pop-dark rounded-xl text-xs font-bold shadow-neo-sm">Isabella</span>
+              <span class="px-2.5 py-1 bg-white border-2 border-pop-dark rounded-xl text-xs font-bold shadow-neo-sm">Lavínia</span>
+              <span class="px-2.5 py-1 bg-white border-2 border-pop-dark rounded-xl text-xs font-bold shadow-neo-sm">Maitê</span>
+              <span class="px-2.5 py-1 bg-white border-2 border-pop-dark rounded-xl text-xs font-bold shadow-neo-sm">Maria Anja</span>
+              <span class="px-2.5 py-1 bg-white border-2 border-pop-dark rounded-xl text-xs font-bold shadow-neo-sm">Maria Clara</span>
+              <span class="px-2.5 py-1 bg-white border-2 border-pop-dark rounded-xl text-xs font-bold shadow-neo-sm">Nina</span>
             </div>
           </div>
+          <span class="text-[10px] font-display font-bold text-pink-900 uppercase">Divulgação &amp; Estande</span>
+        </div>
+
+        <!-- Departamento 2: Tecnologia -->
+        <div class="card-neo bg-cyan-100 rounded-3xl p-4 flex flex-col justify-between space-y-3">
+          <div>
+            <div class="flex items-center gap-2 border-b-2 border-pop-dark pb-2 mb-2.5">
+              <span class="text-2xl">💻</span>
+              <h3 class="font-display font-black text-base text-pop-dark uppercase">Tecnologia</h3>
+            </div>
+            <div class="flex flex-wrap gap-1.5">
+              <span class="px-2.5 py-1 bg-white border-2 border-pop-dark rounded-xl text-xs font-bold shadow-neo-sm">Davi Lucas</span>
+              <span class="px-2.5 py-1 bg-white border-2 border-pop-dark rounded-xl text-xs font-bold shadow-neo-sm">Francisco</span>
+              <span class="px-2.5 py-1 bg-white border-2 border-pop-dark rounded-xl text-xs font-bold shadow-neo-sm">Kalel</span>
+              <span class="px-2.5 py-1 bg-white border-2 border-pop-dark rounded-xl text-xs font-bold shadow-neo-sm">Lionel</span>
+              <span class="px-2.5 py-1 bg-white border-2 border-pop-dark rounded-xl text-xs font-bold shadow-neo-sm">Matheus</span>
+              <span class="px-2.5 py-1 bg-white border-2 border-pop-dark rounded-xl text-xs font-bold shadow-neo-sm">Pedro</span>
+              <span class="px-2.5 py-1 bg-white border-2 border-pop-dark rounded-xl text-xs font-bold shadow-neo-sm">Samuel</span>
+            </div>
+          </div>
+          <span class="text-[10px] font-display font-bold text-cyan-900 uppercase">Código ESP32 &amp; Web</span>
+        </div>
+
+        <!-- Departamento 3: Design -->
+        <div class="card-neo bg-purple-100 rounded-3xl p-4 flex flex-col justify-between space-y-3">
+          <div>
+            <div class="flex items-center gap-2 border-b-2 border-pop-dark pb-2 mb-2.5">
+              <span class="text-2xl">🎨</span>
+              <h3 class="font-display font-black text-base text-pop-dark uppercase">Design</h3>
+            </div>
+            <div class="flex flex-wrap gap-1.5">
+              <span class="px-2.5 py-1 bg-white border-2 border-pop-dark rounded-xl text-xs font-bold shadow-neo-sm">Ana Alzira</span>
+              <span class="px-2.5 py-1 bg-white border-2 border-pop-dark rounded-xl text-xs font-bold shadow-neo-sm">Ana Maria</span>
+              <span class="px-2.5 py-1 bg-white border-2 border-pop-dark rounded-xl text-xs font-bold shadow-neo-sm">Anna Luiza</span>
+              <span class="px-2.5 py-1 bg-white border-2 border-pop-dark rounded-xl text-xs font-bold shadow-neo-sm">Cecília</span>
+              <span class="px-2.5 py-1 bg-white border-2 border-pop-dark rounded-xl text-xs font-bold shadow-neo-sm">Maria Júlia</span>
+              <span class="px-2.5 py-1 bg-white border-2 border-pop-dark rounded-xl text-xs font-bold shadow-neo-sm">Valentina</span>
+              <span class="px-2.5 py-1 bg-white border-2 border-pop-dark rounded-xl text-xs font-bold shadow-neo-sm">Sofia</span>
+              <span class="px-2.5 py-1 bg-white border-2 border-pop-dark rounded-xl text-xs font-bold shadow-neo-sm">Sophie</span>
+              <span class="px-2.5 py-1 bg-white border-2 border-pop-dark rounded-xl text-xs font-bold shadow-neo-sm">Maria Laura</span>
+            </div>
+          </div>
+          <span class="text-[10px] font-display font-bold text-purple-900 uppercase">Layout Laser &amp; Visual</span>
+        </div>
+
+        <!-- Departamento 4: Montagem -->
+        <div class="card-neo bg-amber-100 rounded-3xl p-4 flex flex-col justify-between space-y-3">
+          <div>
+            <div class="flex items-center gap-2 border-b-2 border-pop-dark pb-2 mb-2.5">
+              <span class="text-2xl">🛠️</span>
+              <h3 class="font-display font-black text-base text-pop-dark uppercase">Montagem</h3>
+            </div>
+            <div class="flex flex-wrap gap-1.5">
+              <span class="px-2.5 py-1 bg-white border-2 border-pop-dark rounded-xl text-xs font-bold shadow-neo-sm">Alana</span>
+              <span class="px-2.5 py-1 bg-white border-2 border-pop-dark rounded-xl text-xs font-bold shadow-neo-sm">Davi Bernardo</span>
+              <span class="px-2.5 py-1 bg-white border-2 border-pop-dark rounded-xl text-xs font-bold shadow-neo-sm">José Heitor</span>
+              <span class="px-2.5 py-1 bg-white border-2 border-pop-dark rounded-xl text-xs font-bold shadow-neo-sm">Lucas</span>
+              <span class="px-2.5 py-1 bg-white border-2 border-pop-dark rounded-xl text-xs font-bold shadow-neo-sm">Samuel</span>
+              <span class="px-2.5 py-1 bg-white border-2 border-pop-dark rounded-xl text-xs font-bold shadow-neo-sm">Pedro</span>
+            </div>
+          </div>
+          <span class="text-[10px] font-display font-bold text-amber-900 uppercase">Hardware &amp; Estrutura</span>
+        </div>
+
+        <!-- Departamento 5: Pesquisa e Apresentação -->
+        <div class="card-neo bg-emerald-100 rounded-3xl p-4 flex flex-col justify-between space-y-3 sm:col-span-2 lg:col-span-1">
+          <div>
+            <div class="flex items-center gap-2 border-b-2 border-pop-dark pb-2 mb-2.5">
+              <span class="text-2xl">🎤</span>
+              <h3 class="font-display font-black text-sm sm:text-base text-pop-dark uppercase">Pesquisa e Apresentação</h3>
+            </div>
+            <div class="flex flex-wrap gap-1.5">
+              <span class="px-2.5 py-1 bg-white border-2 border-pop-dark rounded-xl text-xs font-bold shadow-neo-sm">Guilherme</span>
+              <span class="px-2.5 py-1 bg-white border-2 border-pop-dark rounded-xl text-xs font-bold shadow-neo-sm">Cícero</span>
+              <span class="px-2.5 py-1 bg-white border-2 border-pop-dark rounded-xl text-xs font-bold shadow-neo-sm">Davi Carvalho</span>
+              <span class="px-2.5 py-1 bg-white border-2 border-pop-dark rounded-xl text-xs font-bold shadow-neo-sm">Joana</span>
+              <span class="px-2.5 py-1 bg-white border-2 border-pop-dark rounded-xl text-xs font-bold shadow-neo-sm">Maria Alice</span>
+              <span class="px-2.5 py-1 bg-white border-2 border-pop-dark rounded-xl text-xs font-bold shadow-neo-sm">Maria Laura</span>
+              <span class="px-2.5 py-1 bg-white border-2 border-pop-dark rounded-xl text-xs font-bold shadow-neo-sm">Stela</span>
+              <span class="px-2.5 py-1 bg-white border-2 border-pop-dark rounded-xl text-xs font-bold shadow-neo-sm">Maitê</span>
+              <span class="px-2.5 py-1 bg-white border-2 border-pop-dark rounded-xl text-xs font-bold shadow-neo-sm">Valentina</span>
+            </div>
+          </div>
+          <span class="text-[10px] font-display font-bold text-emerald-900 uppercase">Oratória &amp; Inclusão</span>
         </div>
 
       </div>
-
-      <!-- Instruções no Rodapé do Jogo -->
-      <div class="flex items-center justify-between px-2 text-xs font-display text-slate-600 font-bold shrink-0">
-        <span>🕹️ Cada batida no botão = 1 pulo do robozinho</span>
-        <span>Aperte a Barra de Espaço ou bata no botão USB para jogar!</span>
-      </div>
-
-    </div>
+    </section>
 
   </main>
 
-  <!-- ==================== FOOTER DISCRETO DE 1 LINHA ==================== -->
-  <footer class="h-8 border-t-2 border-pop-dark bg-white px-4 flex items-center justify-between text-[11px] font-display text-slate-600 shrink-0">
+  <!-- ==================== QR CODE FLUTUANTE (APENAS DESKTOP lg+) ==================== -->
+  <div id="qr-floating-card" class="hidden lg:flex fixed bottom-4 right-4 z-40 card-neo bg-white rounded-2xl p-3 flex-col items-center gap-1.5 shadow-neo-lg">
+    <button id="btn-close-qr" class="absolute -top-2 -right-2 w-6 h-6 rounded-full bg-pop-red text-white border-2 border-pop-dark text-xs font-black flex items-center justify-center shadow-neo-sm hover:scale-110 transition" title="Ocultar QR Code">
+      ✕
+    </button>
+    <img src="https://api.qrserver.com/v1/create-qr-code/?size=140x140&data=https://luisfpatrocinio.github.io/GiantJoystick/" alt="QR Code GiantJoystick" class="w-28 h-28 rounded-xl border-2 border-pop-dark bg-white" loading="lazy" />
+    <span class="text-[11px] font-display font-black text-pop-dark text-center leading-tight">
+      📱 Teste no seu celular!
+    </span>
+  </div>
+
+  <!-- ==================== FOOTER RESPONSIVO ==================== -->
+  <footer class="border-t-3 border-pop-dark bg-white px-4 py-3 flex flex-col sm:flex-row items-center justify-between gap-1 text-center text-[11px] sm:text-xs font-display text-slate-600 shrink-0">
     <span>Projeto <strong class="text-pop-dark font-black">Jogando Junto</strong> • 6º Ano B (InovaCEV 2026)</span>
     <span>Orientação: <a href="https://patrodev.com" target="_blank" rel="noopener noreferrer" class="text-pop-blue hover:underline font-black">Prof. Luis Felipe Patrocínio (patrodev.com)</a></span>
   </footer>
@@ -553,9 +818,9 @@
         item.view.classList.toggle('hidden', !isActive);
 
         if (isActive) {
-          item.btn.className = "tab-button px-3 sm:px-4 py-1.5 rounded-xl font-black bg-pop-blue text-pop-dark border-2 border-pop-dark shadow-neo-sm transition flex items-center gap-1.5";
+          item.btn.className = "tab-button flex-1 md:flex-initial justify-center px-2 sm:px-4 py-1.5 rounded-xl font-black bg-pop-blue text-pop-dark border-2 border-pop-dark shadow-neo-sm transition flex items-center gap-1 sm:gap-1.5";
         } else {
-          item.btn.className = "tab-button px-3 sm:px-4 py-1.5 rounded-xl font-bold text-slate-700 hover:text-pop-dark transition flex items-center gap-1.5";
+          item.btn.className = "tab-button flex-1 md:flex-initial justify-center px-2 sm:px-4 py-1.5 rounded-xl font-bold text-slate-700 hover:text-pop-dark transition flex items-center gap-1 sm:gap-1.5";
         }
       });
 
@@ -629,17 +894,17 @@
           gain.connect(ctx.destination);
           osc.start(now);
           osc.stop(now + 0.28);
-        } else if (type === 'click') {
-          // Clique mecânico sutil para feedback tátil nas abas Maquete e Código
-          osc.type = 'sine';
-          osc.frequency.setValueAtTime(900, now);
-          osc.frequency.exponentialRampToValueAtTime(300, now + 0.035);
-          gain.gain.setValueAtTime(0.06, now);
-          gain.gain.exponentialRampToValueAtTime(0.001, now + 0.04);
+        } else if (type === 'coin') {
+          // Som alegre estilo "Moeda de Fliperama (Coin)" ao acionar o controle
+          osc.type = 'square';
+          osc.frequency.setValueAtTime(987.77, now);
+          osc.frequency.setValueAtTime(1318.51, now + 0.08);
+          gain.gain.setValueAtTime(0.14, now);
+          gain.gain.exponentialRampToValueAtTime(0.001, now + 0.32);
           osc.connect(gain);
           gain.connect(ctx.destination);
           osc.start(now);
-          osc.stop(now + 0.045);
+          osc.stop(now + 0.33);
         }
       } catch (e) {}
     }
@@ -1180,16 +1445,16 @@
       isExploded = exploded;
       if (isExploded) {
         explodedIcon.textContent = '📦';
-        explodedText.textContent = 'Montar Controle';
-        btnExploded.className = 'btn-neo bg-pop-green hover:bg-emerald-400 text-pop-dark px-3 py-1.5 rounded-xl font-display font-black text-xs flex items-center gap-1.5 shadow-neo';
-        explodedPanel.classList.remove('pointer-events-none', 'opacity-0', 'translate-x-4');
-        explodedPanel.classList.add('opacity-100', 'translate-x-0');
+        explodedText.textContent = 'Montar';
+        btnExploded.className = 'btn-neo bg-pop-green hover:bg-emerald-400 text-pop-dark px-2.5 sm:px-3 py-1.5 rounded-xl font-display font-black text-[11px] sm:text-xs flex items-center gap-1 shadow-neo-sm md:shadow-neo';
+        explodedPanel.classList.remove('hidden', 'pointer-events-none', 'opacity-0', 'md:translate-x-4');
+        explodedPanel.classList.add('opacity-100', 'md:translate-x-0');
       } else {
         explodedIcon.textContent = '💥';
-        explodedText.textContent = 'Vista Explodida';
-        btnExploded.className = 'btn-neo bg-pop-blue hover:bg-cyan-300 text-pop-dark px-3 py-1.5 rounded-xl font-display font-black text-xs flex items-center gap-1.5 shadow-neo';
-        explodedPanel.classList.add('pointer-events-none', 'opacity-0', 'translate-x-4');
-        explodedPanel.classList.remove('opacity-100', 'translate-x-0');
+        explodedText.textContent = 'Explodida';
+        btnExploded.className = 'btn-neo bg-pop-blue hover:bg-cyan-300 text-pop-dark px-2.5 sm:px-3 py-1.5 rounded-xl font-display font-black text-[11px] sm:text-xs flex items-center gap-1 shadow-neo-sm md:shadow-neo';
+        explodedPanel.classList.add('hidden', 'pointer-events-none', 'opacity-0', 'md:translate-x-4');
+        explodedPanel.classList.remove('opacity-100', 'md:translate-x-0');
       }
     }
 
@@ -1228,27 +1493,59 @@
         topCoverMat.opacity = 0.25;
         topCoverMat.roughness = 0.1;
         xrayText.textContent = "Ocultar";
+        xrayLegend.classList.remove('hidden', 'pointer-events-none');
         xrayLegend.style.opacity = '1';
-        btnXray.className = "btn-neo bg-pop-yellow text-pop-dark px-2.5 py-1.5 rounded-xl font-display font-bold text-xs flex items-center gap-1 shadow-neo";
+        btnXray.className = "btn-neo bg-pop-yellow text-pop-dark px-2.5 py-1.5 rounded-xl font-display font-bold text-[11px] sm:text-xs flex items-center gap-1 shadow-neo-sm md:shadow-neo";
       } else {
         boxMat.opacity = 1.0;
         boxMat.roughness = 0.35;
         topCoverMat.opacity = 1.0;
         topCoverMat.roughness = 0.35;
         xrayText.textContent = "Raio-X";
+        xrayLegend.classList.add('hidden', 'pointer-events-none');
         xrayLegend.style.opacity = '0';
-        btnXray.className = "btn-neo bg-white hover:bg-slate-100 text-pop-dark px-2.5 py-1.5 rounded-xl font-display font-bold text-xs flex items-center gap-1 shadow-neo";
+        btnXray.className = "btn-neo bg-white hover:bg-slate-100 text-pop-dark px-2.5 py-1.5 rounded-xl font-display font-bold text-[11px] sm:text-xs flex items-center gap-1 shadow-neo-sm md:shadow-neo";
       }
     });
 
     // -------------------------------------------------------------
-    // 4. LÓGICA DE CLIQUE GLOBAL & ATUALIZAÇÃO DO CÓDIGO DINÂMICO
+    // 4. LÓGICA DE CLIQUE GLOBAL, CLIQUES INCLUSIVOS & FLASH DE TELA
     // -------------------------------------------------------------
     let isPressed = false;
     let targetButtonY = 1.34;
     const normalButtonY = 1.34;
     const pressedButtonY = 1.14;
     let totalClicks = 0;
+
+    // Cliques Inclusivos Hoje (Persistido em localStorage)
+    const inclusiveClicksEl = document.getElementById('inclusive-clicks-count');
+    const btnResetInclusive = document.getElementById('btn-reset-inclusive-clicks');
+    let inclusiveClicks = parseInt(localStorage.getItem('inovacev_inclusive_clicks') || '0', 10);
+    if (inclusiveClicksEl) inclusiveClicksEl.textContent = inclusiveClicks;
+
+    if (btnResetInclusive) {
+      btnResetInclusive.addEventListener('click', () => {
+        if (confirm("Zerar o contador de cliques inclusivos de hoje?")) {
+          inclusiveClicks = 0;
+          localStorage.setItem('inovacev_inclusive_clicks', '0');
+          if (inclusiveClicksEl) inclusiveClicksEl.textContent = '0';
+        }
+      });
+    }
+
+    // Flash verde vibrante ao redor da tela
+    const screenFlashEl = document.getElementById('screen-flash-border');
+    let flashTimer = null;
+    function triggerScreenFlash() {
+      if (!screenFlashEl) return;
+      screenFlashEl.classList.remove('opacity-0');
+      screenFlashEl.classList.add('opacity-100');
+      clearTimeout(flashTimer);
+      flashTimer = setTimeout(() => {
+        screenFlashEl.classList.remove('opacity-100');
+        screenFlashEl.classList.add('opacity-0');
+      }, 160);
+    }
 
     const counterEl = document.getElementById('click-counter');
     const badgeEl = document.getElementById('click-feedback-badge');
@@ -1305,12 +1602,20 @@
       totalClicks++;
       counterEl.textContent = totalClicks;
 
+      // Soma +1 nos Cliques Inclusivos Hoje + LocalStorage
+      inclusiveClicks++;
+      localStorage.setItem('inovacev_inclusive_clicks', inclusiveClicks.toString());
+      if (inclusiveClicksEl) inclusiveClicksEl.textContent = inclusiveClicks;
+
+      // Pisca borda verde vibrante ao redor da tela
+      triggerScreenFlash();
+
       // Sons e mecânicas específicas por aba:
       if (currentActiveTab === 'jogo') {
         playSound('flap');
         handleGameJump();
       } else {
-        playSound('click'); // Clique mecânico discreto para feedback tátil
+        playSound('coin'); // Som alegre estilo "Moeda de Fliperama (Coin)"
       }
 
       // 3D Visual Feedback
@@ -1323,7 +1628,7 @@
       streamStatus.textContent = "CLIQUE!";
       streamStatus.className = "text-[9px] font-display font-black text-white bg-pop-red px-1.5 py-0.5 rounded border border-pop-dark";
 
-      // Acende as linhas correspondentes no Código Dinâmico
+      // Acende a região inteira no Código Dinâmico
       highlightCodeLines(true);
 
       controls.autoRotate = false;
@@ -1350,8 +1655,10 @@
       }, 1500);
     }
 
-    // Tecla ESPAÇO Global
+    // Tecla ESPAÇO Global (Ignora quando o usuário estiver digitando no Leaderboard)
     window.addEventListener('keydown', (e) => {
+      const tag = e.target.tagName;
+      if (tag === 'INPUT' || tag === 'TEXTAREA') return;
       if (e.code === 'Space') {
         e.preventDefault();
         doPress();
@@ -1359,18 +1666,26 @@
     });
 
     window.addEventListener('keyup', (e) => {
+      const tag = e.target.tagName;
+      if (tag === 'INPUT' || tag === 'TEXTAREA') return;
       if (e.code === 'Space') {
         e.preventDefault();
         doRelease();
       }
     });
 
-    // Botão Manual na Maquete
+    // Botão Manual na Maquete e Botão de Teste na Aba Código (Suporte Mobile Touch sem delay)
     const manualBtn = document.getElementById('btn-manual-click');
-    manualBtn.addEventListener('mousedown', doPress);
-    manualBtn.addEventListener('mouseup', doRelease);
-    manualBtn.addEventListener('touchstart', (e) => { e.preventDefault(); doPress(); });
-    manualBtn.addEventListener('touchend', (e) => { e.preventDefault(); doRelease(); });
+    const codeTestBtn = document.getElementById('btn-code-test-press');
+
+    [manualBtn, codeTestBtn].forEach(btn => {
+      if (!btn) return;
+      btn.addEventListener('mousedown', doPress);
+      btn.addEventListener('mouseup', doRelease);
+      btn.addEventListener('mouseleave', () => { if (isPressed) doRelease(); });
+      btn.addEventListener('touchstart', (e) => { e.preventDefault(); doPress(); }, { passive: false });
+      btn.addEventListener('touchend', (e) => { e.preventDefault(); doRelease(); }, { passive: false });
+    });
 
     // Clique direto com o mouse no botão 3D
     const raycaster = new THREE.Raycaster();
@@ -1389,6 +1704,161 @@
     });
 
     // -------------------------------------------------------------
+    // 4B. MODO ESTANDE (TELA CHEIA + AUTO-SCROLL 45s DESKTOP) & QR
+    // -------------------------------------------------------------
+    const btnBoothMode = document.getElementById('btn-booth-mode');
+    const boothIcon = document.getElementById('booth-icon');
+    const boothText = document.getElementById('booth-text');
+    let isBoothMode = false;
+    let boothIdleTimer = null;
+
+    function resetBoothIdleTimer() {
+      clearTimeout(boothIdleTimer);
+      // Apenas Desktop (>= 768px) e com Modo Estande ativo
+      if (!isBoothMode || window.innerWidth < 768) return;
+
+      boothIdleTimer = setTimeout(() => {
+        if (isBoothMode && window.innerWidth >= 768) {
+          const simEl = document.getElementById('simulator-section');
+          if (simEl) simEl.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }
+      }, 45000);
+    }
+
+    ['mousemove', 'keydown', 'touchstart', 'scroll', 'click'].forEach(evt => {
+      window.addEventListener(evt, resetBoothIdleTimer, { passive: true });
+    });
+
+    function updateBoothModeUI(active) {
+      isBoothMode = active;
+      if (isBoothMode) {
+        if (boothIcon) boothIcon.textContent = '⏹️';
+        if (boothText) boothText.textContent = 'Sair Estande';
+        if (btnBoothMode) btnBoothMode.className = 'btn-neo bg-pop-red text-white px-2.5 sm:px-3 py-1.5 rounded-xl text-[11px] sm:text-xs font-display font-black flex items-center gap-1';
+        resetBoothIdleTimer();
+      } else {
+        if (boothIcon) boothIcon.textContent = '📺';
+        if (boothText) boothText.textContent = 'Modo Estande';
+        if (btnBoothMode) btnBoothMode.className = 'btn-neo bg-purple-200 hover:bg-purple-300 text-pop-dark px-2.5 sm:px-3 py-1.5 rounded-xl text-[11px] sm:text-xs font-display font-black flex items-center gap-1';
+        clearTimeout(boothIdleTimer);
+      }
+    }
+
+    if (btnBoothMode) {
+      btnBoothMode.addEventListener('click', async () => {
+        if (!document.fullscreenElement) {
+          try {
+            await document.documentElement.requestFullscreen();
+            updateBoothModeUI(true);
+          } catch (e) {
+            // Fallback se fullscreen for bloqueado: ativa auto-scroll de estande mesmo assim
+            updateBoothModeUI(!isBoothMode);
+          }
+        } else {
+          try {
+            await document.exitFullscreen();
+          } catch (e) {}
+          updateBoothModeUI(false);
+        }
+      });
+    }
+
+    document.addEventListener('fullscreenchange', () => {
+      updateBoothModeUI(Boolean(document.fullscreenElement));
+    });
+
+    const btnCloseQr = document.getElementById('btn-close-qr');
+    const qrFloatingCard = document.getElementById('qr-floating-card');
+    if (btnCloseQr && qrFloatingCard) {
+      btnCloseQr.addEventListener('click', () => {
+        qrFloatingCard.classList.add('lg:hidden');
+        qrFloatingCard.classList.remove('lg:flex');
+      });
+    }
+
+    // -------------------------------------------------------------
+    // 4C. LEADERBOARD AO VIVO ("TOP 5 DA FEIRA") COM LOCALSTORAGE
+    // -------------------------------------------------------------
+    const leaderboardForm = document.getElementById('leaderboard-form');
+    const lbNameInput = document.getElementById('lb-player-name');
+    const lbScoreInput = document.getElementById('lb-player-score');
+    const lbListEl = document.getElementById('leaderboard-list');
+    const btnResetLeaderboard = document.getElementById('btn-reset-leaderboard');
+
+    let leaderboardData = [];
+    try {
+      leaderboardData = JSON.parse(localStorage.getItem('inovacev_top5_leaderboard') || '[]');
+      if (!Array.isArray(leaderboardData)) leaderboardData = [];
+    } catch (e) {
+      leaderboardData = [];
+    }
+
+    function saveAndRenderLeaderboard() {
+      // Ordena do maior pro menor e mantém Top 5
+      leaderboardData.sort((a, b) => b.score - a.score);
+      leaderboardData = leaderboardData.slice(0, 5);
+      localStorage.setItem('inovacev_top5_leaderboard', JSON.stringify(leaderboardData));
+
+      if (!lbListEl) return;
+      if (leaderboardData.length === 0) {
+        lbListEl.innerHTML = `
+          <li class="p-4 rounded-2xl border-2 border-dashed border-slate-300 text-center text-xs font-display font-bold text-slate-500">
+            Nenhum visitante registrado ainda. Jogue o Flappy 6B ou adicione acima para estrear o pódio! 🚀
+          </li>
+        `;
+        return;
+      }
+
+      const medals = ['🥇', '🥈', '🥉', '4º', '5º'];
+      const rowColors = ['bg-yellow-100', 'bg-slate-100', 'bg-amber-50', 'bg-white', 'bg-white'];
+
+      lbListEl.innerHTML = leaderboardData.map((entry, idx) => `
+        <li class="flex items-center justify-between gap-2 p-2.5 rounded-2xl border-2 border-pop-dark ${rowColors[idx] || 'bg-white'} shadow-neo-sm font-display">
+          <div class="flex items-center gap-2.5 min-w-0">
+            <span class="text-base sm:text-lg font-black w-7 text-center shrink-0">${medals[idx] || (idx + 1) + 'º'}</span>
+            <span class="font-bold text-xs sm:text-sm text-pop-dark truncate">${entry.name.replace(/</g, '&lt;').replace(/>/g, '&gt;')}</span>
+          </div>
+          <div class="flex items-center gap-2 shrink-0">
+            <span class="px-2.5 py-0.5 rounded-xl bg-pop-dark text-pop-yellow font-mono font-black text-xs sm:text-sm">${entry.score} pts</span>
+            <button type="button" onclick="removeLeaderboardEntry(${entry.id})" class="w-6 h-6 rounded-lg bg-red-100 hover:bg-pop-red hover:text-white text-pop-red border border-pop-dark text-xs font-black flex items-center justify-center transition" title="Remover">
+              ✕
+            </button>
+          </div>
+        </li>
+      `).join('');
+    }
+
+    window.removeLeaderboardEntry = function(id) {
+      leaderboardData = leaderboardData.filter(item => item.id !== id);
+      saveAndRenderLeaderboard();
+    };
+
+    if (leaderboardForm) {
+      leaderboardForm.addEventListener('submit', (e) => {
+        e.preventDefault();
+        const name = (lbNameInput.value || '').trim();
+        const pts = parseInt(lbScoreInput.value, 10);
+        if (!name || isNaN(pts) || pts < 0) return;
+
+        leaderboardData.push({ id: Date.now(), name, score: pts });
+        saveAndRenderLeaderboard();
+        lbNameInput.value = '';
+        lbScoreInput.value = '';
+      });
+    }
+
+    if (btnResetLeaderboard) {
+      btnResetLeaderboard.addEventListener('click', () => {
+        if (confirm("Deseja limpar todo o placar TOP 5 da feira?")) {
+          leaderboardData = [];
+          saveAndRenderLeaderboard();
+        }
+      });
+    }
+
+    saveAndRenderLeaderboard();
+
+    // -------------------------------------------------------------
     // 5. JOGO FLAPPY BIRD 6B COM HIGHSCORE LOCAL
     // -------------------------------------------------------------
     const flappyCanvas = document.getElementById('flappy-canvas');
@@ -1398,6 +1868,7 @@
     const overlayMsg = document.getElementById('overlay-msg');
     const overlayTag = document.getElementById('overlay-tag');
     const btnStartGame = document.getElementById('btn-start-game');
+    const btnSendToLeaderboard = document.getElementById('btn-send-to-leaderboard');
     const currentScoreEl = document.getElementById('game-current-score');
     const bestScoreEl = document.getElementById('game-best-score');
     const btnResetHighscore = document.getElementById('btn-reset-highscore');
@@ -1421,6 +1892,7 @@
 
     let gameState = 'START';
     let score = 0;
+    let lastFinishedScore = 0;
     let birdY = 150;
     let birdVelocity = 0;
     const gravity = 0.38;
@@ -1438,6 +1910,7 @@
       birdVelocity = 0;
       pipes = [];
       pipeTimer = 0;
+      if (btnSendToLeaderboard) btnSendToLeaderboard.classList.add('hidden');
     }
 
     function handleGameJump() {
@@ -1453,6 +1926,15 @@
     }
 
     btnStartGame.addEventListener('click', handleGameJump);
+    if (btnSendToLeaderboard) {
+      btnSendToLeaderboard.addEventListener('click', () => {
+        if (lbScoreInput) lbScoreInput.value = lastFinishedScore;
+        const lbEl = document.getElementById('leaderboard-section');
+        if (lbEl) lbEl.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        setTimeout(() => { if (lbNameInput) lbNameInput.focus(); }, 450);
+      });
+    }
+
     flappyCanvas.addEventListener('pointerdown', (e) => {
       e.preventDefault();
       doPress();
@@ -1462,6 +1944,7 @@
     function triggerGameOver() {
       if (currentActiveTab !== 'jogo') return;
       gameState = 'GAMEOVER';
+      lastFinishedScore = score;
       playSound('crash');
 
       if (score > highscore) {
@@ -1476,8 +1959,11 @@
       }
 
       overlayTitle.textContent = `PONTUAÇÃO: ${score}`;
-      overlayMsg.textContent = "Bata no botão gigante de papelão ou aperte ESPAÇO para tentar de novo!";
+      overlayMsg.textContent = "Bata no botão gigante, toque na tela ou aperte ESPAÇO para tentar de novo!";
       btnStartGame.textContent = "BATER PARA JOGAR NOVAMENTE 🔄";
+      if (btnSendToLeaderboard) {
+        btnSendToLeaderboard.classList.toggle('hidden', score <= 0);
+      }
       overlay.classList.remove('hidden');
     }
 
@@ -1629,8 +2115,8 @@
           await serialPort.close();
         } catch(e) {}
         serialPort = null;
-        headerUsbBtnText.textContent = "CONECTAR USB";
-        btnHeaderConnectUsb.className = "btn-neo bg-pop-green hover:bg-emerald-300 text-pop-dark px-2.5 sm:px-3.5 py-1.5 sm:py-2 rounded-xl text-xs font-display font-black flex items-center gap-1.5";
+        headerUsbBtnText.textContent = "USB";
+        btnHeaderConnectUsb.className = "btn-neo bg-pop-green hover:bg-emerald-300 text-pop-dark px-2.5 sm:px-3 py-1.5 rounded-xl text-[11px] sm:text-xs font-display font-black flex items-center gap-1";
         return;
       }
 
@@ -1638,8 +2124,8 @@
         serialPort = await navigator.serial.requestPort();
         await serialPort.open({ baudRate: 115200 });
 
-        headerUsbBtnText.textContent = "USB ONLINE!";
-        btnHeaderConnectUsb.className = "btn-neo bg-pop-yellow text-pop-dark px-2.5 sm:px-3.5 py-1.5 sm:py-2 rounded-xl text-xs font-display font-black flex items-center gap-1.5 shadow-neo-sm";
+        headerUsbBtnText.textContent = "ONLINE!";
+        btnHeaderConnectUsb.className = "btn-neo bg-pop-yellow text-pop-dark px-2.5 sm:px-3 py-1.5 rounded-xl text-[11px] sm:text-xs font-display font-black flex items-center gap-1 shadow-neo-sm";
 
         const textDecoder = new TextDecoderStream();
         serialPort.readable.pipeTo(textDecoder.writable);
