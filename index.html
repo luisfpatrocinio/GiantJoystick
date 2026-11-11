@@ -154,12 +154,13 @@
       </div>
     </div>
 
-    <!-- AS 3 ABAS DE NAVEGAÇÃO POP MAKER (RESPONSIVAS) -->
+    <!-- AS 3 ABAS + ATALHO GUIA DE ESTUDOS (RESPONSIVAS) -->
     <nav class="w-full md:w-auto order-3 md:order-2 flex items-center justify-center bg-slate-100 p-1 rounded-2xl border-3 border-pop-dark shadow-neo-sm font-display text-[11px] sm:text-xs md:text-sm">
       <button id="tab-btn-maquete" class="tab-button flex-1 md:flex-initial justify-center px-2 sm:px-4 py-1.5 rounded-xl font-black bg-pop-blue text-pop-dark border-2 border-pop-dark shadow-neo-sm transition flex items-center gap-1 sm:gap-1.5">
         <span>🕹️</span>
         <span class="hidden lg:inline">1.</span>
-        <span>Maquete 3D</span>
+        <span class="sm:hidden">3D</span>
+        <span class="hidden sm:inline">Maquete 3D</span>
       </button>
 
       <button id="tab-btn-codigo" class="tab-button flex-1 md:flex-initial justify-center px-2 sm:px-4 py-1.5 rounded-xl font-bold text-slate-700 hover:text-pop-dark transition flex items-center gap-1 sm:gap-1.5">
@@ -173,6 +174,12 @@
         <span class="hidden lg:inline">3.</span>
         <span>Jogo</span>
       </button>
+
+      <a href="#guia-estudos" class="flex-1 md:flex-initial justify-center px-2 sm:px-3.5 py-1.5 rounded-xl font-bold text-purple-800 hover:bg-purple-100 hover:text-pop-dark transition flex items-center gap-1 whitespace-nowrap">
+        <span>🎓</span>
+        <span class="hidden lg:inline">Guia de</span>
+        <span>Estudos</span>
+      </a>
     </nav>
 
     <!-- Ações: Conectar USB, Modo Estande e Áudio -->
@@ -641,6 +648,258 @@
               </tr>
             </tbody>
           </table>
+        </div>
+      </div>
+
+    </section>
+
+    <!-- ==================== SEÇÃO 2B: GUIA DE ESTUDOS & PREPARAÇÃO PARA A FEIRA ==================== -->
+    <section id="guia-estudos" class="scroll-mt-24 py-4 space-y-6">
+      
+      <!-- Título do Guia -->
+      <div class="text-center space-y-2">
+        <span class="inline-block text-xs font-display font-black uppercase bg-purple-200 text-pop-dark px-3 py-1 rounded-full border-2 border-pop-dark shadow-neo-sm">
+          📖 Manual do Expositor • 6º Ano B
+        </span>
+        <h2 class="text-3xl md:text-5xl font-display font-black text-pop-dark uppercase tracking-tight">
+          🎓 Guia de Estudos <span class="text-pop-blue block sm:inline text-2xl md:text-4xl">(Tecnologia por Trás)</span>
+        </h2>
+        <p class="text-xs sm:text-sm text-slate-600 font-semibold max-w-2xl mx-auto">
+          Use este guia para revisar o projeto, treinar a explicação técnica para os visitantes e mandar bem nas perguntas dos avaliadores!
+        </p>
+      </div>
+
+      <!-- 1. Roteiro de Apresentação (Pitch de 30 Segundos) -->
+      <div class="card-neo-lg bg-white rounded-3xl p-4 sm:p-6 space-y-4">
+        <div class="flex flex-wrap items-center justify-between gap-2 border-b-3 border-pop-dark pb-2.5">
+          <div class="flex items-center gap-2">
+            <span class="text-2xl">🎤</span>
+            <h3 class="text-lg sm:text-xl font-display font-black text-pop-dark uppercase">
+              1. Roteiro Rápido de Apresentação (30 Segundos)
+            </h3>
+          </div>
+          <span class="text-[10px] font-display font-black uppercase bg-pop-yellow px-2.5 py-0.5 rounded-full border border-pop-dark">
+            Comece por aqui!
+          </span>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-3 text-xs sm:text-sm">
+          <div class="p-3.5 rounded-2xl border-2 border-pop-dark bg-red-50 space-y-1">
+            <span class="inline-block px-2 py-0.5 bg-pop-red text-white rounded-lg font-display font-black text-[11px] uppercase">Passo 1 • O Problema</span>
+            <p class="font-semibold text-slate-700 leading-relaxed pt-1">
+              "Um controle comum de videogame tem mais de <strong>16 botões minúsculos</strong> e exige precisão fina dos dedos — criando uma barreira para crianças com limitações motoras."
+            </p>
+          </div>
+          <div class="p-3.5 rounded-2xl border-2 border-pop-dark bg-cyan-50 space-y-1">
+            <span class="inline-block px-2 py-0.5 bg-pop-blue text-pop-dark border border-pop-dark rounded-lg font-display font-black text-[11px] uppercase">Passo 2 • A Solução</span>
+            <p class="font-semibold text-slate-700 leading-relaxed pt-1">
+              "Aplicamos o conceito <strong>One-Switch Gaming</strong>: um botão gigante de <strong>11 cm</strong> que pode ser batido com a mão aberta, antebraço, pé ou queixo!"
+            </p>
+          </div>
+          <div class="p-3.5 rounded-2xl border-2 border-pop-dark bg-emerald-50 space-y-1">
+            <span class="inline-block px-2 py-0.5 bg-pop-green text-pop-dark border border-pop-dark rounded-lg font-display font-black text-[11px] uppercase">Passo 3 • O Impacto</span>
+            <p class="font-semibold text-slate-700 leading-relaxed pt-1">
+              "Um controle adaptado importado custa <strong>R$ 1.800+</strong>. O nosso custa <strong>menos de R$ 45</strong> e funciona direto no navegador!"
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- 2. Detalhes da Tecnologia Por Trás (4 Pilares Técnicos) -->
+      <div class="space-y-3">
+        <div class="flex items-center gap-2 px-1">
+          <span class="text-2xl">⚙️</span>
+          <h3 class="text-xl sm:text-2xl font-display font-black text-pop-dark uppercase">
+            2. Detalhes da Tecnologia por Trás do Controle
+          </h3>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          
+          <!-- Pilar Tech 1: ESP32 -->
+          <div class="card-neo bg-white rounded-3xl p-4 sm:p-5 space-y-2.5">
+            <div class="flex items-center justify-between gap-2">
+              <span class="px-2.5 py-1 rounded-xl bg-emerald-100 text-emerald-900 border-2 border-pop-dark font-display font-black text-xs uppercase">
+                🧠 Hardware • Cérebro
+              </span>
+              <code class="text-[11px] font-mono font-bold bg-slate-100 px-2 py-0.5 rounded border border-slate-300">ESP32 DevKit V1</code>
+            </div>
+            <h4 class="text-base sm:text-lg font-display font-black text-pop-dark">
+              O Microcontrolador ESP32
+            </h4>
+            <p class="text-xs sm:text-sm font-semibold text-slate-700 leading-relaxed">
+              Não é apenas um interruptor comum: o <strong>ESP32</strong> é um minicomputador programado em <strong>C++</strong> com processador dual-core de 240 MHz. Ele monitora o pino digital <code class="px-1 py-0.5 bg-slate-100 rounded font-mono text-pop-red font-bold">D4 (GPIO 4)</code> centenas de vezes por segundo, acende LEDs de confirmação e envia comandos ao PC.
+            </p>
+            <div class="p-2.5 rounded-xl bg-emerald-50 border border-emerald-300 text-[11px] font-bold text-emerald-950">
+              💡 Na feira, diga: "O ESP32 é o cérebro que traduz a batida física no botão em comandos digitais para o jogo!"
+            </div>
+          </div>
+
+          <!-- Pilar Tech 2: Circuito Elétrico & INPUT_PULLUP -->
+          <div class="card-neo bg-white rounded-3xl p-4 sm:p-5 space-y-2.5">
+            <div class="flex items-center justify-between gap-2">
+              <span class="px-2.5 py-1 rounded-xl bg-amber-100 text-amber-900 border-2 border-pop-dark font-display font-black text-xs uppercase">
+                ⚡ Eletrônica • Circuito
+              </span>
+              <code class="text-[11px] font-mono font-bold bg-slate-100 px-2 py-0.5 rounded border border-slate-300">INPUT_PULLUP (3.3V)</code>
+            </div>
+            <h4 class="text-base sm:text-lg font-display font-black text-pop-dark">
+              Contato com Papel Alumínio &amp; Pull-Up Interno
+            </h4>
+            <p class="text-xs sm:text-sm font-semibold text-slate-700 leading-relaxed">
+              Um lado do papel alumínio liga no pino <code class="px-1 py-0.5 bg-amber-100 rounded font-mono font-bold">D4</code> e o outro no <code class="px-1 py-0.5 bg-slate-200 rounded font-mono font-bold">GND (0V)</code>. Como ativamos o modo <code class="px-1 py-0.5 bg-slate-100 rounded font-mono font-bold">INPUT_PULLUP</code>, o ESP32 liga um resistor interno de <strong>45 kΩ em 3,3V</strong>: solto ele lê <code class="font-mono font-bold">HIGH (1)</code>; quando os alumínios encostam, a tensão cai para zero (<code class="font-mono font-bold text-pop-red">LOW</code>) e dispara o salto!
+            </p>
+            <div class="p-2.5 rounded-xl bg-amber-50 border border-amber-300 text-[11px] font-bold text-amber-950">
+              💡 Na feira, diga: "Usamos o resistor interno do chip para evitar leituras fantasmas, dispensando resistores externos!"
+            </div>
+          </div>
+
+          <!-- Pilar Tech 3: Software & Debounce -->
+          <div class="card-neo bg-white rounded-3xl p-4 sm:p-5 space-y-2.5">
+            <div class="flex items-center justify-between gap-2">
+              <span class="px-2.5 py-1 rounded-xl bg-purple-100 text-purple-900 border-2 border-pop-dark font-display font-black text-xs uppercase">
+                ⏱️ Firmware C++ • Filtro
+              </span>
+              <code class="text-[11px] font-mono font-bold bg-slate-100 px-2 py-0.5 rounded border border-slate-300">Debounce 40 ms</code>
+            </div>
+            <h4 class="text-base sm:text-lg font-display font-black text-pop-dark">
+              Filtro Anti-Repique (Debounce)
+            </h4>
+            <p class="text-xs sm:text-sm font-semibold text-slate-700 leading-relaxed">
+              Quando duas placas de papel alumínio batem, em câmera lenta elas vibram e quicam várias vezes em milissegundos (<em>repique mecânico</em>). Sem filtro, 1 batida daria 5 pulos! No firmware C++, usamos um cronômetro <code class="px-1 py-0.5 bg-slate-100 rounded font-mono font-bold">millis()</code> que exige <strong>40 milissegundos</strong> de sinal estável antes de confirmar o clique.
+            </p>
+            <div class="p-2.5 rounded-xl bg-purple-50 border border-purple-300 text-[11px] font-bold text-purple-950">
+              💡 Mostre na prática: abra a aba <strong>⚡ Código</strong>, aperte o botão e mostre o bloco amarelo acendendo em tempo real!
+            </div>
+          </div>
+
+          <!-- Pilar Tech 4: Web Serial API & Ponte USB -->
+          <div class="card-neo bg-white rounded-3xl p-4 sm:p-5 space-y-2.5">
+            <div class="flex items-center justify-between gap-2">
+              <span class="px-2.5 py-1 rounded-xl bg-cyan-100 text-cyan-900 border-2 border-pop-dark font-display font-black text-xs uppercase">
+                🔌 Conexão Web • Zero Atraso
+              </span>
+              <code class="text-[11px] font-mono font-bold bg-slate-100 px-2 py-0.5 rounded border border-slate-300">115200 bps</code>
+            </div>
+            <h4 class="text-base sm:text-lg font-display font-black text-pop-dark">
+              Web Serial API (Direto no Navegador)
+            </h4>
+            <p class="text-xs sm:text-sm font-semibold text-slate-700 leading-relaxed">
+              Em uma feira cheia de celulares, o sinal Bluetooth pode sofrer interferência. Por isso usamos comunicação cabeada pela <strong>Web Serial API</strong> do navegador a <strong>115.200 bits/s</strong>: o ESP32 envia <code class="px-1 py-0.5 bg-slate-900 text-emerald-400 rounded font-mono text-[11px]">"SPACE:DOWN"</code> pelo USB direto para esta página, garantindo resposta instantânea!
+            </p>
+            <div class="p-2.5 rounded-xl bg-cyan-50 border border-cyan-300 text-[11px] font-bold text-cyan-950">
+              💡 Bônus técnico: Também temos um script Python (<code class="font-mono">ponte_teclado_usb.py</code>) para usar o botão em qualquer jogo do Windows!
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- 3. Engenharia Mecânica & Estrutura Corte a Laser -->
+      <div class="card-neo bg-slate-900 text-white rounded-3xl p-4 sm:p-6 space-y-3">
+        <div class="flex flex-wrap items-center justify-between gap-2 border-b border-slate-700 pb-2.5">
+          <div class="flex items-center gap-2">
+            <span class="text-2xl">🛠️</span>
+            <h3 class="text-lg sm:text-xl font-display font-black text-pop-yellow uppercase">
+              3. Engenharia Mecânica: Por Que a Caixa Foi Feita Assim?
+            </h3>
+          </div>
+          <span class="text-[10px] font-mono font-bold text-cyan-300 bg-slate-800 px-2.5 py-0.5 rounded border border-slate-700">
+            Corte a Laser + Dupla Caixa
+          </span>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 text-xs">
+          <div class="p-3 rounded-2xl bg-slate-800 border border-slate-700 space-y-1">
+            <strong class="font-display text-cyan-300 block uppercase">📦 Caixa Dupla Protetora</strong>
+            <p class="text-slate-300 leading-relaxed">
+              A <strong>caixa interna rebaixada</strong> serve de plataforma firme para o botão bater em cima, enquanto o <strong>ESP32</strong> fica protegido embaixo longe de impactos.
+            </p>
+          </div>
+          <div class="p-3 rounded-2xl bg-slate-800 border border-slate-700 space-y-1">
+            <strong class="font-display text-pop-yellow block uppercase">🧽 4 Esponjas nos Cantos</strong>
+            <p class="text-slate-300 leading-relaxed">
+              Uma mola única no centro faria o botão de 11 cm entortar ao bater na beirada. As <strong>4 esponjas em cruz</strong> mantêm a descida nivelada e suave.
+            </p>
+          </div>
+          <div class="p-3 rounded-2xl bg-slate-800 border border-slate-700 space-y-1">
+            <strong class="font-display text-pop-red block uppercase">🛑 Disco Trava Anti-Pop</strong>
+            <p class="text-slate-300 leading-relaxed">
+              O botão visível tem Ø 110 mm (passa no furo de Ø 115 mm), mas colamos embaixo um disco trava maior (Ø 130 mm) para ele nunca pular para fora.
+            </p>
+          </div>
+          <div class="p-3 rounded-2xl bg-slate-800 border border-slate-700 space-y-1">
+            <strong class="font-display text-emerald-400 block uppercase">✨ Design Inclusivo &amp; LED</strong>
+            <p class="text-slate-300 leading-relaxed">
+              Aletas diagonais deixam o brilho interno escapar, unindo estética gamer de alto contraste e acessibilidade sem parecer um aparelho médico.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- 4. Simulado: Perguntas Difíceis dos Avaliadores (Interativo) -->
+      <div class="card-neo-lg bg-white rounded-3xl p-4 sm:p-6 space-y-3">
+        <div class="flex flex-wrap items-center justify-between gap-2 pb-1">
+          <div>
+            <span class="text-[10px] font-display font-black uppercase bg-pop-green text-pop-dark px-2.5 py-0.5 rounded-full border border-pop-dark">
+              Treine Aqui!
+            </span>
+            <h3 class="text-lg sm:text-xl font-display font-black text-pop-dark uppercase mt-1">
+              💬 4. Perguntas Clássicas dos Avaliadores (Toque para Ver a Resposta)
+            </h3>
+          </div>
+        </div>
+
+        <div class="space-y-2.5 text-xs sm:text-sm">
+          <details class="group rounded-2xl border-2 border-pop-dark bg-slate-50 open:bg-yellow-50 transition">
+            <summary class="cursor-pointer p-3.5 font-display font-black text-pop-dark flex items-center justify-between gap-2 list-none">
+              <span>⚡ 1. Esse papel alumínio ligado no ESP32 não dá choque em quem aperta?</span>
+              <span class="text-xs px-2 py-0.5 rounded-lg bg-white border border-pop-dark shrink-0 group-open:bg-pop-yellow">Ver resposta</span>
+            </summary>
+            <div class="px-3.5 pb-3.5 pt-1 text-slate-700 font-semibold leading-relaxed border-t border-pop-dark/20">
+              <strong>Não dá choque nenhum!</strong> O circuito opera com apenas <strong>3,3 Volts</strong> (menos energia do que duas pilhas pequenas de controle remoto) e uma corrente minúscula limitada pelo resistor interno de 45 kΩ — além do papel alumínio ficar protegido dentro da caixa, abaixo do disco do botão.
+            </div>
+          </details>
+
+          <details class="group rounded-2xl border-2 border-pop-dark bg-slate-50 open:bg-yellow-50 transition">
+            <summary class="cursor-pointer p-3.5 font-display font-black text-pop-dark flex items-center justify-between gap-2 list-none">
+              <span>🎮 2. Como é possível jogar um videogame inteiro usando só 1 botão?</span>
+              <span class="text-xs px-2 py-0.5 rounded-lg bg-white border border-pop-dark shrink-0 group-open:bg-pop-yellow">Ver resposta</span>
+            </summary>
+            <div class="px-3.5 pb-3.5 pt-1 text-slate-700 font-semibold leading-relaxed border-t border-pop-dark/20">
+              Pelo padrão <strong>One-Switch Gaming</strong> (Tecnologia Assistiva de Acionador Único). Jogos baseados em tempo/ritmo — como o nosso <em>Flappy 6B</em>, <em>Dino do Chrome</em> e <em>Geometry Dash</em> — dependem apenas de 1 botão. Além disso, softwares adaptativos usam <strong>varredura automática</strong> na tela: um cursor passa pelos menus e o usuário confirma qualquer escolha com uma única batida.
+            </div>
+          </details>
+
+          <details class="group rounded-2xl border-2 border-pop-dark bg-slate-50 open:bg-yellow-50 transition">
+            <summary class="cursor-pointer p-3.5 font-display font-black text-pop-dark flex items-center justify-between gap-2 list-none">
+              <span>🧽 3. Por que usar 4 esponjas nos cantos em vez de uma mola no centro?</span>
+              <span class="text-xs px-2 py-0.5 rounded-lg bg-white border border-pop-dark shrink-0 group-open:bg-pop-yellow">Ver resposta</span>
+            </summary>
+            <div class="px-3.5 pb-3.5 pt-1 text-slate-700 font-semibold leading-relaxed border-t border-pop-dark/20">
+              Em um botão grande (11 cm de diâmetro), uma mola só no meio faria o disco <strong>tombar de lado e travar</strong> no furo sempre que alguém batesse na borda. Distribuindo <strong>4 esponjas macias nos cantos</strong>, o botão desce nivelado independente de onde a mão ou o braço acertar — e esponjas custam centavos e são fáceis de trocar!
+            </div>
+          </details>
+
+          <details class="group rounded-2xl border-2 border-pop-dark bg-slate-50 open:bg-yellow-50 transition">
+            <summary class="cursor-pointer p-3.5 font-display font-black text-pop-dark flex items-center justify-between gap-2 list-none">
+              <span>🔧 4. Por que escolheram cabo USB (Web Serial) em vez de Bluetooth?</span>
+              <span class="text-xs px-2 py-0.5 rounded-lg bg-white border border-pop-dark shrink-0 group-open:bg-pop-yellow">Ver resposta</span>
+            </summary>
+            <div class="px-3.5 pb-3.5 pt-1 text-slate-700 font-semibold leading-relaxed border-t border-pop-dark/20">
+              Em ambientes cheios como uma feira de ciências, dezenas de celulares e redes geram interferência em 2.4 GHz e o pareamento Bluetooth pode cair. Com a <strong>Web Serial API via USB (115200 bps)</strong>, é só plugar o cabo e clicar em <em>Conectar</em> no navegador — latência zero e alimentação elétrica contínua para o ESP32 e os LEDs!
+            </div>
+          </details>
+
+          <details class="group rounded-2xl border-2 border-pop-dark bg-slate-50 open:bg-yellow-50 transition">
+            <summary class="cursor-pointer p-3.5 font-display font-black text-pop-dark flex items-center justify-between gap-2 list-none">
+              <span>♻️ 5. E se o papel alumínio rasgar ou algum componente quebrar durante o uso?</span>
+              <span class="text-xs px-2 py-0.5 rounded-lg bg-white border border-pop-dark shrink-0 group-open:bg-pop-yellow">Ver resposta</span>
+            </summary>
+            <div class="px-3.5 pb-3.5 pt-1 text-slate-700 font-semibold leading-relaxed border-t border-pop-dark/20">
+              Todo o projeto é <strong>100% modular e reparável sem solda</strong>: o ESP32 encaixa em jumpers, as esponjas e o papel alumínio custam menos de R$ 2 e podem ser substituídos em menos de 2 minutos. Um controle comercial de R$ 1.800 exige assistência técnica cara — o nosso qualquer escola ou família consegue manter!
+            </div>
+          </details>
         </div>
       </div>
 
