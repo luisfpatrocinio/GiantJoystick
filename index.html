@@ -2243,6 +2243,33 @@
     let floatingTexts = [];
     let stars = [];
     let pipeSpawnDistanceAccum = 0;
+    let currentDayProgression = 0; // 0.0 = Dia, 1.0 = Pôr do Sol, 2.0 = Noite estrelada
+
+    // Interpolação suave de cores RGB
+    function lerpColor(c1, c2, factor) {
+      const f = Math.max(0, Math.min(1, factor));
+      const r = Math.round(c1[0] + (c2[0] - c1[0]) * f);
+      const g = Math.round(c1[1] + (c2[1] - c1[1]) * f);
+      const b = Math.round(c1[2] + (c2[2] - c1[2]) * f);
+      return `rgb(${r}, ${g}, ${b})`;
+    }
+
+    // Paletas dos momentos do dia [Top, Mid, Bottom]
+    const PALETTE_DAY = {
+      top: [56, 189, 248],    // #38BDF8
+      mid: [125, 211, 252],   // #7DD3FC
+      bottom: [186, 230, 253] // #BAE6FD
+    };
+    const PALETTE_SUNSET = {
+      top: [251, 113, 133],   // #FB7185
+      mid: [249, 115, 22],    // #F97316
+      bottom: [253, 224, 71]  // #FDE047
+    };
+    const PALETTE_NIGHT = {
+      top: [15, 23, 42],      // #0F172A
+      mid: [30, 27, 75],      // #1E1B4B
+      bottom: [49, 46, 129]   // #312E81
+    };
 
     // Inicializa estrelas para o céu noturno quando pontuação sobe
     for (let s = 0; s < 45; s++) {
@@ -2278,6 +2305,7 @@
     function resetGame() {
       score = 0;
       combo = 0;
+      currentDayProgression = 0;
       currentScoreEl.textContent = '0';
       if (comboPillEl) comboPillEl.classList.add('hidden');
       if (diffBadgeEl) {
@@ -2424,47 +2452,68 @@
       const robotX = getRobotX(W);
 
       // -------------------------------------------------------
-      // CENÁRIO EVOLUTIVO POR PONTOS (Dia -> Pôr do Sol -> Noite)
+      // TRANSIÇÃO GRADUAL E SUAVE DO CÉU (Dia -> Pôr do Sol -> Noite)
       // -------------------------------------------------------
-      if (score < 8) {
-        // Céu azul de dia
-        const skyGrad = fCtx.createLinearGradient(0, 0, 0, H);
-        skyGrad.addColorStop(0, '#38BDF8');
-        skyGrad.addColorStop(1, '#BAE6FD');
-        fCtx.fillStyle = skyGrad;
-        fCtx.fillRect(0, 0, W, H);
-      } else if (score < 20) {
-        // Pôr do Sol vibrante Pop Maker
-        const sunsetGrad = fCtx.createLinearGradient(0, 0, 0, H);
-        sunsetGrad.addColorStop(0, '#FB7185');
-        sunsetGrad.addColorStop(0.5, '#F97316');
-        sunsetGrad.addColorStop(1, '#FDE047');
-        fCtx.fillStyle = sunsetGrad;
-        fCtx.fillRect(0, 0, W, H);
-        if (diffBadgeEl) {
-          diffBadgeEl.textContent = "Fase 2 • Pôr do Sol (+Rápido!)";
-          diffBadgeEl.className = "hidden sm:inline-block text-[10px] uppercase font-black px-2 py-0.5 rounded-lg bg-amber-100 text-amber-900 border border-pop-dark";
-        }
+      // Target progression: 0.0 (Score 0-4), transita para 1.0 (Score 5-11), transita para 2.0 (Score 12-22+)
+      let targetProgression = 0;
+      if (score < 5) {
+        targetProgression = score / 5 * 0.3; // Pequeno aquecimento sutil
+      } else if (score < 12) {
+        targetProgression = 0.3 + ((score - 5) / 7) * 0.7; // Rumo ao Pôr do Sol pleno (1.0)
+      } else if (score < 22) {
+        targetProgression = 1.0 + ((score - 12) / 10) * 1.0; // Rumo à Noite Plena (2.0)
       } else {
-        // Noite Estrelada Cyberpunk / Maker
-        const nightGrad = fCtx.createLinearGradient(0, 0, 0, H);
-        nightGrad.addColorStop(0, '#0F172A');
-        nightGrad.addColorStop(0.7, '#1E1B4B');
-        nightGrad.addColorStop(1, '#312E81');
-        fCtx.fillStyle = nightGrad;
-        fCtx.fillRect(0, 0, W, H);
+        targetProgression = 2.0;
+      }
 
-        // Estrelas piscantes
+      // Interpolação suave frame a frame (easing sem cortes bruscos)
+      currentDayProgression += (targetProgression - currentDayProgression) * 0.035;
+
+      let topColor, midColor, bottomColor;
+      if (currentDayProgression <= 1.0) {
+        // Transição suave entre DIA e PÔR DO SOL
+        const t = currentDayProgression;
+        topColor = lerpColor(PALETTE_DAY.top, PALETTE_SUNSET.top, t);
+        midColor = lerpColor(PALETTE_DAY.mid, PALETTE_SUNSET.mid, t);
+        bottomColor = lerpColor(PALETTE_DAY.bottom, PALETTE_SUNSET.bottom, t);
+      } else {
+        // Transição suave entre PÔR DO SOL e NOITE ESTRELADA
+        const t = currentDayProgression - 1.0;
+        topColor = lerpColor(PALETTE_SUNSET.top, PALETTE_NIGHT.top, t);
+        midColor = lerpColor(PALETTE_SUNSET.mid, PALETTE_NIGHT.mid, t);
+        bottomColor = lerpColor(PALETTE_SUNSET.bottom, PALETTE_NIGHT.bottom, t);
+      }
+
+      // Aplica o degradê de 3 paradas com as cores suavemente interpoladas
+      const skyGrad = fCtx.createLinearGradient(0, 0, 0, H);
+      skyGrad.addColorStop(0, topColor);
+      skyGrad.addColorStop(0.55, midColor);
+      skyGrad.addColorStop(1, bottomColor);
+      fCtx.fillStyle = skyGrad;
+      fCtx.fillRect(0, 0, W, H);
+
+      // Estrelas surgem gradualmente conforme a noite cai (currentDayProgression > 1.0)
+      if (currentDayProgression > 1.0) {
+        const nightFactor = Math.min(1.0, currentDayProgression - 1.0);
         fCtx.fillStyle = '#FFFFFF';
         stars.forEach(st => {
           st.twinkle += 0.05;
-          const starAlpha = 0.4 + 0.6 * Math.sin(st.twinkle);
-          fCtx.globalAlpha = starAlpha;
+          const starAlpha = nightFactor * (0.35 + 0.65 * Math.sin(st.twinkle));
+          fCtx.globalAlpha = Math.max(0, Math.min(1, starAlpha));
           fCtx.fillRect(st.x % W, st.y % (groundY - 60), st.r, st.r);
         });
         fCtx.globalAlpha = 1.0;
+      }
 
-        if (diffBadgeEl) {
+      // Atualiza o Badge de fase no topo de forma natural
+      if (diffBadgeEl) {
+        if (currentDayProgression < 0.65) {
+          diffBadgeEl.textContent = "Fase 1 • Dia Ensolarado";
+          diffBadgeEl.className = "hidden sm:inline-block text-[10px] uppercase font-black px-2 py-0.5 rounded-lg bg-emerald-100 text-emerald-800 border border-pop-dark";
+        } else if (currentDayProgression < 1.45) {
+          diffBadgeEl.textContent = "Fase 2 • Entardecer (+Rápido!)";
+          diffBadgeEl.className = "hidden sm:inline-block text-[10px] uppercase font-black px-2 py-0.5 rounded-lg bg-amber-100 text-amber-900 border border-pop-dark";
+        } else {
           diffBadgeEl.textContent = "Fase 3 • Mestre da Noite ⚡";
           diffBadgeEl.className = "hidden sm:inline-block text-[10px] uppercase font-black px-2 py-0.5 rounded-lg bg-purple-200 text-purple-950 border border-pop-dark animate-pulse";
         }
