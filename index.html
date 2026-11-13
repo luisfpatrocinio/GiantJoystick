@@ -500,14 +500,20 @@
       <!-- ============================================================== -->
       <div id="tab-view-jogo" class="tab-view-panel hidden w-full flex flex-col justify-between gap-3">
         
-        <!-- Topo do Jogo: Placares -->
+        <!-- Topo do Jogo: Placares + Multiplicador de Combo -->
         <div class="flex flex-wrap items-center justify-between gap-2.5 bg-white p-3 rounded-2xl border-3 border-pop-dark shadow-neo-sm font-display">
           <div class="flex items-center gap-2">
             <span class="w-3 h-3 rounded-full bg-pop-green animate-ping shrink-0"></span>
             <span class="text-xs sm:text-sm font-black text-pop-dark uppercase">Arena de Teste: Salto do 6º B!</span>
+            <span id="game-difficulty-badge" class="hidden sm:inline-block text-[10px] uppercase font-black px-2 py-0.5 rounded-lg bg-emerald-100 text-emerald-800 border border-pop-dark">Fase 1 • Tranquilo</span>
           </div>
 
           <div class="flex items-center gap-2">
+            <div id="game-combo-pill" class="hidden bg-purple-100 px-2.5 py-1 rounded-xl border-2 border-pop-dark flex items-center gap-1 animate-pulse">
+              <span class="text-[11px] text-purple-900 font-black uppercase">🔥 Combo:</span>
+              <span id="game-combo-val" class="text-xs sm:text-sm font-black text-purple-950">2x</span>
+            </div>
+
             <div class="bg-slate-100 px-3 py-1 rounded-xl border-2 border-pop-dark flex items-center gap-1.5">
               <span class="text-[11px] text-slate-500 font-bold uppercase">Pontos:</span>
               <span id="game-current-score" class="text-base sm:text-lg font-black text-pop-dark">0</span>
@@ -2187,7 +2193,8 @@
     saveAndRenderLeaderboard();
 
     // -------------------------------------------------------------
-    // 5. JOGO FLAPPY BIRD 6B COM HIGHSCORE LOCAL
+    // -------------------------------------------------------------
+    // 5. JOGO FLAPPY BIRD 6B (DINÂMICO, RÁPIDO & MENOS CANSATIVO)
     // -------------------------------------------------------------
     const flappyCanvas = document.getElementById('flappy-canvas');
     const fCtx = flappyCanvas.getContext('2d');
@@ -2200,6 +2207,9 @@
     const currentScoreEl = document.getElementById('game-current-score');
     const bestScoreEl = document.getElementById('game-best-score');
     const btnResetHighscore = document.getElementById('btn-reset-highscore');
+    const diffBadgeEl = document.getElementById('game-difficulty-badge');
+    const comboPillEl = document.getElementById('game-combo-pill');
+    const comboValEl = document.getElementById('game-combo-val');
 
     function resizeFlappyCanvas() {
       if (!flappyCanvas.clientWidth || !flappyCanvas.clientHeight) return;
@@ -2220,25 +2230,124 @@
 
     let gameState = 'START';
     let score = 0;
+    let combo = 0;
     let lastFinishedScore = 0;
     let birdY = 150;
     let birdVelocity = 0;
-    const gravity = 0.38;
-    const jumpStrength = -6.8;
+    const gravity = 0.36;
+    const jumpStrength = -6.5;
 
     let pipes = [];
-    const pipeWidth = 52;
-    const pipeGap = 125;
-    let pipeTimer = 0;
+    let coins = [];
+    let particles = [];
+    let floatingTexts = [];
+    let stars = [];
+    let pipeSpawnDistanceAccum = 0;
+
+    // Inicializa estrelas para o céu noturno quando pontuação sobe
+    for (let s = 0; s < 45; s++) {
+      stars.push({
+        x: Math.random() * 1920,
+        y: Math.random() * 400,
+        r: Math.random() * 1.8 + 0.8,
+        twinkle: Math.random() * Math.PI * 2
+      });
+    }
+
+    function getRobotX(W) {
+      // Posição proporcional para telas largas ou cheias (20% a 25% da largura)
+      return Math.max(70, Math.min(220, W * 0.22));
+    }
+
+    function getGameSpeed() {
+      // Base dinâmica: começa em 4.6 px/frame (quase o dobro do antigo 2.6!)
+      // e acelera suavemente conforme a pontuação sobe
+      return 4.6 + Math.min(2.8, score * 0.09);
+    }
+
+    function getPipeGap(H) {
+      // Gap generoso e inclusivo (145px) para não ser punitivo
+      return Math.max(130, Math.min(160, H * 0.36));
+    }
+
+    function getPipeSpacing(W) {
+      // Espaçamento em pixels entre canos: garante que cheguem rápido em qualquer resolução
+      return Math.max(260, Math.min(380, W * 0.38));
+    }
 
     function resetGame() {
       score = 0;
+      combo = 0;
       currentScoreEl.textContent = '0';
-      birdY = flappyCanvas.height / 2;
+      if (comboPillEl) comboPillEl.classList.add('hidden');
+      if (diffBadgeEl) {
+        diffBadgeEl.textContent = "Fase 1 • Dia Ensolarado";
+        diffBadgeEl.className = "hidden sm:inline-block text-[10px] uppercase font-black px-2 py-0.5 rounded-lg bg-emerald-100 text-emerald-800 border border-pop-dark";
+      }
+
+      const W = flappyCanvas.width || 800;
+      const H = flappyCanvas.height || 450;
+      birdY = H * 0.45;
       birdVelocity = 0;
       pipes = [];
-      pipeTimer = 0;
+      coins = [];
+      particles = [];
+      floatingTexts = [];
+      pipeSpawnDistanceAccum = 0;
+
+      // Primeiro cano nasce BEM PERTO do robô (~320px à frente) para a ação começar na hora!
+      const robotX = getRobotX(W);
+      const gap = getPipeGap(H);
+      const groundY = H - 36;
+      const minH = 45;
+      const maxH = groundY - gap - minH;
+      const firstTopH = Math.floor(Math.random() * (maxH - minH + 1)) + minH;
+      pipes.push({
+        x: robotX + 320,
+        topH: firstTopH,
+        gap: gap,
+        passed: false,
+        theme: 'yellow'
+      });
+
+      // Moedinha bônus no meio do primeiro cano!
+      coins.push({
+        x: robotX + 320 + 26,
+        y: firstTopH + gap / 2,
+        r: 11,
+        collected: false
+      });
+
       if (btnSendToLeaderboard) btnSendToLeaderboard.classList.add('hidden');
+    }
+
+    function spawnFloatingText(text, x, y, color = '#FFCC00') {
+      floatingTexts.push({
+        text,
+        x,
+        y,
+        color,
+        vy: -1.6,
+        alpha: 1.0,
+        life: 38
+      });
+    }
+
+    function spawnParticles(x, y, color, count = 10) {
+      for (let i = 0; i < count; i++) {
+        const ang = Math.random() * Math.PI * 2;
+        const spd = Math.random() * 4.5 + 1.2;
+        particles.push({
+          x,
+          y,
+          vx: Math.cos(ang) * spd,
+          vy: Math.sin(ang) * spd,
+          color,
+          size: Math.random() * 4 + 2,
+          life: 25 + Math.random() * 15,
+          maxLife: 40
+        });
+      }
     }
 
     function handleGameJump() {
@@ -2248,8 +2357,13 @@
         gameState = 'PLAYING';
         overlay.classList.add('hidden');
         birdVelocity = jumpStrength;
+        playSound('flap');
       } else if (gameState === 'PLAYING') {
         birdVelocity = jumpStrength;
+        playSound('flap');
+        // Partículas na turbina do robô ao pular
+        const robotX = getRobotX(flappyCanvas.width);
+        spawnParticles(robotX + 4, birdY + 24, '#00C3E3', 4);
       }
     }
 
@@ -2275,6 +2389,10 @@
       lastFinishedScore = score;
       playSound('crash');
 
+      const robotX = getRobotX(flappyCanvas.width);
+      spawnParticles(robotX + 16, birdY + 14, '#FF3B30', 25);
+      spawnParticles(robotX + 16, birdY + 14, '#FFCC00', 15);
+
       if (score > highscore) {
         highscore = score;
         localStorage.setItem('inovacev_flappy_6b_best', highscore.toString());
@@ -2287,7 +2405,7 @@
       }
 
       overlayTitle.textContent = `PONTUAÇÃO: ${score}`;
-      overlayMsg.textContent = "Bata no botão gigante, toque na tela ou aperte ESPAÇO para tentar de novo!";
+      overlayMsg.textContent = combo >= 3 ? `Incrível! Você atingiu combo ${combo}x! Bata no botão para tentar de novo.` : "Bata no botão gigante, toque na tela ou aperte ESPAÇO para jogar de novo!";
       btnStartGame.textContent = "BATER PARA JOGAR NOVAMENTE 🔄";
       if (btnSendToLeaderboard) {
         btnSendToLeaderboard.classList.toggle('hidden', score <= 0);
@@ -2300,28 +2418,90 @@
       const H = flappyCanvas.height;
       if (!W || !H) return;
 
-      // Fundo Céu Ensolarado
-      fCtx.fillStyle = '#7DD3FC';
-      fCtx.fillRect(0, 0, W, H);
-
-      // Nuvens no fundo
-      fCtx.fillStyle = '#FFFFFF';
-      fCtx.beginPath();
-      fCtx.arc(100, 70, 24, 0, Math.PI * 2);
-      fCtx.arc(130, 60, 30, 0, Math.PI * 2);
-      fCtx.arc(160, 70, 22, 0, Math.PI * 2);
-      fCtx.fill();
-
-      // Chão do Jogo
       const groundY = H - 36;
+      const speed = getGameSpeed();
+      const currentGap = getPipeGap(H);
+      const robotX = getRobotX(W);
+
+      // -------------------------------------------------------
+      // CENÁRIO EVOLUTIVO POR PONTOS (Dia -> Pôr do Sol -> Noite)
+      // -------------------------------------------------------
+      if (score < 8) {
+        // Céu azul de dia
+        const skyGrad = fCtx.createLinearGradient(0, 0, 0, H);
+        skyGrad.addColorStop(0, '#38BDF8');
+        skyGrad.addColorStop(1, '#BAE6FD');
+        fCtx.fillStyle = skyGrad;
+        fCtx.fillRect(0, 0, W, H);
+      } else if (score < 20) {
+        // Pôr do Sol vibrante Pop Maker
+        const sunsetGrad = fCtx.createLinearGradient(0, 0, 0, H);
+        sunsetGrad.addColorStop(0, '#FB7185');
+        sunsetGrad.addColorStop(0.5, '#F97316');
+        sunsetGrad.addColorStop(1, '#FDE047');
+        fCtx.fillStyle = sunsetGrad;
+        fCtx.fillRect(0, 0, W, H);
+        if (diffBadgeEl) {
+          diffBadgeEl.textContent = "Fase 2 • Pôr do Sol (+Rápido!)";
+          diffBadgeEl.className = "hidden sm:inline-block text-[10px] uppercase font-black px-2 py-0.5 rounded-lg bg-amber-100 text-amber-900 border border-pop-dark";
+        }
+      } else {
+        // Noite Estrelada Cyberpunk / Maker
+        const nightGrad = fCtx.createLinearGradient(0, 0, 0, H);
+        nightGrad.addColorStop(0, '#0F172A');
+        nightGrad.addColorStop(0.7, '#1E1B4B');
+        nightGrad.addColorStop(1, '#312E81');
+        fCtx.fillStyle = nightGrad;
+        fCtx.fillRect(0, 0, W, H);
+
+        // Estrelas piscantes
+        fCtx.fillStyle = '#FFFFFF';
+        stars.forEach(st => {
+          st.twinkle += 0.05;
+          const starAlpha = 0.4 + 0.6 * Math.sin(st.twinkle);
+          fCtx.globalAlpha = starAlpha;
+          fCtx.fillRect(st.x % W, st.y % (groundY - 60), st.r, st.r);
+        });
+        fCtx.globalAlpha = 1.0;
+
+        if (diffBadgeEl) {
+          diffBadgeEl.textContent = "Fase 3 • Mestre da Noite ⚡";
+          diffBadgeEl.className = "hidden sm:inline-block text-[10px] uppercase font-black px-2 py-0.5 rounded-lg bg-purple-200 text-purple-950 border border-pop-dark animate-pulse";
+        }
+      }
+
+      // Nuvens decorativas com parallax
+      const cloudTime = performance.now() * 0.0006;
+      fCtx.fillStyle = 'rgba(255, 255, 255, 0.7)';
+      for (let c = 0; c < 3; c++) {
+        const cx = ((c * (W / 2.5) + cloudTime * 40 * (c + 1)) % (W + 200)) - 100;
+        const cy = 40 + c * 35;
+        fCtx.beginPath();
+        fCtx.arc(cx, cy, 26, 0, Math.PI * 2);
+        fCtx.arc(cx + 30, cy - 8, 34, 0, Math.PI * 2);
+        fCtx.arc(cx + 65, cy, 24, 0, Math.PI * 2);
+        fCtx.fill();
+      }
+
+      // Chão do Jogo estilizado
       fCtx.fillStyle = '#22C55E';
       fCtx.fillRect(0, groundY, W, 10);
-      fCtx.fillStyle = '#B45309';
+      fCtx.fillStyle = '#92400E';
       fCtx.fillRect(0, groundY + 10, W, 26);
       fCtx.strokeStyle = '#0F172A';
       fCtx.lineWidth = 3;
       fCtx.strokeRect(0, groundY, W, 36);
 
+      // Faixas amarelas tipo canteiro maker no chão
+      const stripeOffset = (performance.now() * 0.12) % 30;
+      fCtx.fillStyle = '#F59E0B';
+      for (let sx = -stripeOffset; sx < W; sx += 30) {
+        fCtx.fillRect(sx, groundY + 2, 14, 6);
+      }
+
+      // -------------------------------------------------------
+      // LÓGICA DE JOGO ATIVO
+      // -------------------------------------------------------
       if (gameState === 'PLAYING') {
         birdVelocity += gravity;
         birdY += birdVelocity;
@@ -2334,89 +2514,237 @@
           triggerGameOver();
         }
 
-        pipeTimer++;
-        if (pipeTimer > 100) {
-          pipeTimer = 0;
+        // Spawn de canos por distância percorrida
+        pipeSpawnDistanceAccum += speed;
+        const requiredSpacing = getPipeSpacing(W);
+        if (pipeSpawnDistanceAccum >= requiredSpacing) {
+          pipeSpawnDistanceAccum = 0;
           const minH = 40;
-          const maxH = groundY - pipeGap - minH;
+          const maxH = groundY - currentGap - minH;
           const topH = Math.floor(Math.random() * (maxH - minH + 1)) + minH;
-          pipes.push({ x: W + 10, topH: topH, passed: false });
+          const theme = score > 15 ? 'purple' : (score > 7 ? 'cyan' : 'yellow');
+
+          pipes.push({
+            x: W + 10,
+            topH: topH,
+            gap: currentGap,
+            passed: false,
+            theme: theme
+          });
+
+          // 70% de chance de nascer uma moeda bônus no vão do cano
+          if (Math.random() < 0.70) {
+            coins.push({
+              x: W + 10 + 26,
+              y: topH + currentGap / 2,
+              r: 12,
+              collected: false
+            });
+          }
         }
 
+        // Movimentação e colisão de canos
+        const pipeW = 56;
         for (let i = pipes.length - 1; i >= 0; i--) {
           const p = pipes[i];
-          p.x -= 2.6;
+          p.x -= speed;
 
-          const bottomY = p.topH + pipeGap;
+          const bottomY = p.topH + p.gap;
           const bottomH = groundY - bottomY;
 
-          fCtx.fillStyle = '#FFCC00';
+          // Cores Neobrutalistas por Tema
+          let bodyColor = '#FFCC00';
+          let capColor = '#EAB308';
+          if (p.theme === 'cyan') {
+            bodyColor = '#06B6D4';
+            capColor = '#0891B2';
+          } else if (p.theme === 'purple') {
+            bodyColor = '#A855F7';
+            capColor = '#9333EA';
+          }
+
+          fCtx.fillStyle = bodyColor;
           fCtx.strokeStyle = '#0F172A';
-          fCtx.lineWidth = 3;
+          fCtx.lineWidth = 3.5;
 
-          fCtx.fillRect(p.x, 0, pipeWidth, p.topH);
-          fCtx.strokeRect(p.x, 0, pipeWidth, p.topH);
-          fCtx.fillStyle = '#EAB308';
-          fCtx.fillRect(p.x - 4, p.topH - 18, pipeWidth + 8, 18);
-          fCtx.strokeRect(p.x - 4, p.topH - 18, pipeWidth + 8, 18);
+          // Cano Superior
+          fCtx.fillRect(p.x, 0, pipeW, p.topH);
+          fCtx.strokeRect(p.x, 0, pipeW, p.topH);
+          fCtx.fillStyle = capColor;
+          fCtx.fillRect(p.x - 4, p.topH - 20, pipeW + 8, 20);
+          fCtx.strokeRect(p.x - 4, p.topH - 20, pipeW + 8, 20);
 
-          fCtx.fillStyle = '#FFCC00';
-          fCtx.fillRect(p.x, bottomY, pipeWidth, bottomH);
-          fCtx.strokeRect(p.x, bottomY, pipeWidth, bottomH);
-          fCtx.fillStyle = '#EAB308';
-          fCtx.fillRect(p.x - 4, bottomY, pipeWidth + 8, 18);
-          fCtx.strokeRect(p.x - 4, bottomY, pipeWidth + 8, 18);
+          // Cano Inferior
+          fCtx.fillStyle = bodyColor;
+          fCtx.fillRect(p.x, bottomY, pipeW, bottomH);
+          fCtx.strokeRect(p.x, bottomY, pipeW, bottomH);
+          fCtx.fillStyle = capColor;
+          fCtx.fillRect(p.x - 4, bottomY, pipeW + 8, 20);
+          fCtx.strokeRect(p.x - 4, bottomY, pipeW + 8, 20);
 
-          const birdX = 70;
+          // Colisão precisa com o Robozinho
           const birdW = 32;
-          const birdH = 28;
-
-          if (birdX + birdW > p.x && birdX < p.x + pipeWidth) {
-            if (birdY < p.topH || (birdY + birdH) > bottomY) {
+          const birdH = 26;
+          // Hitbox levemente perdoadora para inclusão acessível
+          const hitInset = 4;
+          if (robotX + birdW - hitInset > p.x && robotX + hitInset < p.x + pipeW) {
+            if ((birdY + hitInset) < p.topH || (birdY + birdH - hitInset) > bottomY) {
               triggerGameOver();
             }
           }
 
-          if (!p.passed && p.x + pipeWidth < birdX) {
+          // Passou pelo cano!
+          if (!p.passed && p.x + pipeW < robotX) {
             p.passed = true;
             score++;
+            combo++;
             currentScoreEl.textContent = score;
+            if (comboPillEl && comboValEl) {
+              if (combo >= 2) {
+                comboPillEl.classList.remove('hidden');
+                comboValEl.textContent = `${combo}x`;
+              }
+            }
             playSound('score');
+            spawnFloatingText(combo >= 3 ? `+1 (COMBO ${combo}x!)` : '+1', robotX + 20, birdY - 10, '#22C55E');
           }
 
-          if (p.x < -pipeWidth - 20) {
+          if (p.x < -pipeW - 40) {
             pipes.splice(i, 1);
+          }
+        }
+
+        // Moedinhas Bônus Flutuantes
+        const coinBob = Math.sin(performance.now() * 0.008) * 4;
+        for (let j = coins.length - 1; j >= 0; j--) {
+          const coin = coins[j];
+          coin.x -= speed;
+
+          if (!coin.collected) {
+            // Desenho da Moeda estilo Fliperama
+            const cy = coin.y + coinBob;
+            fCtx.save();
+            fCtx.fillStyle = '#FBBF24';
+            fCtx.strokeStyle = '#0F172A';
+            fCtx.lineWidth = 2.5;
+            fCtx.beginPath();
+            fCtx.arc(coin.x, cy, coin.r, 0, Math.PI * 2);
+            fCtx.fill();
+            fCtx.stroke();
+
+            // Detalhe central da moeda
+            fCtx.fillStyle = '#D97706';
+            fCtx.font = 'bold 10px sans-serif';
+            fCtx.textAlign = 'center';
+            fCtx.textBaseline = 'middle';
+            fCtx.fillText('★', coin.x, cy);
+            fCtx.restore();
+
+            // Colisão do Robô com a Moeda
+            const dist = Math.hypot((robotX + 16) - coin.x, (birdY + 14) - cy);
+            if (dist < 32) {
+              coin.collected = true;
+              score += 2; // Moeda vale +2 pontos extras!
+              combo++;
+              currentScoreEl.textContent = score;
+              playSound('coin');
+              spawnFloatingText('+2 MOEDA!', coin.x, cy - 12, '#F59E0B');
+              spawnParticles(coin.x, cy, '#FBBF24', 12);
+              if (comboPillEl && comboValEl && combo >= 2) {
+                comboPillEl.classList.remove('hidden');
+                comboValEl.textContent = `${combo}x`;
+              }
+            }
+          }
+
+          if (coin.x < -40 || coin.collected) {
+            coins.splice(j, 1);
           }
         }
       }
 
-      // Mascote Robô do 6º B
-      const robotX = 70;
+      // -------------------------------------------------------
+      // PARTÍCULAS E TEXTOS FLUTUANTES (+1, +2, BOOM)
+      // -------------------------------------------------------
+      for (let pIdx = particles.length - 1; pIdx >= 0; pIdx--) {
+        const pt = particles[pIdx];
+        pt.x += pt.vx;
+        pt.y += pt.vy;
+        pt.vy += 0.12; // gravidade leve
+        pt.life--;
+        const alpha = Math.max(0, pt.life / pt.maxLife);
+        fCtx.save();
+        fCtx.globalAlpha = alpha;
+        fCtx.fillStyle = pt.color;
+        fCtx.beginPath();
+        fCtx.arc(pt.x, pt.y, pt.size, 0, Math.PI * 2);
+        fCtx.fill();
+        fCtx.restore();
+        if (pt.life <= 0) particles.splice(pIdx, 1);
+      }
+
+      for (let tIdx = floatingTexts.length - 1; tIdx >= 0; tIdx--) {
+        const ft = floatingTexts[tIdx];
+        ft.y += ft.vy;
+        ft.life--;
+        ft.alpha = Math.max(0, ft.life / 38);
+        fCtx.save();
+        fCtx.globalAlpha = ft.alpha;
+        fCtx.font = '900 13px Fredoka, sans-serif';
+        fCtx.fillStyle = ft.color;
+        fCtx.strokeStyle = '#0F172A';
+        fCtx.lineWidth = 3;
+        fCtx.strokeText(ft.text, ft.x, ft.y);
+        fCtx.fillText(ft.text, ft.x, ft.y);
+        fCtx.restore();
+        if (ft.life <= 0) floatingTexts.splice(tIdx, 1);
+      }
+
+      // -------------------------------------------------------
+      // MASCOTE ROBÔ DO 6º B (COM OLHOS EXPRESSIVOS & TURBINA)
+      // -------------------------------------------------------
       fCtx.save();
       fCtx.translate(robotX + 16, birdY + 14);
       const angle = Math.min(Math.PI / 4, Math.max(-Math.PI / 4, birdVelocity * 0.08));
       fCtx.rotate(angle);
 
+      // Fogo da turbina quando sobe
+      if (birdVelocity < 0 && gameState === 'PLAYING') {
+        fCtx.fillStyle = '#F59E0B';
+        fCtx.beginPath();
+        fCtx.moveTo(-16, -4);
+        fCtx.lineTo(-26 + Math.random() * 5, 2);
+        fCtx.lineTo(-16, 8);
+        fCtx.fill();
+      }
+
+      // Corpo Neobrutalista do Robô
       fCtx.fillStyle = isPressed ? '#22C55E' : '#FF3B30';
       fCtx.strokeStyle = '#0F172A';
       fCtx.lineWidth = 3;
       fCtx.fillRect(-16, -14, 32, 28);
       fCtx.strokeRect(-16, -14, 32, 28);
 
+      // Visor / Olhos
       fCtx.fillStyle = '#FFFFFF';
-      fCtx.fillRect(2, -8, 10, 10);
+      fCtx.fillRect(2, -8, 11, 11);
       fCtx.fillStyle = '#0F172A';
       fCtx.fillRect(7, -5, 4, 4);
 
+      // Bochecha rosada (fofa!)
+      fCtx.fillStyle = '#FDA4AF';
+      fCtx.fillRect(3, 4, 6, 4);
+
+      // Antena do Robô com Luz Neon
       fCtx.strokeStyle = '#0F172A';
-      fCtx.lineWidth = 2;
+      fCtx.lineWidth = 2.5;
       fCtx.beginPath();
       fCtx.moveTo(0, -14);
       fCtx.lineTo(0, -22);
       fCtx.stroke();
       fCtx.fillStyle = '#00C3E3';
       fCtx.beginPath();
-      fCtx.arc(0, -24, 4, 0, Math.PI * 2);
+      fCtx.arc(0, -24, 4.5, 0, Math.PI * 2);
       fCtx.fill();
       fCtx.stroke();
 
